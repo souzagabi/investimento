@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap');
+
+body{
+    font-family: "Roboto", San-Serif;
+    background-color: #242F34;
+}
+.imgTopo{
+    background-image: url("../img/sinuca.jfif");
+}
+.foto{
+    float: right;
+}
+.pr{
+    font-weight: bold;
+    font-size: 24px;
+    margin: 10px 0;
+}
+.pr, .fa{
+    color: #ffd050;
+}
+
+.cards, .eventoCartaz {
+    width: 90%;
+    color: #fff;
+    display: block;
+    background-color: #eeea;
+    margin: auto;
+    border-radius: 20px;
+    box-shadow: 0 2px 23px #08080842;
+    background-color: #3D515A;
+}
+.cards:hover, .eventoCartaz:hover {
+    box-shadow: 0 8px 30px #F4BA00;
+}
+.eventoCartaz{
+    padding: 20px 0;
+    margin: 20px auto;
+}
+.cards .container .column{
+    padding: 10px;
+}
+.cards .container .columnX{
+    margin-top: 80px;
+    font-size: 3em;
+    color: #F4BA00;
+    font-weight: bold;
+}
+
+a{
+    text-decoration: none;
+}
