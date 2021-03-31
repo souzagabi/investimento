@@ -6,7 +6,7 @@
     
     class User extends Model {
         const SESSION = "User";
-        const SECRET = "acaoInvestimento";
+        const SECRET = "HcodePhp7_secret";
 
         public static function login($login, $password){
             $sql = new Sql();

@@ -10,46 +10,79 @@
             return $sql->select("SELECT * FROM tb_investiments ORDER BY sgcompany");
         }
 
-        public function get($iduser) {
+        public function get($idinvestiment) {
         
             $sql = new Sql();
             
-            $results = $sql->select("SELECT * FROM tb_investiments a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser;", array(
-            ":iduser"=>$iduser
+            $results = $sql->select("SELECT * FROM tb_investiments WHERE idinvestiment = :idinvestiment;", array(
+            ":idinvestiment"=>$idinvestiment
             ));
             
+            if ($results[0]["tax"]) {
+                $results[0]["tax"] = $results[0]["tax"]." %";
+            }
+            if ($results[0]["dtbuy"]) {
+                $results[0]["dtbuy"] = $this->convertDate($results[0]["dtbuy"]);
+            }
+            if ($results[0]["dtsell"]) {
+                $results[0]["dtsell"] = $this->convertDate($results[0]["dtsell"]);
+            }
             $data = $results[0];
             
             $this->setData($data);
         
         }
-
+        public function convertDate($date){
+            return $data = date("d-m-Y", strToTime($date));
+        }
+        
         public function save(){
             $sql = new Sql();
-            $results = $sql->select("CALL sp_users_save(:desperson, :deslogin, :despassword, :descpfcnpj, :inadmin)", array(
-                ":desperson"=>   $this->getdesperson(),
-                ":deslogin"=>    $this->getdeslogin(),
-                ":despassword"=> $this->getdespassword(),
-                ":descpfcnpg"=>    $this->getdescpfcnpg(),
-                ":inadmin"=>     $this->getinadmin()
+
+            $results = $sql->select("CALL sp_acoes_save(:iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe)", array(
+                ":iduser"      => $this->getiduser(),
+                ":descompany"  => $this->getdescompany(),    
+                ":sgcompany"   => $this->getsgcompany(),    
+                ":descnpj"     => $this->getdescnpj(),    
+                ":dtbuy"       => $this->getdtbuy(),
+                ":dtsell"      => $this->getdtsell(),
+                ":qtdebuy"     => $this->getqtdebuy(),
+                ":qtdesell"    => $this->getqtdesell(),
+                ":prcbuy"      => $this->getprcbuy(),
+                ":prcsell"     => $this->getprcsell(),
+                ":tlbuy"       => $this->gettlbuy(),
+                ":tlsell"      => $this->gettlsell(),
+                ":tax"         => $this->gettax(),
+                ":lucre"       => $this->getlucre(),
+                ":tipe"        => $this->gettipe()
             ));
-            $this->setData($results[0]);
+            
+            $this->setData($results);
         }
         
         public function update(){
             $sql = new Sql();
-
-            $results = $sql->select("CALL sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
-                ":iduser"=>      $this->getiduser(),
-                ":desperson"=>   $this->getdesperson(),
-                ":deslogin"=>    $this->getdeslogin(),
-                ":despassword"=> $this->getdespassword(),
-                ":desemail"=>    $this->getdesemail(),
-                ":nrphone"=>     $this->getnrphone(),
-                ":inadmin"=>     $this->getinadmin()
-            ));
             
-            $this->setData($results[0]);
+            $results = $sql->select("CALL sp_acoesupdate_save(:idinvestiment, :iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe)", array(
+                ":idinvestiment"    => $this->getidinvestiment(),
+                ":iduser"           => $this->getiduser(),
+                ":descompany"       => $this->getdescompany(),    
+                ":sgcompany"        => $this->getsgcompany(),    
+                ":descnpj"          => $this->getdescnpj(),    
+                ":dtbuy"            => $this->getdtbuy(),
+                ":dtsell"           => $this->getdtsell(),
+                ":qtdebuy"          => $this->getqtdebuy(),
+                ":qtdesell"         => $this->getqtdesell(),
+                ":prcbuy"           => $this->getprcbuy(),
+                ":prcsell"          => $this->getprcsell(),
+                ":tlbuy"            => $this->gettlbuy(),
+                ":tlsell"           => $this->gettlsell(),
+                ":tax"              => $this->gettax(),
+                ":lucre"            => $this->getlucre(),
+                ":tipe"             => $this->gettipe()
+            ));
+           
+            $this->setData($results);
 
         }
 
@@ -84,7 +117,7 @@
                     $iv = openssl_random_pseudo_bytes($ivlen);
                     $code = base64_encode(openssl_encrypt($dataRecovery["idrecovery"], "aes-256-ctr", USER::SECRET, 0, $iv));
                     $link = "http://www.gbsuporte.com.br:99/admin/forgot/reset?code=$code";
-                    $mailer = new Mailer($data["desemail"], $data["desperson"], "Redefinir senha da Hcode store", "forgot", 
+                    $mailer = new Mailer($data["desemail"], $data["desperson"], "Redefinir senha do aplicativo", "forgot", 
                         array(
                             "name"=>$data["desperson"],
                             "link"=>$link
