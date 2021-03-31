@@ -69,7 +69,6 @@
 		header("Location: /acoes");
 			exit;
 	});
-
 	
 	$app->get("/acoes/:idinvestiment", function($idinvestiment) {
 		User::verifyLogin();
@@ -82,6 +81,7 @@
 			"acoes"=>$acoes->getValues()
 		));
 	});
+	
 	$app->post("/acoes/:idinvestiment", function ($idinvestiment){
 		User::verifyLogin();
 		$acoes = new Acao();
@@ -114,7 +114,16 @@
 		User::verifyLogin();
 		$page = new PageAdmin();
 		$page->setTpl("index");
+
+		// $user = new User();
 		
+		// $user->get((int)$_SESSION["User"]["iduser"]);
+		// $page->setTpl("index", array(
+		// 	"acoes"=>$user->getValues()
+		// ));
+		
+ 
+
 	});
 	$app->get('/admin/login', function() {
 		
