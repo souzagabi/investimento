@@ -261,6 +261,7 @@ desired effect
       <!-- Optionally, you can add icons to the links -->
       <li><a href="/admin"><i class="fa fa-user"></i> <span>Administrador</span></a></li>
       <li class="active"><a href="/acoes"><i class="fa fa-envelope"></i> <span>Ações</span></a></li>
+      <li><a href="/notas"><i class="fa fa-envelope"></i> <span>Notas</span></a></li>
       <li class="treeview">
         <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
           <span class="pull-right-container">

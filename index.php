@@ -27,14 +27,30 @@
 		$page = new PageAcoes();
 		for ($i=0; $i < count($acoes); $i++) { 
 			if ($acoes[$i]["dtbuy"]) {
-				$acoes[$i]["dtbuy"] = Acao::convertDate($acoes[$i]["dtbuy"]);
+				$acoes[$i]["dtbuy"] = Acao::convertDateView($acoes[$i]["dtbuy"]);
 			}
 			if ($acoes[$i]["dtsell"]) {
-				$acoes[$i]["dtsell"] = Acao::convertDate($acoes[$i]["dtsell"]);
+				$acoes[$i]["dtsell"] = Acao::convertDateView($acoes[$i]["dtsell"]);
 			}
 		}
-
 		$page->setTpl("acoes", array(
+			"acoes"=> $acoes
+		));
+		
+	});
+	
+	$app->get('/notas', function() {
+		$acoes = Acao::listAll();
+		$page = new PageAcoes();
+		for ($i=0; $i < count($acoes); $i++) { 
+			if ($acoes[$i]["dtbuy"]) {
+				$acoes[$i]["dtbuy"] = Acao::convertDateView($acoes[$i]["dtbuy"]);
+			}
+			if ($acoes[$i]["dtsell"]) {
+				$acoes[$i]["dtsell"] = Acao::convertDateView($acoes[$i]["dtsell"]);
+			}
+		}
+		$page->setTpl("notas", array(
 			"acoes"=> $acoes
 		));
 		
@@ -56,12 +72,10 @@
 			$_POST["tax"] = $tax[0];
 		}
 		if ($_POST["dtbuy"]) {
-			$data = explode("-", $_POST["dtbuy"]);
-			$_POST["dtbuy"] = $data[2]."-".$data[1]."-".$data[0];
+			$_POST["dtbuy"] = Acao::convertDateDataBase($_POST["dtbuy"]);
 		}
 		if ($_POST["dtsell"]) {
-			$data = explode("-", $_POST["dtsell"]);
-			$_POST["dtsell"] = $data[2]."-".$data[1]."-".$data[0];
+			$_POST["dtsell"] = Acao::convertDateDataBase($_POST["dtsell"]);
 		}
 		var_dump($_POST);exit;
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
@@ -72,12 +86,11 @@
 			exit;
 	});
 	
-	$app->get("/acoes/:idinvestiment", function($idinvestiment) {
+	$app->get("/acoes/:idperson", function($idperson) {
 		User::verifyLogin();
 		$acoes = new Acao();
  
-		$acoes->get((int)$idinvestiment);
-		
+		$acoes->get((int)$idperson);
 		$page = new PageAcoes();
 		$page ->setTpl("acoes-update", array(
 			"acoes"=>$acoes->getValues()
@@ -92,12 +105,10 @@
 			$_POST["tax"] = $tax[0];
 		}
 		if ($_POST["dtbuy"]) {
-			$data = explode("-", $_POST["dtbuy"]);
-			$_POST["dtbuy"] = $data[2].'-'.$data[1].'-'.$data[0];
+			$_POST["dtbuy"] = Acao::convertDateDataBase($_POST["dtbuy"]);
 		}
 		if ($_POST["dtsell"]) {
-			$data = explode("-", $_POST["dtsell"]);
-			$_POST["dtsell"] = $data[2].'-'.$data[1].'-'.$data[0];
+			$_POST["dtsell"] = Acao::convertDateDataBase($_POST["dtsell"]);
 		}
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		$acoes->get((int)$idinvestiment);

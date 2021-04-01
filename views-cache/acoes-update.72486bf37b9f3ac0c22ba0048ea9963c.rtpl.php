@@ -59,7 +59,7 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="qtdebuy">Qtde</label>
-                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="<?php echo htmlspecialchars( $acoes["qtdebuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" required>
+                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="<?php echo htmlspecialchars( $acoes["qtdeestoque"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" required>
                 </div>
               </div>
               <div class="col col-md-2">

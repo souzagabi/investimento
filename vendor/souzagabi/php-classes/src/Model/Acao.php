@@ -7,15 +7,15 @@
 
         public static function listAll(){
             $sql = new Sql();
-            return $sql->select("SELECT * FROM tb_investiments ORDER BY sgcompany");
+            return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY e.sgecompany");
         }
 
-        public function get($idinvestiment) {
+        public function get($idperson) {
         
             $sql = new Sql();
             
-            $results = $sql->select("SELECT * FROM tb_investiments WHERE idinvestiment = :idinvestiment;", array(
-            ":idinvestiment"=>$idinvestiment
+            $results = $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE p.idperson = :idperson AND e.qtdeestoque > 0", array(
+            ":idperson"=>$idperson
             ));
             
             if ($results[0]["tax"]) {
@@ -32,15 +32,18 @@
             $this->setData($data);
         
         }
-        public function convertDate($date){
+        public function convertDateView($date){
             return $data = date("d-m-Y", strToTime($date));
+        }
+        public function convertDateDataBase($date){
+            return $data = date("Y-m-d", strToTime($date));
         }
         
         public function save(){
             $sql = new Sql();
 
             $results = $sql->select("CALL sp_acoes_save(:iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe)", array(
-                ":iduser"      => $this->getiduser(),
+                ":iduser"      => $this->getiduser(),    
                 ":descompany"  => $this->getdescompany(),    
                 ":sgcompany"   => $this->getsgcompany(),    
                 ":descnpj"     => $this->getdescnpj(),    
@@ -63,9 +66,10 @@
         public function update(){
             $sql = new Sql();
             
-            $results = $sql->select("CALL sp_acoesupdate_save(:idinvestiment, :iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe)", array(
+            $results = $sql->select("CALL sp_acoesupdate_save(:idinvestiment,:idperson, :iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe)", array(
                 ":idinvestiment"    => $this->getidinvestiment(),
-                ":iduser"           => $this->getiduser(),
+                ":idperson"         => $this->getidperson(),
+                ":iduser "          => $this->getiduser(),   
                 ":descompany"       => $this->getdescompany(),    
                 ":sgcompany"        => $this->getsgcompany(),    
                 ":descnpj"          => $this->getdescnpj(),    

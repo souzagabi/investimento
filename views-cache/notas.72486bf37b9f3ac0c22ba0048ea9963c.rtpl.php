@@ -6,14 +6,14 @@
     </h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active"><a href="/acoes">Ações</a></li>
+      <li class="active"><a href="/notas">Notas</a></li>
     </ol>
   </section>
   <!-- Main content -->
   <section class="content">
     <div class="box box-primary">
       <div class="col form-control">
-        <a href="/acoes/create" class="btn btn-success">Cadastrar Compra</a>
+        <a href="/acoes/create" class="btn btn-success">Cadastrar Notas</a>
       </div>
     </div>
     <div class="box box-primary">
@@ -38,7 +38,7 @@
             <tr>
               <th><?php echo htmlspecialchars( $value1["sgcompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?></th>
               <td><?php echo htmlspecialchars( $value1["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td><?php echo htmlspecialchars( $value1["qtdeestoque"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <td><?php echo htmlspecialchars( $value1["qtdebuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td><?php echo htmlspecialchars( $value1["prcbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td><?php echo htmlspecialchars( $value1["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td><?php echo htmlspecialchars( $value1["qtdesell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
