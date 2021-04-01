@@ -10,15 +10,37 @@
             return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY e.sgecompany");
         }
 
-        public function get($idperson) {
+        public function getByPerson($idperson) {
         
             $sql = new Sql();
             
+            var_dump($idperson);
             $results = $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE p.idperson = :idperson AND e.qtdeestoque > 0", array(
             ":idperson"=>$idperson
             ));
+            if ($results[0]["tax"] > 0) {
+                $results[0]["tax"] = $results[0]["tax"]." %";
+            }
+            if ($results[0]["dtbuy"]) {
+                $results[0]["dtbuy"] = $this->convertDate($results[0]["dtbuy"]);
+            }
+            if ($results[0]["dtsell"]) {
+                $results[0]["dtsell"] = $this->convertDate($results[0]["dtsell"]);
+            }
+            $data = $results[0];
             
-            if ($results[0]["tax"]) {
+            $this->setData($data);
+        
+        }
+        public function getByBuy($idinvestiment) {
+        
+            $sql = new Sql();
+            
+            $results = $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE i.idinvestiment = :idinvestiment", array(
+                ":idinvestiment"=>$idinvestiment
+            ));
+            
+            if ($results[0]["tax"] > 0) {
                 $results[0]["tax"] = $results[0]["tax"]." %";
             }
             if ($results[0]["dtbuy"]) {

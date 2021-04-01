@@ -1,3 +1,14 @@
+$(document).ready(function () {
+    var qbuy = document.getElementById("qtdebuy").value;
+    var qsell = document.getElementById("qtdesell").value;
+    var pbuy = document.getElementById("prcbuy");
+    var tbuy = document.getElementById("tlbuy");
+    var psell = document.getElementById("prcsell");
+    var tsell = document.getElementById("tlsell");
+    sumTotal(qbuy, pbuy, tbuy);
+    sumTotal(qsell, psell, tsell);
+});
+
 function sumTotal(qtde, elementValue, elementTotal)
 {
     if (elementValue.value !== '') {

@@ -77,7 +77,7 @@
 		if ($_POST["dtsell"]) {
 			$_POST["dtsell"] = Acao::convertDateDataBase($_POST["dtsell"]);
 		}
-		var_dump($_POST);exit;
+		
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		$acao->setData($_POST);
 		$acao->save();
@@ -90,7 +90,7 @@
 		User::verifyLogin();
 		$acoes = new Acao();
  
-		$acoes->get((int)$idperson);
+		$acoes->getByPerson((int)$idperson);
 		$page = new PageAcoes();
 		$page ->setTpl("acoes-update", array(
 			"acoes"=>$acoes->getValues()
@@ -111,7 +111,7 @@
 			$_POST["dtsell"] = Acao::convertDateDataBase($_POST["dtsell"]);
 		}
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
-		$acoes->get((int)$idinvestiment);
+		$acoes->getByBuy((int)$idinvestiment);
 		$acoes->setData($_POST);
 		$acoes->update();
 		header("Location: /acoes");
