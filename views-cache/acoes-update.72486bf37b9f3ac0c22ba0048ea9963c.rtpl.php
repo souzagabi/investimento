@@ -59,7 +59,7 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="qtdebuy">Qtde</label>
-                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" value="<?php echo htmlspecialchars( $acoes["qtdebuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" required>
+                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="<?php echo htmlspecialchars( $acoes["qtdebuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" required>
                 </div>
               </div>
               <div class="col col-md-2">
@@ -85,7 +85,7 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="qtdesell">Qtde</label>
-                  <input type="text" class="form-control" name="qtdesell" id="qtdesell" value="<?php echo htmlspecialchars( $acoes["qtdesell"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
+                  <input type="text" class="form-control" name="qtdesell" id="qtdesell" value="<?php echo htmlspecialchars( $acoes["qtdesell"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
                 </div>
               </div>
               <div class="col col-md-2">

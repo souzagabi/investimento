@@ -59,7 +59,7 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="qtdebuy">Qtde</label>
-                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" value="{$acoes.qtdebuy}" required>
+                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="{$acoes.qtdebuy}" required>
                 </div>
               </div>
               <div class="col col-md-2">
@@ -85,7 +85,7 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="qtdesell">Qtde</label>
-                  <input type="text" class="form-control" name="qtdesell" id="qtdesell" value="{$acoes.qtdesell}">
+                  <input type="text" class="form-control" name="qtdesell" id="qtdesell" value="{$acoes.qtdesell}" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
                 </div>
               </div>
               <div class="col col-md-2">

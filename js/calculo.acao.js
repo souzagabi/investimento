@@ -9,11 +9,12 @@ function sumTotal(qtde, elementValue, elementTotal)
     }
     if (elementTotal.name === "tlsell") {
         
-        var vlbuy = document.getElementById("tlbuy").value;
+        var vlbuy = document.getElementById("prcbuy").value * qtde;
         var vlsell = elementTotal.value;
-        if (vlbuy > 0 && vlsell > 0) {
+
+        if (vlbuy && vlsell) {
             var lucre = vlsell - vlbuy;
-            if (lucre > 0) {
+            if (lucre < 0 || lucre > 0) {
                 var tax = ((lucre*100)/vlbuy);
                 document.getElementById("tax").value = tax.toFixed(2)+" %";
             }
@@ -35,3 +36,4 @@ function replaceSlash(element)
     var dt = element.value.replace(/[\/\-]/g, '-');
     document.getElementById(element.name).value = dt;
 }
+    

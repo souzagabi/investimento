@@ -98,7 +98,15 @@
 <script src="../../res/admin/bootstrap/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../../res/admin/dist/js/app.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
 <script src="../../js/calculo.acao.js"></script>
+<script language="javascript">
+  $(document).ready(function () {
+        $('#dtbuy').mask('99-99-9999');
+        $('#dtsell').mask('99-99-9999');
+        return false;
+    });
+ </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

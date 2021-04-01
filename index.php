@@ -50,18 +50,20 @@
 	$app->post("/acoes/create", function (){
 		User::verifyLogin();
 
-
 		$acao = new Acao();
-		if ($_POST["tax"] !== 0) {
+		if ($_POST["tax"]) {
 			$tax = explode(" ",$_POST["tax"]);
+			$_POST["tax"] = $tax[0];
 		}
-		if ($_POST["dtbuy"] > 0) {
-			//$_POST["dtbuy"] = Acao::ConvertDate($_POST["dtbuy"]);
+		if ($_POST["dtbuy"]) {
+			$data = explode("-", $_POST["dtbuy"]);
+			$_POST["dtbuy"] = $data[2]."-".$data[1]."-".$data[0];
 		}
-		if ($_POST["dtsell"] > 0) {
-			//$_POST["dtsell"] = Acao::ConvertDate($_POST["dtsell"]);
+		if ($_POST["dtsell"]) {
+			$data = explode("-", $_POST["dtsell"]);
+			$_POST["dtsell"] = $data[2]."-".$data[1]."-".$data[0];
 		}
-		$_POST["tax"] = $tax[0];
+		var_dump($_POST);exit;
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		$acao->setData($_POST);
 		$acao->save();
@@ -85,22 +87,21 @@
 	$app->post("/acoes/:idinvestiment", function ($idinvestiment){
 		User::verifyLogin();
 		$acoes = new Acao();
-		if ($_POST["tax"] !== 0) {
+		if ($_POST["tax"]) {
 			$tax = explode(" ",$_POST["tax"]);
 			$_POST["tax"] = $tax[0];
 		}
-		if ($_POST["dtbuy"] !== "") {
+		if ($_POST["dtbuy"]) {
 			$data = explode("-", $_POST["dtbuy"]);
 			$_POST["dtbuy"] = $data[2].'-'.$data[1].'-'.$data[0];
 		}
-		if ($_POST["dtsell"] !== "") {
+		if ($_POST["dtsell"]) {
 			$data = explode("-", $_POST["dtsell"]);
 			$_POST["dtsell"] = $data[2].'-'.$data[1].'-'.$data[0];
 		}
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		$acoes->get((int)$idinvestiment);
 		$acoes->setData($_POST);
-		//var_dump($acoes);exit;
 		$acoes->update();
 		header("Location: /acoes");
 		exit;
@@ -111,10 +112,15 @@
 
 	$app->get('/admin', function() {
 
+		// User::verifyLogin();
+		// $page = new PageAdmin();
+		// $page->setTpl("index");
 		User::verifyLogin();
+		$users = User::listAll();
 		$page = new PageAdmin();
-		$page->setTpl("index");
-
+		$page->setTpl("users", array(
+			"users"=> $users
+		));
 		// $user = new User();
 		
 		// $user->get((int)$_SESSION["User"]["iduser"]);
