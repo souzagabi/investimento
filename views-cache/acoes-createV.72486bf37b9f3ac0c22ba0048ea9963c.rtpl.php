@@ -1,14 +1,14 @@
-<!-- Content Wrapper. Contains page content -->
+<?php if(!class_exists('Rain\Tpl')){exit;}?><!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    Lista de Açoes
+    Cadastro de Venda de Ações
   </h1>
   <ol class="breadcrumb">
     <li><a href="/acoes"><i class="fa fa-dashboard"></i> Home</a></li>
     <li><a href="/acoes">Ação</a></li>
-    <li class="active"><a href="/acoes/create">Cadastrar</a></li>
+    <li class="active"><a href="/acoes/createV">Cadastrar</a></li>
   </ol>
 </section>
 
@@ -24,7 +24,7 @@
         <!-- /.box-header -->
         <!-- form start -->
         <form role="form" action="/acoes/create" method="post">
-          <div class="box-body">
+          <!-- <div class="box-body">
             <div class="col col-md-2">
               <div class="form-group">
                 <label for="descompany">Empresa</label>
@@ -78,6 +78,35 @@
                 <input type="text" class="form-control" id="tlbuy" name="tlbuy" readonly>
               </div>
             </div>
+          </div> -->
+          <div class="box-body">
+            <div class="col col-md-2">
+              <div class="form-group">
+                <label for="descompany">Empresa</label>
+                <input type="text" class="form-control" name="descompany" id="descompany">
+              </div>
+            </div>
+            <div class="col col-md-2">
+              <div class="form-group">
+                <label for="sgcompany">Sigla</label>
+                <input type="text" class="form-control" name="sgcompany" id="sgcompany" required>
+              </div>
+            </div>
+            <div class="col col-md-2">
+              <div class="form-group">
+                <label for="descnpj">CPF/CNPJ</label>
+                <input type="text" class="form-control" name="descnpj" id="descnpj">
+              </div>
+            </div>
+            <div class="col col-md-2">
+              <div class="form-group">
+                <label for="tipe">Tipo</label>
+                <select class="form-control" name="tipe" id="tipe">
+                  <option value="1" selected>Swing Trade</option>
+                  <option value="2">Day Trade</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="box-body">
             <div class="col col-md-2">
@@ -106,6 +135,12 @@
             </div>
             <div class="col col-md-2">
               <div class="form-group">
+                <label for="prcaverage">Valor Médio</label>
+                <input type="text" class="form-control" id="prcaverage" name="prcaverage" readonly>
+              </div>
+            </div>
+            <!-- <div class="col col-md-2">
+              <div class="form-group">
                 <label for="lucre">Lucro</label>
                 <input type="text" class="form-control" id="lucre" name="lucre" readonly>
               </div>
@@ -115,12 +150,16 @@
                 <label for="tax">Taxa</label>
                 <input type="text" class="form-control" id="tax" name="tax" readonly>
               </div>
-            </div>
+            </div> -->
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
-            <button type="submit" class="btn btn-success">Cadastrar</button>
-            <a href="/acoes" class="btn btn-warning">Voltar</a>
+            <input type="submit"name="venda" class="btn btn-success" value="Cadastrar Venda">
+
+            <!-- <button type="submit" name="Venda" class="btn btn-success">Cadastrar Venda</button> -->
+            <?php $counter1=-1;  if( isset($voltar) && ( is_array($voltar) || $voltar instanceof Traversable ) && sizeof($voltar) ) foreach( $voltar as $key1 => $value1 ){ $counter1++; ?>
+            <a href="/<?php echo htmlspecialchars( $voltar["voltar"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-warning">Voltar</a>
+            <?php } ?>
           </div>
         </form>
       </div>

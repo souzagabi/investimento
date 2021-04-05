@@ -16,7 +16,9 @@ function sumTotal(qtde, elementValue, elementTotal)
     }
     if (qtde > 0 && elementValue.value > 0) {
         var total =  qtde * elementValue.value;
+        var prcAverage = total / qtde;
         document.getElementById(elementTotal.name).value = total.toFixed(2);
+        document.getElementById("prcaverage").value = prcAverage.toFixed(2);
     }
     if (elementTotal.name === "tlsell") {
         

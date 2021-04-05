@@ -2,9 +2,13 @@
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
 <section class="content-header">
-  <h1>
-    Lista de Usuários
-  </h1>
+  <div class="box box-primary">
+    <div class="box-header with-border">
+      <h3 class="box-title">
+        Editar Ação Compra
+      </h3>
+    </div>
+  </div>
 </section>
 
 <!-- Main content -->
@@ -13,12 +17,11 @@
   <div class="row">
   	<div class="col-md-12">
   		<div class="box box-primary">
-        <div class="box-header with-border">
-          <h3 class="box-title">Editar Ação</h3>
-        </div>
         <!-- /.box-header -->
         <!-- form start -->
         <form role="form" action="/acoes/<?php echo htmlspecialchars( $acoes["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" method="post">
+          <input type="text" name="idinvestiment" value="<?php echo htmlspecialchars( $acoes["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" hidden>
+          <input type="text" name="idperson" value="<?php echo htmlspecialchars( $acoes["idperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" hidden>
           <div class="box-body">
             <div class="box-body">
               <div class="col col-md-2">
@@ -59,7 +62,7 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="qtdebuy">Qtde</label>
-                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="<?php echo htmlspecialchars( $acoes["qtdeestoque"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" required>
+                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="<?php echo htmlspecialchars( $acoes["qtdebuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" required>
                 </div>
               </div>
               <div class="col col-md-2">

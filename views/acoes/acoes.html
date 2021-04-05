@@ -11,11 +11,17 @@
   </section>
   <!-- Main content -->
   <section class="content">
-    <div class="box box-primary">
-      <div class="col form-control">
-        <a href="/acoes/create" class="btn btn-success">Cadastrar Compra</a>
+    <form action="/acoes/create" method="get">
+      <div class="box box-primary">
+        <div class="col form-control">
+          <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
+          <input type="submit" name="venda" class="btn btn-success" value="Cadastrar Venda">
+          <input type="text" name="acoes" value="acoes" hidden>
+          <!-- <a href="/acoes/create" name="teste" class="btn btn-success">Cadastrar Compra</a> -->
+          <!-- <a href="/acoes/vcreate" class="btn btn-success">Cadastrar Venda</a> -->
+        </div>
       </div>
-    </div>
+    </form>
     <div class="box box-primary">
       <div class="box-body no-padding">
     
@@ -23,30 +29,22 @@
           <thead class="thead-dark">
             <tr>
               <th>Empresa</th>
-              <th>DtCompra</th>
-              <th>Qtde</th>
-              <th>Valor</th>
-              <th>DtVenda</th>
-              <th>Qtde</th>
-              <th>Valor</th>
-              <th>Tipo</th>
+              <th>Qtde Estoque</th>
+              <th>Valor Médio</th>
+              <th>Valor Total</th>
               <th>Ação</th>
             </tr>
           </thead>
           <tbody>
             {loop="$acoes"}
             <tr>
-              <th>{$value.sgcompany}</th>
-              <td>{$value.dtbuy}</td>
+              <th>{$value.sgecompany}</th>
               <td>{$value.qtdeestoque}</td>
-              <td>{$value.prcbuy}</td>
-              <td>{$value.dtsell}</td>
-              <td>{$value.qtdesell}</td>
-              <td>{$value.prcsell}</td>
-              <td>{if="$value.tipe == 1"}Swing Trade{else}Day Trade{/if}</td>
+              <td>{$value.prcaverage}</td>
+              <td>{$value.prcaverage * $value.qtdeestoque}</td>
               <td>
                 <a href="/acoes/{$value.idperson}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
-                <a href="/acoes/{$value.idinvestiment}/delete1" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                <a href="/acoes/{$value.idperson}/delete1" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
             {/loop}

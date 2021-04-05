@@ -22,65 +22,65 @@
 		
 	});
 	
+/*======================================================================================*/
+/*											Rotas das Ações								*/
+/*======================================================================================*/
+
 	$app->get('/acoes', function() {
-		$acoes = Acao::listAll();
+		$acoes = Acao::listAll("listacoes");
 		$page = new PageAcoes();
-		for ($i=0; $i < count($acoes); $i++) { 
-			if ($acoes[$i]["dtbuy"]) {
-				$acoes[$i]["dtbuy"] = Acao::convertDateView($acoes[$i]["dtbuy"]);
-			}
-			if ($acoes[$i]["dtsell"]) {
-				$acoes[$i]["dtsell"] = Acao::convertDateView($acoes[$i]["dtsell"]);
-			}
-		}
+		
 		$page->setTpl("acoes", array(
 			"acoes"=> $acoes
 		));
 		
 	});
 	
-	$app->get('/notas', function() {
-		$acoes = Acao::listAll();
-		$page = new PageAcoes();
-		for ($i=0; $i < count($acoes); $i++) { 
-			if ($acoes[$i]["dtbuy"]) {
-				$acoes[$i]["dtbuy"] = Acao::convertDateView($acoes[$i]["dtbuy"]);
-			}
-			if ($acoes[$i]["dtsell"]) {
-				$acoes[$i]["dtsell"] = Acao::convertDateView($acoes[$i]["dtsell"]);
-			}
-		}
-		$page->setTpl("notas", array(
-			"acoes"=> $acoes
-		));
-		
-	});
-
 	$app->get('/acoes/create', function() {
-		
 		User::verifyLogin();
+		$voltar = ["voltar"=>"teste"];
+		if (isset($_GET["acoes"])) {
+			$voltar = ["voltar"=>"acoes"];
+		}
+		if (isset($_GET["notas"])) {
+			$voltar = ["voltar"=>"notasC"];
+		}
 		$page = new PageAcoes();
-		$page->setTpl("acoes-create");
+		if (isset($_GET["compra"])) {
+			$page->setTpl("acoes-createC", array(
+				"voltar"=>$voltar
+			));
+		}
+		if (isset($_GET["venda"])) {
+			$page->setTpl("acoes-createV", array(
+				"voltar"=>$voltar
+			));
+		}
 	});
 
 	$app->post("/acoes/create", function (){
 		User::verifyLogin();
 
 		$acao = new Acao();
-		if ($_POST["tax"]) {
+		if (isset($_POST["tax"])) {
 			$tax = explode(" ",$_POST["tax"]);
 			$_POST["tax"] = $tax[0];
 		}
-		if ($_POST["dtbuy"]) {
+		if (isset($_POST["dtbuy"])) {
 			$_POST["dtbuy"] = Acao::convertDateDataBase($_POST["dtbuy"]);
 		}
-		if ($_POST["dtsell"]) {
+		if (isset($_POST["dtsell"])) {
 			$_POST["dtsell"] = Acao::convertDateDataBase($_POST["dtsell"]);
 		}
-		
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
+		
 		$acao->setData($_POST);
-		$acao->save();
+		if (isset($_POST["compra"])) {
+			$acao->save_buy();
+		}
+		if (isset($_POST["venda"])) {
+			$acao->save_sell();
+		}
 
 		header("Location: /acoes");
 			exit;
@@ -92,6 +92,7 @@
  
 		$acoes->getByPerson((int)$idperson);
 		$page = new PageAcoes();
+		
 		$page ->setTpl("acoes-update", array(
 			"acoes"=>$acoes->getValues()
 		));
@@ -113,13 +114,64 @@
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		$acoes->getByBuy((int)$idinvestiment);
 		$acoes->setData($_POST);
+		
 		$acoes->update();
 		header("Location: /acoes");
 		exit;
 	});
 
+/*======================================================================================*/
+/*											Rotas das Notas								*/
+/*======================================================================================*/
+	
+	$app->get('/notasC', function() {
+		$acoes = Acao::listAll("notascompra");
+		$page = new PageAcoes();
+		for ($i=0; $i < count($acoes); $i++) { 
+			if ($acoes[$i]["dtbuy"]) {
+				$acoes[$i]["dtbuy"] = Acao::convertDateView($acoes[$i]["dtbuy"]);
+			}
+			if ($acoes[$i]["dtsell"]) {
+				$acoes[$i]["dtsell"] = Acao::convertDateView($acoes[$i]["dtsell"]);
+			}
+		}
+		$page->setTpl("notas", array(
+			"acoes"=> $acoes
+		));
+		
+	});
+	$app->get('/notasV', function() {
+		$acoes = Acao::listAll("notasvenda");
+		$page = new PageAcoes();
+		for ($i=0; $i < count($acoes); $i++) { 
+			if ($acoes[$i]["dtbuy"]) {
+				$acoes[$i]["dtbuy"] = Acao::convertDateView($acoes[$i]["dtbuy"]);
+			}
+			if ($acoes[$i]["dtsell"]) {
+				$acoes[$i]["dtsell"] = Acao::convertDateView($acoes[$i]["dtsell"]);
+			}
+		}
+		$page->setTpl("notas", array(
+			"acoes"=> $acoes
+		));
+		
+	});
 
-
+	$app->get('/notas/create', function() {
+		$notas = ["notas"=> "notas"];
+		User::verifyLogin();
+		$page = new PageAcoes();
+		if (isset($_GET["compra"])) {
+			$page->setTpl("notas-createC", array(
+				"notas"=>$notas
+			));
+		}
+		if (isset($_GET["venda"])) {
+			$page->setTpl("notas-createV", array(
+				"notas"=>$notas
+			));
+		}
+	});
 
 	$app->get('/admin', function() {
 

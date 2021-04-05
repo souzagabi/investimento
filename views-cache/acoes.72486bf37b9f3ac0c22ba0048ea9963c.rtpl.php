@@ -11,11 +11,17 @@
   </section>
   <!-- Main content -->
   <section class="content">
-    <div class="box box-primary">
-      <div class="col form-control">
-        <a href="/acoes/create" class="btn btn-success">Cadastrar Compra</a>
+    <form action="/acoes/create" method="get">
+      <div class="box box-primary">
+        <div class="col form-control">
+          <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
+          <input type="submit" name="venda" class="btn btn-success" value="Cadastrar Venda">
+          <input type="text" name="acoes" value="acoes" hidden>
+          <!-- <a href="/acoes/create" name="teste" class="btn btn-success">Cadastrar Compra</a> -->
+          <!-- <a href="/acoes/vcreate" class="btn btn-success">Cadastrar Venda</a> -->
+        </div>
       </div>
-    </div>
+    </form>
     <div class="box box-primary">
       <div class="box-body no-padding">
     
@@ -23,30 +29,22 @@
           <thead class="thead-dark">
             <tr>
               <th>Empresa</th>
-              <th>DtCompra</th>
-              <th>Qtde</th>
-              <th>Valor</th>
-              <th>DtVenda</th>
-              <th>Qtde</th>
-              <th>Valor</th>
-              <th>Tipo</th>
+              <th>Qtde Estoque</th>
+              <th>Valor Médio</th>
+              <th>Valor Total</th>
               <th>Ação</th>
             </tr>
           </thead>
           <tbody>
             <?php $counter1=-1;  if( isset($acoes) && ( is_array($acoes) || $acoes instanceof Traversable ) && sizeof($acoes) ) foreach( $acoes as $key1 => $value1 ){ $counter1++; ?>
             <tr>
-              <th><?php echo htmlspecialchars( $value1["sgcompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?></th>
-              <td><?php echo htmlspecialchars( $value1["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <th><?php echo htmlspecialchars( $value1["sgecompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?></th>
               <td><?php echo htmlspecialchars( $value1["qtdeestoque"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td><?php echo htmlspecialchars( $value1["prcbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td><?php echo htmlspecialchars( $value1["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td><?php echo htmlspecialchars( $value1["qtdesell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td><?php echo htmlspecialchars( $value1["prcsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td><?php if( $value1["tipe"] == 1 ){ ?>Swing Trade<?php }else{ ?>Day Trade<?php } ?></td>
+              <td><?php echo htmlspecialchars( $value1["prcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <td><?php echo htmlspecialchars( $value1["prcaverage"] * $value1["qtdeestoque"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td>
                 <a href="/acoes/<?php echo htmlspecialchars( $value1["idperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
-                <a href="/acoes/<?php echo htmlspecialchars( $value1["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete1" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                <a href="/acoes/<?php echo htmlspecialchars( $value1["idperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete1" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
             <?php } ?>
