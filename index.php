@@ -6,8 +6,10 @@
 	use \Acao\Page;
 	use \Acao\PageAdmin;
 	use \Acao\PageAcoes;
+	use \Acao\PagePerson;
 	use \Acao\Model\User;
 	use \Acao\Model\Acao;
+	use \Acao\Model\Person;
 
 	
 
@@ -174,30 +176,39 @@
 	});
 
 /*======================================================================================*/
+/*										Rotas do Person									*/
+/*======================================================================================*/
+
+	$app->get('/persons', function() {
+
+		User::verifyLogin();
+		$persons = Person::listAll();
+		echo '<pre>';
+		print_r($persons);
+		echo '</pre>';
+		$page = new PagePerson();
+		exit;
+		$page->setTpl("persons", array(
+			"persons"=> $persons
+		));
+	});
+
+
+
+/*======================================================================================*/
 /*										Rotas do Admin									*/
 /*======================================================================================*/
 
 	$app->get('/admin', function() {
 
-		// User::verifyLogin();
-		// $page = new PageAdmin();
-		// $page->setTpl("index");
 		User::verifyLogin();
 		$users = User::listAll();
 		$page = new PageAdmin();
 		$page->setTpl("users", array(
 			"users"=> $users
 		));
-		// $user = new User();
-		
-		// $user->get((int)$_SESSION["User"]["iduser"]);
-		// $page->setTpl("index", array(
-		// 	"acoes"=>$user->getValues()
-		// ));
-		
- 
-
 	});
+
 	$app->get('/admin/login', function() {
 		
 		$page = new PageAdmin([
@@ -208,6 +219,7 @@
 		$page->setTpl("login");
 		
 	});
+
 	$app->post('/admin/login', function() {
 		
 		User::login($_POST["login"], $_POST["password"]);
@@ -215,12 +227,14 @@
 		exit;
 		
 	});
+
 	$app->get('/admin/logout', function() {
 		
 		User::logout();
 		header("Location: /admin/login");
 		exit;
 	});
+
 	$app->get('/admin/users', function() {
 		
 		User::verifyLogin();
@@ -230,6 +244,7 @@
 			"users"=> $users
 		));
 	});
+
 	$app->get('/admin/users/create', function() {
 		
 		User::verifyLogin();

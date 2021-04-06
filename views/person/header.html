@@ -1,4 +1,4 @@
-<?php if(!class_exists('Rain\Tpl')){exit;}?><!DOCTYPE html>
+<!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
@@ -25,6 +25,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         apply the skin class to the body tag so the changes take effect.
   -->
   <link rel="stylesheet" href="../../res/admin/dist/css/skins/skin-blue.min.css">
+  <link rel="stylesheet" href="../../css/index.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -178,7 +179,7 @@ desired effect
               <!-- The user image in the navbar-->
               <img src="../../res/admin/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">Alexander Pierce</a>
+              <span class="hidden-xs">Alexander Pierce</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
@@ -258,10 +259,10 @@ desired effect
     <ul class="sidebar-menu">
       <li class="header">HEADER</li>
       <!-- Optionally, you can add icons to the links -->
-      <li class="active"><a href="/admin/users"><i class="fa fa-users"></i> <span>Usuários</span></a></li>
-      <li><a href="/persons"><i class="fa fa-user"></i> <span>Pessoas</span></a></li>
-      <li><a href="/acoes"><i class="fa fa-envelope"></i> <span>Ações</span></a></li>
-      <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
+      <li><a href="/admin"><i class="fa fa-user"></i> <span>Administrador</span></a></li>
+      <li class="active"><a href="/persons"><i class="fa fa-envelope"></i> <span>Pessoas</span></a></li>
+      <li><a href="/notasC"><i class="fa fa-envelope"></i> <span>Notas Compra</span></a></li>
+      <li><a href="/notasV"><i class="fa fa-envelope"></i> <span>Notas Venda</span></a></li>
       <li class="treeview">
         <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
           <span class="pull-right-container">
