@@ -183,12 +183,8 @@
 
 		User::verifyLogin();
 		$persons = Person::listAll();
-		echo '<pre>';
-		print_r($persons);
-		echo '</pre>';
 		$page = new PagePerson();
-		exit;
-		$page->setTpl("persons", array(
+		$page->setTpl("index", array(
 			"persons"=> $persons
 		));
 	});
