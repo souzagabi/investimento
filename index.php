@@ -88,11 +88,20 @@
 			exit;
 	});
 	
-	$app->get("/acoes/:idperson", function($idperson) {
+	$app->get("/acoes/:idinvestiment/delete", function ($idinvestiment){
+		User::verifyLogin();
+		$acao = new Acao();
+		$acao->getByBuy((int)$idinvestiment);
+		$acao->delete();
+		header("Location: /notasC");
+		exit;
+	});
+
+	$app->get("/acoes/:idinvestiment", function($idinvestiment) {
 		User::verifyLogin();
 		$acoes = new Acao();
- 
-		$acoes->getByPerson((int)$idperson);
+		//var_dump($idinvestiment);exit;
+		$acoes->getByBuy((int)$idinvestiment);
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(
@@ -129,6 +138,7 @@
 	$app->get('/notasC', function() {
 		$acoes = Acao::listAll("notascompra");
 		$page = new PageAcoes();
+		
 		for ($i=0; $i < count($acoes); $i++) { 
 			if ($acoes[$i]["dtbuy"]) {
 				$acoes[$i]["dtbuy"] = Acao::convertDateView($acoes[$i]["dtbuy"]);
@@ -137,11 +147,13 @@
 				$acoes[$i]["dtsell"] = Acao::convertDateView($acoes[$i]["dtsell"]);
 			}
 		}
+		
 		$page->setTpl("notas", array(
 			"acoes"=> $acoes
 		));
 		
 	});
+
 	$app->get('/notasV', function() {
 		$acoes = Acao::listAll("notasvenda");
 		$page = new PageAcoes();
@@ -174,6 +186,7 @@
 			));
 		}
 	});
+	
 
 /*======================================================================================*/
 /*										Rotas do Person									*/
@@ -189,7 +202,38 @@
 		));
 	});
 
+	$app->get("/acoes/:idperson/delete", function ($idperson){
+		User::verifyLogin();
+		$person = new Person();
+		$person->get((int)$idperson);
+		$person->delete();
+		header("Location: /persons");
+		exit;
+	});
 
+	$app->get("/persons/:idperson", function($idperson) {
+		User::verifyLogin();
+		$persons = new Person();
+ 
+		$persons->get((int)$idperson);
+		$page = new PagePerson();
+		
+		$page ->setTpl("person-update", array(
+			"persons"=>$persons->getValues()
+		));
+	});
+
+	$app->post("/persons/:idperson", function ($idperson){
+		User::verifyLogin();
+		$persons = new Person();
+		
+		$persons->get((int)$idperson);
+		$persons->setData($_POST);
+		
+		$persons->update();
+		header("Location: /persons");
+		exit;
+	});
 
 /*======================================================================================*/
 /*										Rotas do Admin									*/
@@ -278,10 +322,10 @@
 		$_POST["inadmin"] = (isset($_POST["inadmin"])) ? 1 : 0;
 
 		$_POST['despassword'] = password_hash($_POST["despassword"], PASSWORD_DEFAULT, [
-
+			
 			"cost"=>12
-
-		]);
+			
+			]);
 
 		$user->setData($_POST);
 
@@ -295,11 +339,14 @@
 		User::verifyLogin();
 		$user = new User();
 		$_POST["inadmin"] = (isset($_POST["inadmin"])) ? 1 : 0;
+		
 		$user->get((int)$iduser);
 		$user->setData($_POST);
+		
 		$user->update();
 		header("Location: /admin/users");
 		exit;
+		
 	});
 	
 	$app->get("/admin/forgot", function(){
@@ -309,12 +356,14 @@
 		]);
 		$page->setTpl("forgot");
 	});
+
 	$app->post("/admin/forgot", function(){
 		
 		$user = User::getForgot($_POST["email"]);
 		header("Location: /admin/forgot/sent");
 		exit;
 	});
+
 	$app->get("/admin/forgot/sent", function(){
 		$page = new PageAdmin([
 			"header"=>false,
@@ -322,6 +371,7 @@
 		]);
 		$page->setTpl("forgot-sent");
 	});
+
 	$app->get("/admin/forgot/reset", function(){
 		$user = User::validForgotDecrypt($_GET["code"]);
 		$page = new PageAdmin([
@@ -333,6 +383,7 @@
 			"code"=>$_GET["code"]
 		));
 	});
+
 	$app->post("/admin/forgot/reset", function(){
 		$forgot = User::validForgotDecrypt($_GET["code"]);
 		User::setForgotUsed($forgot["idrecovery"]);
@@ -340,6 +391,7 @@
 		$user->get((int)$forgot["iduser"]);
 		$user->setPassword($_POST["password"]);
 	});
+
 	$app->run();
 
 ?>

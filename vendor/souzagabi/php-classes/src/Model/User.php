@@ -61,31 +61,33 @@
 
         public function save(){
             $sql = new Sql();
-            $results = $sql->select("CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
-                ":desperson"=>   $this->getdesperson(),
-                ":deslogin"=>    $this->getdeslogin(),
-                ":despassword"=> $this->getdespassword(),
-                ":desemail"=>    $this->getdesemail(),
-                ":nrphone"=>     $this->getnrphone(),
-                ":inadmin"=>     $this->getinadmin()
+            
+            $results = $sql->select("CALL sp_users_save(:desperson, :sgcompany, :descpfcnpj, :deslogin, :despassword, :inadmin)", array(
+                ":desperson"    =>  $this->getdesperson(),
+                ":sgcompany"    =>  $this->getsgcompany(),
+                ":descpfcnpj"   =>  $this->getdescpfcnpj(),
+                ":deslogin"     =>  $this->getdeslogin(),
+                ":despassword"  =>  $this->getdespassword(),
+                ":inadmin"      =>  $this->getinadmin()
             ));
-            $this->setData($results[0]);
+            $this->setData($results);
         }
         
         public function update(){
             $sql = new Sql();
-
-            $results = $sql->select("CALL sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
-                ":iduser"=>      $this->getiduser(),
-                ":desperson"=>   $this->getdesperson(),
-                ":deslogin"=>    $this->getdeslogin(),
-                ":despassword"=> $this->getdespassword(),
-                ":desemail"=>    $this->getdesemail(),
-                ":nrphone"=>     $this->getnrphone(),
-                ":inadmin"=>     $this->getinadmin()
-            ));
             
-            $this->setData($results[0]);
+            $results = $sql->select("CALL sp_users_update_save(:iduser, :idperson, :desperson, :sgcompany, :descpfcnpj, :deslogin, :despassword, :inadmin)", array(
+                ":iduser"       =>  $this->getiduser(),
+                ":idperson"     =>  $this->getidperson(),
+                ":desperson"    =>  $this->getdesperson(),
+                ":sgcompany"    =>  $this->getsgcompany(),
+                ":descpfcnpj"   =>  $this->getdescpfcnpj(),
+                ":deslogin"     =>  $this->getdeslogin(),
+                ":despassword"  =>  $this->getdespassword(),
+                ":inadmin"      =>  $this->getinadmin()
+            ));
+          
+            $this->setData($results);
 
         }
 

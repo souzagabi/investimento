@@ -11,7 +11,7 @@
             if($listacoes === "listacoes"){
                 return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY e.sgecompany");
             }
-            return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY e.sgecompany");
+            return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY p.sgcompany");
         }
 
         public function getByPerson($idperson) {
@@ -21,7 +21,7 @@
             $results = $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE p.idperson = :idperson AND e.qtdeestoque > 0", array(
             ":idperson"=>$idperson
             ));
-            var_dump($results);exit;
+            
             if (isset($results[0]["tax"])) {
                 $results[0]["tax"] = $results[0]["tax"]." %";
             }
@@ -105,9 +105,6 @@
         
         public function update(){
             $sql = new Sql();
-            echo "<pre>";
-            print_r($this);
-            echo "</pre>";
                                                         
             $results = $sql->select("CALL sp_acoesupdate_save(:idinvestiment,:idperson, :iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :idestoque, :sgecompany, :qtdeestoque)", array(
                 ":idinvestiment"    => $this->getidinvestiment(),
@@ -138,8 +135,9 @@
 
         public function delete(){
             $sql = new Sql();
-            $sql->query("CALL sp_users_delete(:iduser)", array(
-                ":iduser"=>$this->getiduser()
+            
+            $sql->query("CALL sp_acoes_delete(:idinvestiment)", array(
+                ":idinvestiment"=>$this->getidinvestiment()
             ));
         }
         public static function getForgot($email){

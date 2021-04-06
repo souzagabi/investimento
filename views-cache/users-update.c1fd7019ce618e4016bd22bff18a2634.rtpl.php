@@ -1,4 +1,4 @@
-<!-- Content Wrapper. Contains page content -->
+<?php if(!class_exists('Rain\Tpl')){exit;}?><!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -18,21 +18,21 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/admin/users/{$user.iduser}" method="post">
+        <form role="form" action="/admin/users/<?php echo htmlspecialchars( $user["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" method="post">
           <div class="box-body">
             <div class="box-body">
               <div class="form-group">
                 <label for="desperson">Nome</label>
-                <input type="text" class="form-control" id="desperson" name="desperson" value="{$user.desperson}" placeholder="Digite o nome">
+                <input type="text" class="form-control" id="desperson" name="desperson" value="<?php echo htmlspecialchars( $user["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Digite o nome">
               </div>
               <div class="form-group">
                 <label for="deslogin">Login</label>
-                <input type="text" class="form-control" id="deslogin" name="deslogin" value="{$user.deslogin}" placeholder="Digite o login">
+                <input type="text" class="form-control" id="deslogin" name="deslogin" value="<?php echo htmlspecialchars( $user["deslogin"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Digite o login">
               </div>
               
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="inadmin" value="1" {if="$user.inadmin == 1"}checked{/if}> Acesso de Administrador
+                  <input type="checkbox" name="inadmin" value="1" <?php if( $user["inadmin"] == 1 ){ ?>checked<?php } ?>> Acesso de Administrador
                 </label>
               </div>
             </div>

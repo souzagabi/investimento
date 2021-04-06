@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<?php if(!class_exists('Rain\Tpl')){exit;}?><div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
@@ -32,17 +32,17 @@
             </tr>
           </thead>
           <tbody>
-            {loop="$persons"}
+            <?php $counter1=-1;  if( isset($persons) && ( is_array($persons) || $persons instanceof Traversable ) && sizeof($persons) ) foreach( $persons as $key1 => $value1 ){ $counter1++; ?>
             <tr>
-              <th>{$value.idperson}</th>
-              <td>{$value.desperson}</td>
-              <td>{$value.descpfcnpj}</td>
+              <th><?php echo htmlspecialchars( $value1["idperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?></th>
+              <td><?php echo htmlspecialchars( $value1["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <td><?php echo htmlspecialchars( $value1["descpfcnpj"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td>
-                <a href="/persons/{$value.idperson}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
-                <a href="/persons/{$value.idperson}/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                <a href="/persons/<?php echo htmlspecialchars( $value1["idperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                <a href="/persons/<?php echo htmlspecialchars( $value1["idperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
-            {/loop}
+            <?php } ?>
           </tbody>
         </table>
       </div>

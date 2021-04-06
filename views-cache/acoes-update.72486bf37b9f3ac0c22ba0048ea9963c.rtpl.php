@@ -119,7 +119,7 @@
             <!-- /.box-body -->
             <div class="box-footer">
               <button type="submit" class="btn btn-primary">Alualizar</button>
-              <a href="/acoes" class="btn btn-warning">Voltar</a>
+              <a href="/notasC" class="btn btn-warning">Voltar</a>
             </div>
         </form>
       </div>

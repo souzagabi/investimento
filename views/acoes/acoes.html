@@ -29,23 +29,20 @@
           <thead class="thead-dark">
             <tr>
               <th>Empresa</th>
+              <th>Sigla</th>
               <th>Qtde Estoque</th>
               <th>Valor Médio</th>
               <th>Valor Total</th>
-              <th>Ação</th>
             </tr>
           </thead>
           <tbody>
             {loop="$acoes"}
             <tr>
+              <th>{$value.desperson}</th>
               <th>{$value.sgecompany}</th>
               <td>{$value.qtdeestoque}</td>
               <td>{$value.prcaverage}</td>
               <td>{$value.prcaverage * $value.qtdeestoque}</td>
-              <td>
-                <a href="/acoes/{$value.idperson}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
-                <a href="/acoes/{$value.idperson}/delete1" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
-              </td>
             </tr>
             {/loop}
           </tbody>
