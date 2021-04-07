@@ -62,15 +62,18 @@
 			));
 		}
 		if (isset($_GET["search"])) {
-			if (isset($_GET["dtbuy"])) {
+			if ($_GET["dtbuy"] != NULL || $_GET["dtsell"] != NULL) {
+				
 				$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
+				$acoes = Acao::listAll($dtBuySell);
+				$page->setTpl("/acoes-search", array(
+					"voltar"=>$voltar,
+					"acoes"=>$acoes
+				));
+				
 			}
-			$acoes = Acao::listAll($dtBuySell);
-
-			$page->setTpl("/acoes-search", array(
-				"voltar"=>$voltar,
-				"acoes"=>$acoes
-			));
+			$page->setTpl("/acoes-search");
+			
 		}
 	});
 

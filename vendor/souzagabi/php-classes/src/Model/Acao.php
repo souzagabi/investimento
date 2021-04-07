@@ -11,8 +11,17 @@
             if($listacoes === "listacoes"){
                 return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY e.sgecompany");
             }
-            
-            return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY p.sgcompany");
+            if($listacoes === "notascompra" || $listacoes === "notasvenda"){
+                return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY p.sgcompany");
+            }
+            if (isset($listacoes)) {
+                $data = explode("_", $listacoes);
+                
+                return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 AND dtbuy >= :dtbuy AND dtsell <= :dtsell ORDER BY p.sgcompany", array(
+                   ":dtbuy"=>$data[0], 
+                   ":dtsell"=>$data[1] 
+                ));
+            }
         }
 
         public function getByPerson($idperson) {
