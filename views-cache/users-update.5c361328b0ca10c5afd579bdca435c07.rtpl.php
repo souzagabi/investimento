@@ -18,7 +18,7 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/admin/users/<?php echo htmlspecialchars( $user["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" method="post">
+        <form role="form" action="/users/<?php echo htmlspecialchars( $user["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" method="post">
           <div class="box-body">
             <div class="box-body">
               <div class="form-group">
@@ -27,21 +27,16 @@
               </div>
               <div class="form-group">
                 <label for="sgcompany">Sigla</label>
-                <input type="text" class="form-control" id="sgcompany" name="sgcompany" value="<?php echo htmlspecialchars( $user["sgcompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Digite o login">
+                <input type="text" class="form-control" id="sgcompany" name="sgcompany" value="<?php echo htmlspecialchars( $user["descpfcnpj"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Digite o login">
               </div>
               <div class="form-group">
                 <label for="descpfcnpj">CPF/CNPJ</label>
-                <input type="text" class="form-control" id="descpfcnpj" name="descpfcnpj" value="<?php echo htmlspecialchars( $user["descpfcnpj"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Digite o login">
+                <input type="text" class="form-control" id="descpfcnpj" name="descpfcnpj" value="<?php echo htmlspecialchars( $user["sgcompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Digite o login">
               </div>
               <div class="form-group">
                 <label for="deslogin">Login</label>
                 <input type="text" class="form-control" id="deslogin" name="deslogin" value="<?php echo htmlspecialchars( $user["deslogin"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Digite o login">
               </div>
-              <div class="form-group">
-                <label for="deslogin">Login</label>
-                <input type="text" class="form-control" id="deslogin" name="deslogin" value="<?php echo htmlspecialchars( $user["deslogin"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Digite o login">
-              </div>
-              
               <div class="checkbox">
                 <label>
                   <input type="checkbox" name="inadmin" value="1" <?php if( $user["inadmin"] == 1 ){ ?>checked<?php } ?>> Acesso de Administrador

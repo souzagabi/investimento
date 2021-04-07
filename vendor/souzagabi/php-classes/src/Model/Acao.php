@@ -106,7 +106,7 @@
         public function update(){
             $sql = new Sql();
                                                         
-            $results = $sql->select("CALL sp_acoesupdate_save(:idinvestiment,:idperson, :iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :idestoque, :sgecompany, :qtdeestoque)", array(
+            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson, :iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :idestoque, :sgecompany, :qtdeestoque)", array(
                 ":idinvestiment"    => $this->getidinvestiment(),
                 ":idperson"         => $this->getidperson(),
                 ":iduser"          => $this->getiduser(),   

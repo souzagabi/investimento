@@ -75,20 +75,31 @@
         
         public function update(){
             $sql = new Sql();
-            
+            /*
+            [idperson] => 2
+            [] => 2
+            [] => suporte123
+            [] => $2y$12$HFjgUm/mk1RzTy4ZkJaZBe0Mc/BA2hQyoUckvm.lFa6TesjtNpiMe
+            [] => 1
+            [dtregister] => 2021-03-15 16:10:27
+            [] => Suporte123
+            [] => SP123
+            [] => 12354865202
+            */
+            echo '<pre>';
+            print_r($this);
+            echo '</pre>';//exit;            
             $results = $sql->select("CALL sp_users_update_save(:iduser, :idperson, :desperson, :sgcompany, :descpfcnpj, :deslogin, :despassword, :inadmin)", array(
                 ":iduser"       =>  $this->getiduser(),
                 ":idperson"     =>  $this->getidperson(),
                 ":desperson"    =>  $this->getdesperson(),
-                ":sgcompany"    =>  $this->getsgcompany(),
                 ":descpfcnpj"   =>  $this->getdescpfcnpj(),
+                ":sgcompany"    =>  $this->getsgcompany(),
                 ":deslogin"     =>  $this->getdeslogin(),
                 ":despassword"  =>  $this->getdespassword(),
                 ":inadmin"      =>  $this->getinadmin()
             ));
-          
             $this->setData($results);
-
         }
 
         public function delete(){

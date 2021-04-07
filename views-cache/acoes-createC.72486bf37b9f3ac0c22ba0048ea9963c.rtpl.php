@@ -85,48 +85,10 @@
               </div>
             </div>
           </div>
-          <!-- <div class="box-body">
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="dtsell">Data Venda</label>
-                <input type="text" class="form-control" name="dtsell" id="dtsell" onChange="replaceSlash(dtsell)">
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="qtdesell">Qtde</label>
-                <input type="text" class="form-control" name="qtdesell" id="qtdesell" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="prcsell">Valor Venda</label>
-                <input type="text" class="form-control" name="prcsell" id="prcsell" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="tlsell">Total Venda</label>
-                <input type="text" class="form-control" id="tlsell" name="tlsell" readonly>
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="lucre">Lucro</label>
-                <input type="text" class="form-control" id="lucre" name="lucre" readonly>
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="tax">Taxa</label>
-                <input type="text" class="form-control" id="tax" name="tax" readonly>
-              </div>
-            </div>
-          </div> -->
+          
           <!-- /.box-body -->
           <div class="box-footer">
             <input type="submit"name="compra" class="btn btn-success" value="Cadastrar Compra">
-            <!-- <button type="submit" >Cadastrar Compra</button> -->
             <?php $counter1=-1;  if( isset($voltar) && ( is_array($voltar) || $voltar instanceof Traversable ) && sizeof($voltar) ) foreach( $voltar as $key1 => $value1 ){ $counter1++; ?>
             <a href="/<?php echo htmlspecialchars( $voltar["voltar"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-warning">Voltar</a>
             <?php } ?>

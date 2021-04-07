@@ -18,7 +18,7 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/admin/users/{$user.iduser}" method="post">
+        <form role="form" action="/users/{$user.iduser}" method="post">
           <div class="box-body">
             <div class="box-body">
               <div class="form-group">
@@ -26,10 +26,17 @@
                 <input type="text" class="form-control" id="desperson" name="desperson" value="{$user.desperson}" placeholder="Digite o nome">
               </div>
               <div class="form-group">
+                <label for="sgcompany">Sigla</label>
+                <input type="text" class="form-control" id="sgcompany" name="sgcompany" value="{$user.descpfcnpj}" placeholder="Digite o login">
+              </div>
+              <div class="form-group">
+                <label for="descpfcnpj">CPF/CNPJ</label>
+                <input type="text" class="form-control" id="descpfcnpj" name="descpfcnpj" value="{$user.sgcompany}" placeholder="Digite o login">
+              </div>
+              <div class="form-group">
                 <label for="deslogin">Login</label>
                 <input type="text" class="form-control" id="deslogin" name="deslogin" value="{$user.deslogin}" placeholder="Digite o login">
               </div>
-              
               <div class="checkbox">
                 <label>
                   <input type="checkbox" name="inadmin" value="1" {if="$user.inadmin == 1"}checked{/if}> Acesso de Administrador

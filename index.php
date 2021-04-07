@@ -5,6 +5,7 @@
 	use \Slim\Slim;
 	use \Acao\Page;
 	use \Acao\PageAdmin;
+	use \Acao\PageUser;
 	use \Acao\PageAcoes;
 	use \Acao\PagePerson;
 	use \Acao\Model\User;
@@ -29,6 +30,7 @@
 /*======================================================================================*/
 
 	$app->get('/acoes', function() {
+		User::verifyLogin();
 		$acoes = Acao::listAll("listacoes");
 		$page = new PageAcoes();
 		
@@ -136,6 +138,7 @@
 /*======================================================================================*/
 	
 	$app->get('/notasC', function() {
+		User::verifyLogin();
 		$acoes = Acao::listAll("notascompra");
 		$page = new PageAcoes();
 		
@@ -155,6 +158,7 @@
 	});
 
 	$app->get('/notasV', function() {
+		User::verifyLogin();
 		$acoes = Acao::listAll("notasvenda");
 		$page = new PageAcoes();
 		for ($i=0; $i < count($acoes); $i++) { 
@@ -171,21 +175,32 @@
 		
 	});
 
-	$app->get('/notas/create', function() {
-		$notas = ["notas"=> "notas"];
+	$app->get("/notas/:idinvestiment", function($idinvestiment) {
 		User::verifyLogin();
+		$acoes = new Acao();
+		//var_dump($idinvestiment);exit;
+		$acoes->getByBuy((int)$idinvestiment);
 		$page = new PageAcoes();
-		if (isset($_GET["compra"])) {
-			$page->setTpl("notas-createC", array(
-				"notas"=>$notas
-			));
-		}
-		if (isset($_GET["venda"])) {
-			$page->setTpl("notas-createV", array(
-				"notas"=>$notas
-			));
-		}
+		
+		$page ->setTpl("acoes-update", array(
+			"acoes"=>$acoes->getValues()
+		));
 	});
+	// $app->get('/notas/create', function() {
+	// 	$notas = ["notas"=> "notas"];
+	// 	User::verifyLogin();
+	// 	$page = new PageAcoes();
+	// 	if (isset($_GET["compra"])) {
+	// 		$page->setTpl("notas-createC", array(
+	// 			"notas"=>$notas
+	// 		));
+	// 	}
+	// 	if (isset($_GET["venda"])) {
+	// 		$page->setTpl("notas-createV", array(
+	// 			"notas"=>$notas
+	// 		));
+	// 	}
+	// });
 	
 
 /*======================================================================================*/
@@ -202,7 +217,7 @@
 		));
 	});
 
-	$app->get("/acoes/:idperson/delete", function ($idperson){
+	$app->get("/persons/:idperson/delete", function ($idperson){
 		User::verifyLogin();
 		$person = new Person();
 		$person->get((int)$idperson);
@@ -243,7 +258,7 @@
 
 		User::verifyLogin();
 		$users = User::listAll();
-		$page = new PageAdmin();
+		$page = new PageUser();
 		$page->setTpl("users", array(
 			"users"=> $users
 		));
@@ -275,80 +290,6 @@
 		exit;
 	});
 
-	$app->get('/admin/users', function() {
-		
-		User::verifyLogin();
-		$users = User::listAll();
-		$page = new PageAdmin();
-		$page->setTpl("users", array(
-			"users"=> $users
-		));
-	});
-
-	$app->get('/admin/users/create', function() {
-		
-		User::verifyLogin();
-		$page = new PageAdmin();
-		$page->setTpl("users-create");
-	});
-	
-	$app->get("/admin/users/:iduser/delete", function ($iduser){
-		User::verifyLogin();
-		$user = new User();
-		$user->get((int)$iduser);
-		$user->delete();
-		header("Location: /admin/users");
-		exit;
-	});
-
-	$app->get("/admin/users/:iduser", function($iduser) {
-		User::verifyLogin();
-		$user = new User();
- 
-		$user->get((int)$iduser);
-		
-		$page = new PageAdmin();
-		
-		$page ->setTpl("users-update", array(
-			"user"=>$user->getValues()
-		));
-	});
-
-	$app->post("/admin/users/create", function (){
-		User::verifyLogin();
-
-		$user = new User();
-
-		$_POST["inadmin"] = (isset($_POST["inadmin"])) ? 1 : 0;
-
-		$_POST['despassword'] = password_hash($_POST["despassword"], PASSWORD_DEFAULT, [
-			
-			"cost"=>12
-			
-			]);
-
-		$user->setData($_POST);
-
-		$user->save();
-
-		header("Location: /admin/users");
-			exit;
-	});
-	
-	$app->post("/admin/users/:iduser", function ($iduser){
-		User::verifyLogin();
-		$user = new User();
-		$_POST["inadmin"] = (isset($_POST["inadmin"])) ? 1 : 0;
-		
-		$user->get((int)$iduser);
-		$user->setData($_POST);
-		
-		$user->update();
-		header("Location: /admin/users");
-		exit;
-		
-	});
-	
 	$app->get("/admin/forgot", function(){
 		$page = new PageAdmin([
 			"header"=>false,
@@ -392,6 +333,88 @@
 		$user->setPassword($_POST["password"]);
 	});
 
+
+/*======================================================================================*/
+/*										Rotas do Users									*/
+/*======================================================================================*/
+
+	$app->get('/users', function() {
+		
+		User::verifyLogin();
+		$users = User::listAll();
+		$page = new PageUser();
+		$page->setTpl("users", array(
+			"users"=> $users
+		));
+	});
+
+	$app->get('/users/create', function() {
+		
+		User::verifyLogin();
+		$page = new PageUser();
+		$page->setTpl("users-create");
+	});
+	
+	$app->get("/users/:iduser/delete", function ($iduser){
+		User::verifyLogin();
+		$user = new User();
+		$user->get((int)$iduser);
+
+		$user->delete();
+		header("Location: /users");
+		exit;
+	});
+
+	$app->get("/users/:iduser", function($iduser) {
+		User::verifyLogin();
+		$user = new User();
+ 
+		$user->get((int)$iduser);
+		
+		$page = new PageUser();
+		
+		$page ->setTpl("users-update", array(
+			"user"=>$user->getValues()
+		));
+	});
+
+	$app->post("/users/create", function (){
+		User::verifyLogin();
+
+		$user = new User();
+
+		$_POST["inadmin"] = (isset($_POST["inadmin"])) ? 1 : 0;
+
+		$_POST['despassword'] = password_hash($_POST["despassword"], PASSWORD_DEFAULT, [
+			
+			"cost"=>12
+			
+			]);
+
+		$user->setData($_POST);
+
+		$user->save();
+
+		header("Location: /users");
+			exit;
+	});
+	
+	$app->post("/users/:iduser", function ($iduser){
+		User::verifyLogin();
+		$user = new User();
+		$_POST["inadmin"] = (isset($_POST["inadmin"])) ? 1 : 0;
+		
+		$user->get((int)$iduser);
+		$user->setData($_POST);
+		
+		$user->update();
+		
+		header("Location: /users");
+		exit;
+		
+	});
+	
+	
 	$app->run();
 
 ?>
