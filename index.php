@@ -77,6 +77,7 @@
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		
 		$acao->setData($_POST);
+
 		if (isset($_POST["compra"])) {
 			$acao->save_buy();
 		}
@@ -186,7 +187,6 @@
 			));
 		}
 	});
-	
 
 /*======================================================================================*/
 /*										Rotas do Person									*/

@@ -75,7 +75,10 @@
         
         public function update(){
             $sql = new Sql();
-            
+            // echo '<pre>';
+            // print_r($this);
+            // echo '</pre>';
+            // exit;
             $results = $sql->select("CALL sp_users_update_save(:iduser, :idperson, :desperson, :sgcompany, :descpfcnpj, :deslogin, :despassword, :inadmin)", array(
                 ":iduser"       =>  $this->getiduser(),
                 ":idperson"     =>  $this->getidperson(),
