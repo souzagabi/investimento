@@ -24,61 +24,6 @@
         <!-- /.box-header -->
         <!-- form start -->
         <form role="form" action="/acoes/create" method="post">
-          <!-- <div class="box-body">
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="descompany">Empresa</label>
-                <input type="text" class="form-control" name="descompany" id="descompany">
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="sgcompany">Sigla</label>
-                <input type="text" class="form-control" name="sgcompany" id="sgcompany" required>
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="descnpj">CPF/CNPJ</label>
-                <input type="text" class="form-control" name="descnpj" id="descnpj">
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="tipe">Tipo</label>
-                <select class="form-control" name="tipe" id="tipe">
-                  <option value="1" selected>Swing Trade</option>
-                  <option value="2">Day Trade</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="box-body">
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="dtbuy">Data Compra</label>
-                <input type="text" class="form-control" name="dtbuy" id="dtbuy" onChange="replaceSlash(dtbuy)" required>
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="qtdebuy">Qtde</label>
-                <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" required>
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="prcbuy">Valor Compra</label>
-                <input type="text" class="form-control" name="prcbuy" id="prcbuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy);" required>
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="tlbuy">Total Compra</label>
-                <input type="text" class="form-control" id="tlbuy" name="tlbuy" readonly>
-              </div>
-            </div>
-          </div> -->
           <div class="box-body">
             <div class="col col-md-2">
               <div class="form-group">
@@ -139,18 +84,6 @@
                 <input type="text" class="form-control" id="prcaverage" name="prcaverage" readonly>
               </div>
             </div>
-            <!-- <div class="col col-md-2">
-              <div class="form-group">
-                <label for="lucre">Lucro</label>
-                <input type="text" class="form-control" id="lucre" name="lucre" readonly>
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="tax">Taxa</label>
-                <input type="text" class="form-control" id="tax" name="tax" readonly>
-              </div>
-            </div> -->
           </div>
           <!-- /.box-body -->
           <div class="box-footer">

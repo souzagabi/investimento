@@ -11,6 +11,7 @@
             if($listacoes === "listacoes"){
                 return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY e.sgecompany");
             }
+            
             return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY p.sgcompany");
         }
 
@@ -66,8 +67,7 @@
         
         public function save_buy(){
             $sql = new Sql();
-       
-            //$results = $sql->select("CALL sp_acoes_save(:iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :prcaverage)", array(
+           
             $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :tipe, :prcaverage)", array(
                 ":iduser"      => $this->getiduser(),    
                 ":descompany"  => $this->getdescompany(),    

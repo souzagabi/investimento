@@ -79,6 +79,7 @@
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		
 		$acao->setData($_POST);
+
 		if (isset($_POST["compra"])) {
 			$acao->save_buy();
 		}
@@ -186,23 +187,7 @@
 			"acoes"=>$acoes->getValues()
 		));
 	});
-	// $app->get('/notas/create', function() {
-	// 	$notas = ["notas"=> "notas"];
-	// 	User::verifyLogin();
-	// 	$page = new PageAcoes();
-	// 	if (isset($_GET["compra"])) {
-	// 		$page->setTpl("notas-createC", array(
-	// 			"notas"=>$notas
-	// 		));
-	// 	}
-	// 	if (isset($_GET["venda"])) {
-	// 		$page->setTpl("notas-createV", array(
-	// 			"notas"=>$notas
-	// 		));
-	// 	}
-	// });
 	
-
 /*======================================================================================*/
 /*										Rotas do Person									*/
 /*======================================================================================*/

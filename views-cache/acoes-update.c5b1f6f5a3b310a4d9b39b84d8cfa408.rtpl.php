@@ -2,9 +2,13 @@
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
 <section class="content-header">
-  <h1>
-    Lista de Usuários
-  </h1>
+  <div class="box box-primary">
+    <div class="box-header with-border">
+      <h3 class="box-title">
+        Editar Ação Compra
+      </h3>
+    </div>
+  </div>
 </section>
 
 <!-- Main content -->
@@ -13,9 +17,6 @@
   <div class="row">
   	<div class="col-md-12">
   		<div class="box box-primary">
-        <div class="box-header with-border">
-          <h3 class="box-title">Editar Ação</h3>
-        </div>
         <!-- /.box-header -->
         <!-- form start -->
         <form role="form" action="/acoes/<?php echo htmlspecialchars( $acoes["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" method="post">
@@ -118,7 +119,7 @@
             <!-- /.box-body -->
             <div class="box-footer">
               <button type="submit" class="btn btn-primary">Alualizar</button>
-              <a href="/acoes" class="btn btn-warning">Voltar</a>
+              <a href="/notasC" class="btn btn-warning">Voltar</a>
             </div>
         </form>
       </div>
