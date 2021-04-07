@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<?php if(!class_exists('Rain\Tpl')){exit;}?><div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
@@ -6,7 +6,7 @@
     </h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active"><a href="/acoes">Ações</a></li>
+      <li class="active"><a href="/acoes">Ações Search</a></li>
     </ol>
   </section>
   <!-- Main content -->
@@ -41,15 +41,15 @@
             </tr>
           </thead>
           <tbody>
-            {loop="$acoes"}
+            <?php $counter1=-1;  if( isset($acoes) && ( is_array($acoes) || $acoes instanceof Traversable ) && sizeof($acoes) ) foreach( $acoes as $key1 => $value1 ){ $counter1++; ?>
             <tr>
-              <th>{$value.desperson}</th>
-              <th>{$value.sgecompany}</th>
-              <td>{$value.qtdeestoque}</td>
-              <td>{$value.prcaverage}</td>
-              <td>{$value.prcaverage * $value.qtdeestoque}</td>
+              <th><?php echo htmlspecialchars( $value1["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?></th>
+              <th><?php echo htmlspecialchars( $value1["sgecompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?></th>
+              <td><?php echo htmlspecialchars( $value1["qtdeestoque"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <td><?php echo htmlspecialchars( $value1["prcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <td><?php echo htmlspecialchars( $value1["prcaverage"] * $value1["qtdeestoque"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
             </tr>
-            {/loop}
+            <?php } ?>
           </tbody>
         </table>
       </div>

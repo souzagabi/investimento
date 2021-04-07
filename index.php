@@ -50,6 +50,7 @@
 			$voltar = ["voltar"=>"notasC"];
 		}
 		$page = new PageAcoes();
+
 		if (isset($_GET["compra"])) {
 			$page->setTpl("acoes-createC", array(
 				"voltar"=>$voltar
@@ -58,6 +59,17 @@
 		if (isset($_GET["venda"])) {
 			$page->setTpl("acoes-createV", array(
 				"voltar"=>$voltar
+			));
+		}
+		if (isset($_GET["search"])) {
+			if (isset($_GET["dtbuy"])) {
+				$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
+			}
+			$acoes = Acao::listAll($dtBuySell);
+
+			$page->setTpl("/acoes-search", array(
+				"voltar"=>$voltar,
+				"acoes"=>$acoes
 			));
 		}
 	});
