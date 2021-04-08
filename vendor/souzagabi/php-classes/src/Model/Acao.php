@@ -76,7 +76,7 @@
         
         public function save_buy(){
             $sql = new Sql();
-           
+          
             $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :tipe, :prcaverage)", array(
                 ":iduser"      => $this->getiduser(),    
                 ":descompany"  => $this->getdescompany(),    
@@ -94,7 +94,7 @@
         }
         public function save_sell(){
             $sql = new Sql();
-            
+           
             $results = $sql->select("CALL sp_acoes_save_sell(:iduser, :descompany, :sgcompany, :descnpj, :dtsell, :qtdesell, :prcsell, :tlsell, :tipe, :prcaverage)", array(
                 ":iduser"      => $this->getiduser(),    
                 ":descompany"  => $this->getdescompany(),    

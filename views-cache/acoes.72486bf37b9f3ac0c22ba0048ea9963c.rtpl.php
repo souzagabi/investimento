@@ -20,9 +20,6 @@
               <input type="submit" name="venda" class="btn btn-success" value="Cadastrar Venda">
               <input type="text" name="acoes" value="acoes" hidden>
             </div>
-            <div class="col col-md-2"><input type="text" name="dtbuy" id="dtbuy" class="form-control"></div>
-            <div class="col col-md-2"><input type="text" name="dtsell" id="dtsell" class="form-control"></div>
-            <input type="submit" name="search" class="btn btn-primary" value="Search">
           </div>
         </div>
       </div>

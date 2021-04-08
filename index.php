@@ -42,12 +42,11 @@
 				$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
 				
 				$acoes = Acao::listAll($dtBuySell);
-				$page->setTpl("/acoes-search", array(
+				$page->setTpl("/notas", array(
 					"acoes"=>$acoes
 				));
 				
 			}
-			$page->setTpl("/acoes-search");
 			
 		} else {
 			$acoes = Acao::listAll("listacoes");
