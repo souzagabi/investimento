@@ -89,7 +89,7 @@
         public function save_buy(){
             $sql = new Sql();
           
-            $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, ::tptransaction, :tipe, :prcaverage)", array(
+            $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :tptransaction, :tipe, :prcaverage)", array(
                 ":iduser"           => $this->getiduser(),    
                 ":descompany"       => $this->getdescompany(),    
                 ":sgcompany"        => $this->getsgcompany(),    
@@ -167,8 +167,10 @@
         public function delete(){
             $sql = new Sql();
             
-            $sql->query("CALL sp_acoes_delete(:idinvestiment)", array(
-                ":idinvestiment"=>$this->getidinvestiment()
+            $sql->query("CALL sp_acoes_delete(:idinvestiment, :idestoque, :qtdetotal)", array(
+                ":idinvestiment"    =>$this->getidinvestiment(),
+                ":idestoque"        =>$this->getidestoque(),
+                ":qtdetotal"        =>$this->getqtdetotal()
             ));
         }
 

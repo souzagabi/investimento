@@ -105,6 +105,7 @@
 			$_POST["tptransaction"] = "V";
 		}
 
+
 		$acao->setData($_POST);
 
 		if (isset($_POST["compra"])) {
@@ -121,7 +122,7 @@
 	$app->get("/acoes/:idinvestiment/delete", function ($idinvestiment){
 		User::verifyLogin();
 		$acao = new Acao();
-		$acao->getByBuy((int)$idinvestiment);
+		$acao->getByBuy($idinvestiment);
 		$acao->delete();
 		header("Location: /notasC");
 		exit;

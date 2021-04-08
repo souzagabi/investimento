@@ -58,7 +58,7 @@
               <td>{if="$value.tipe == 1"}Swing Trade{else}Day Trade{/if}</td>
               <td>
                 <a href="/acoes/{$value.idinvestiment}_{$value.tptransaction}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
-                <a href="/acoes/{$value.idinvestiment}/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                <a href="/acoes/{$value.idinvestiment}_{$value.tptransaction}/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
             {/loop}
