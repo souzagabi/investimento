@@ -31,12 +31,31 @@
 
 	$app->get('/acoes', function() {
 		User::verifyLogin();
-		$acoes = Acao::listAll("listacoes");
 		$page = new PageAcoes();
 		
-		$page->setTpl("acoes", array(
-			"acoes"=> $acoes
-		));
+		if (isset($_GET["search"])) {
+			if ($_GET["dtbuy"] != NULL || $_GET["dtsell"] != NULL) {
+				
+				$_GET["dtbuy"] = Acao::convertDateDataBase($_GET["dtbuy"]);
+				$_GET["dtsell"] = Acao::convertDateDataBase($_GET["dtsell"]);
+				
+				$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
+				
+				$acoes = Acao::listAll($dtBuySell);
+				$page->setTpl("/acoes-search", array(
+					"acoes"=>$acoes
+				));
+				
+			}
+			$page->setTpl("/acoes-search");
+			
+		} else {
+			$acoes = Acao::listAll("listacoes");
+			
+			$page->setTpl("acoes", array(
+				"acoes"=> $acoes
+			));
+		}
 		
 	});
 	
@@ -61,20 +80,7 @@
 				"voltar"=>$voltar
 			));
 		}
-		if (isset($_GET["search"])) {
-			if ($_GET["dtbuy"] != NULL || $_GET["dtsell"] != NULL) {
-				
-				$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
-				$acoes = Acao::listAll($dtBuySell);
-				$page->setTpl("/acoes-search", array(
-					"voltar"=>$voltar,
-					"acoes"=>$acoes
-				));
-				
-			}
-			$page->setTpl("/acoes-search");
-			
-		}
+		
 	});
 
 	$app->post("/acoes/create", function (){

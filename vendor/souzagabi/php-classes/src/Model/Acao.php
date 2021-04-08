@@ -17,7 +17,7 @@
             if (isset($listacoes)) {
                 $data = explode("_", $listacoes);
                 
-                return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 AND dtbuy >= :dtbuy AND dtsell <= :dtsell ORDER BY p.sgcompany", array(
+                return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 AND dtbuy >= :dtbuy OR dtsell <= :dtsell ORDER BY p.sgcompany", array(
                    ":dtbuy"=>$data[0], 
                    ":dtsell"=>$data[1] 
                 ));
@@ -94,8 +94,7 @@
         }
         public function save_sell(){
             $sql = new Sql();
-       
-            //$results = $sql->select("CALL sp_acoes_save(:iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :prcaverage)", array(
+            
             $results = $sql->select("CALL sp_acoes_save_sell(:iduser, :descompany, :sgcompany, :descnpj, :dtsell, :qtdesell, :prcsell, :tlsell, :tipe, :prcaverage)", array(
                 ":iduser"      => $this->getiduser(),    
                 ":descompany"  => $this->getdescompany(),    

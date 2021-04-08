@@ -11,17 +11,24 @@
   </section>
   <!-- Main content -->
   <section class="content">
-    <form action="/acoes/create" method="get">
-      <div class="box box-primary">
-        <div class="col form-control">
-          <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
-          <input type="submit" name="venda" class="btn btn-success" value="Cadastrar Venda">
-          <input type="text" name="acoes" value="acoes" hidden>
-          <!-- <a href="/acoes/create" name="teste" class="btn btn-success">Cadastrar Compra</a> -->
-          <!-- <a href="/acoes/vcreate" class="btn btn-success">Cadastrar Venda</a> -->
+    <div class="box box-primary">
+      <div class="col form-control">
+        <div class="row">
+          <div class="col col-md-6">
+              <form action="/acoes/create" method="get">
+                <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
+                <input type="submit" name="venda" class="btn btn-success" value="Cadastrar Venda">
+                <input type="text" name="acoes" value="acoes" hidden>
+              </form>
+            </div>
+            <form action="/acoes" method="get">
+              <div class="col col-md-2"><input type="text" name="dtbuy" id="dtbuy" class="form-control" onChange="replaceSlash(dtbuy)"></div>
+              <div class="col col-md-2"><input type="text" name="dtsell" id="dtsell" class="form-control" onChange="replaceSlash(dtsell)"></div>
+              <input type="submit" name="search" class="btn btn-primary" value="Search">
+            </form>
+          </div>
         </div>
       </div>
-    </form>
     <div class="box box-primary">
       <div class="box-body no-padding">
     
