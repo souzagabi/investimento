@@ -19,7 +19,7 @@
   		<div class="box box-primary">
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/acoes/{$acoes.idinvestiment}" method="post">
+        <form role="form" action="/acoes/{$acoes.idinvestiment}_{$acoes.tptransaction}" method="post">
           <input type="text" name="idinvestiment" value="{$acoes.idinvestiment}" hidden>
           <input type="text" name="idperson" value="{$acoes.idperson}" hidden>
           <div class="box-body">
@@ -56,19 +56,19 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="dtbuy">Data Compra</label>
-                  <input type="text" class="form-control" name="dtbuy" id="dtbuy" value="{$acoes.dtbuy}" onChange="replaceSlash(dtbuy)" required>
+                  <input type="text" class="form-control" name="dtbuy" id="dtbuy" value="{$acoes.dtbuy}" onChange="replaceSlash(dtbuy)">
                 </div>
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="qtdebuy">Qtde</label>
-                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="{$acoes.qtdebuy}" required>
+                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="{$acoes.qtdebuy}">
                 </div>
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="prcbuy">Valor Compra</label>
-                  <input type="text" class="form-control" name="prcbuy" id="prcbuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="{$acoes.prcbuy}" required>
+                  <input type="text" class="form-control" name="prcbuy" id="prcbuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="{$acoes.prcbuy}">
                 </div>
               </div>
               <div class="col col-md-2">

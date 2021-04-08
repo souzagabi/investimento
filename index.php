@@ -98,6 +98,13 @@
 		}
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		
+		if (isset($_POST["compra"])) {
+			$_POST["tptransaction"] = "C";
+		}
+		if (isset($_POST["venda"])) {
+			$_POST["tptransaction"] = "V";
+		}
+
 		$acao->setData($_POST);
 
 		if (isset($_POST["compra"])) {
@@ -123,8 +130,8 @@
 	$app->get("/acoes/:idinvestiment", function($idinvestiment) {
 		User::verifyLogin();
 		$acoes = new Acao();
-		//var_dump($idinvestiment);exit;
-		$acoes->getByBuy((int)$idinvestiment);
+		$acoes->getByBuy($idinvestiment);
+		 
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(
@@ -146,9 +153,10 @@
 			$_POST["dtsell"] = Acao::convertDateDataBase($_POST["dtsell"]);
 		}
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
-		$acoes->getByBuy((int)$idinvestiment);
-		$acoes->setData($_POST);
 		
+		$acoes->getByBuy($idinvestiment);
+		$acoes->setData($_POST);
+
 		$acoes->update();
 		header("Location: /acoes");
 		exit;
@@ -199,8 +207,10 @@
 	$app->get("/notas/:idinvestiment", function($idinvestiment) {
 		User::verifyLogin();
 		$acoes = new Acao();
-		//var_dump($idinvestiment);exit;
+		
 		$acoes->getByBuy((int)$idinvestiment);
+		
+       
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(

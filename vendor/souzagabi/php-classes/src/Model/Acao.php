@@ -46,13 +46,23 @@
             $this->setData($data);
         
         }
+
         public function getByBuy($idinvestiment) {
         
             $sql = new Sql();
+            $id = explode("_", $idinvestiment);
             
-            $results = $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE i.idinvestiment = :idinvestiment", array(
-                ":idinvestiment"=>$idinvestiment
-            ));
+            if ($id[1] == 'C') 
+            {
+                $results = $sql->select("SELECT *, sum(e.qtdeestoque - i.qtdebuy) AS qtdetotal FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE i.idinvestiment = :idinvestiment", array(
+                    ":idinvestiment"=>(int)$id[0]
+                ));
+            } else 
+            {
+                $results = $sql->select("SELECT *, sum(e.qtdeestoque + i.qtdesell) AS qtdetotal FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE i.idinvestiment = :idinvestiment", array(
+                    ":idinvestiment"=>(int)$id[0]
+                ));
+            }
             if ($results[0]["tax"] > 0) {
                 $results[0]["tax"] = $results[0]["tax"]." %";
             }
@@ -67,9 +77,11 @@
             $this->setData($data);
         
         }
+
         public function convertDateView($date){
             return $data = date("d-m-Y", strToTime($date));
         }
+
         public function convertDateDataBase($date){
             return $data = date("Y-m-d", strToTime($date));
         }
@@ -77,35 +89,39 @@
         public function save_buy(){
             $sql = new Sql();
           
-            $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :tipe, :prcaverage)", array(
-                ":iduser"      => $this->getiduser(),    
-                ":descompany"  => $this->getdescompany(),    
-                ":sgcompany"   => $this->getsgcompany(),    
-                ":descnpj"     => $this->getdescnpj(),    
-                ":dtbuy"       => $this->getdtbuy(),
-                ":qtdebuy"     => $this->getqtdebuy(),
-                ":prcbuy"      => $this->getprcbuy(),
-                ":tlbuy"       => $this->gettlbuy(),
-                ":tipe"        => $this->gettipe(),
-                ":prcaverage"  => $this->getprcaverage()
+            $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, ::tptransaction, :tipe, :prcaverage)", array(
+                ":iduser"           => $this->getiduser(),    
+                ":descompany"       => $this->getdescompany(),    
+                ":sgcompany"        => $this->getsgcompany(),    
+                ":descnpj"          => $this->getdescnpj(),    
+                ":dtbuy"            => $this->getdtbuy(),
+                ":qtdebuy"          => $this->getqtdebuy(),
+                ":prcbuy"           => $this->getprcbuy(),
+                ":tlbuy"            => $this->gettlbuy(),
+                ":tptransaction"    => $this->gettptransaction(),
+                ":tipe"             => $this->gettipe(),
+                ":prcaverage"       => $this->getprcaverage()
             ));
             
             $this->setData($results);
         }
+
         public function save_sell(){
             $sql = new Sql();
-           
-            $results = $sql->select("CALL sp_acoes_save_sell(:iduser, :descompany, :sgcompany, :descnpj, :dtsell, :qtdesell, :prcsell, :tlsell, :tipe, :prcaverage)", array(
-                ":iduser"      => $this->getiduser(),    
-                ":descompany"  => $this->getdescompany(),    
-                ":sgcompany"   => $this->getsgcompany(),    
-                ":descnpj"     => $this->getdescnpj(),    
-                ":dtsell"      => $this->getdtsell(),
-                ":qtdesell"    => $this->getqtdesell(),
-                ":prcsell"     => $this->getprcsell(),
-                ":tlsell"      => $this->gettlsell(),
-                ":tipe"        => $this->gettipe(),
-                ":prcaverage"  => $this->getprcaverage()
+          
+       
+            $results = $sql->select("CALL sp_acoes_save_sell(:iduser, :descompany, :sgcompany, :descnpj, :dtsell, :qtdesell, :prcsell, :tlsell, :tptransaction, :tipe, :prcaverage)", array(
+                ":iduser"           => $this->getiduser(),    
+                ":descompany"       => $this->getdescompany(),    
+                ":sgcompany"        => $this->getsgcompany(),    
+                ":descnpj"          => $this->getdescnpj(),    
+                ":dtsell"           => $this->getdtsell(),
+                ":qtdesell"         => $this->getqtdesell(),
+                ":prcsell"          => $this->getprcsell(),
+                ":tlsell"           => $this->gettlsell(),
+                ":tptransaction"    => $this->gettptransaction(),
+                ":tipe"             => $this->gettipe(),
+                ":prcaverage"       => $this->getprcaverage()
             ));
             
             $this->setData($results);
@@ -113,8 +129,14 @@
         
         public function update(){
             $sql = new Sql();
-                                                        
-            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson, :iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :idestoque, :sgecompany, :qtdeestoque)", array(
+            if ($this->tptransaction() == 'C') {
+                $qtdeTotal = ["qtdetotal"=>$this->getqtdetotal() + $this->getqtdebuy() - $this->getqtdesell()];
+            } else {
+                $qtdeTotal = ["qtdetotal"=>$this->getqtdetotal() - $this->getqtdesell() + $this->getqtdebuy()];
+            }
+            $this->setData($qtdeTotal);
+
+            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson, :iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :idestoque, :sgecompany, :qtdeestoque, :tptransaction)", array(
                 ":idinvestiment"    => $this->getidinvestiment(),
                 ":idperson"         => $this->getidperson(),
                 ":iduser"          => $this->getiduser(),   
@@ -134,7 +156,8 @@
                 ":tipe"             => $this->gettipe(),
                 ":idestoque"        => $this->getidestoque(),
                 ":sgecompany"       => $this->getsgecompany(),
-                ":qtdeestoque"      => $this->getqtdeestoque()
+                ":qtdeestoque"      => $this->getqtdetotal(),
+                ":tptransaction"    => $this->gettptransaction()
             ));
            
             $this->setData($results);
@@ -148,6 +171,7 @@
                 ":idinvestiment"=>$this->getidinvestiment()
             ));
         }
+
         public static function getForgot($email){
             $sql = new Sql();
             $results = $sql->select("
