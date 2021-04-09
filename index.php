@@ -24,8 +24,10 @@
 /*======================================================================================*/
 	$app->get('/', function() {
 		User::verifyLogin();
-		$page = new PageAcoes();
 		$acoes = Acao::listAll("listacoes");
+		$page = new PageAcoes([
+			"acoes"=> $acoes
+		]);
 			
 		$page->setTpl("acoes", array(
 			"acoes"=> $acoes
