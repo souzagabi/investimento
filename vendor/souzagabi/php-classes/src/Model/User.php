@@ -8,7 +8,8 @@
         const SESSION = "User";
         const SECRET = "HcodePhp7_secret";
 
-        public static function login($login, $password){
+        public static function login($login, $password)
+        {
             $sql = new Sql();
 
             $results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :LOGIN", array(
@@ -30,23 +31,26 @@
             }
         }
 
-        public static function verifyLogin($inadmin = true){
+        public static function verifyLogin($inadmin = true)
+        {
             if (!isset($_SESSION[User::SESSION]) || !$_SESSION[User::SESSION] || !(int)$_SESSION[User::SESSION]["iduser"] > 0 || (bool)$_SESSION[User::SESSION]["inadmin"] !== $inadmin) {
                 header("Location: /admin/login");
                 exit;
             } 
         }
-        public static function logout(){
+        public static function logout()
+        {
             $_SESSION[User::SESSION] = NULL;
         }
 
-        public static function listAll(){
+        public static function listAll()
+        {
             $sql = new Sql();
             return $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) ORDER BY b.idperson");
         }
 
-        public function get($iduser) {
-        
+        public function get($iduser) 
+        {
             $sql = new Sql();
             
             $results = $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser;", array(
@@ -56,10 +60,10 @@
             $data = $results[0];
             
             $this->setData($data);
-        
         }
 
-        public function save(){
+        public function save()
+        {
             $sql = new Sql();
             
             $results = $sql->select("CALL sp_users_save(:desperson, :sgcompany, :descpfcnpj, :deslogin, :despassword, :inadmin)", array(
@@ -73,22 +77,10 @@
             $this->setData($results);
         }
         
-        public function update(){
+        public function update()
+        {
             $sql = new Sql();
-            /*
-            [idperson] => 2
-            [] => 2
-            [] => suporte123
-            [] => $2y$12$HFjgUm/mk1RzTy4ZkJaZBe0Mc/BA2hQyoUckvm.lFa6TesjtNpiMe
-            [] => 1
-            [dtregister] => 2021-03-15 16:10:27
-            [] => Suporte123
-            [] => SP123
-            [] => 12354865202
-            */
-            echo '<pre>';
-            print_r($this);
-            echo '</pre>';//exit;            
+                       
             $results = $sql->select("CALL sp_users_update_save(:iduser, :idperson, :desperson, :sgcompany, :descpfcnpj, :deslogin, :despassword, :inadmin)", array(
                 ":iduser"       =>  $this->getiduser(),
                 ":idperson"     =>  $this->getidperson(),
@@ -102,13 +94,15 @@
             $this->setData($results);
         }
 
-        public function delete(){
+        public function delete()
+        {
             $sql = new Sql();
             $sql->query("CALL sp_users_delete(:iduser)", array(
                 ":iduser"=>$this->getiduser()
             ));
         }
-        public static function getForgot($email){
+        public static function getForgot($email)
+        {
             $sql = new Sql();
             $results = $sql->select("
                 SELECT * FROM tb_persons a
@@ -146,7 +140,8 @@
             }
         }
 
-        public static function validForgotDecrypt($code){
+        public static function validForgotDecrypt($code)
+        {
             $ivlen = openssl_cipher_iv_length("aes-256-ctr");
             $iv = openssl_random_pseudo_bytes($ivlen);
             $idrecovery = openssl_decrypt(base64_decode($code), "aes-256-ctr", USER::SECRET, 0, $iv);
@@ -174,17 +169,20 @@
             }
         }
 
-        public static function setForgotUsed($idrecovery){
+        public static function setForgotUsed($idrecovery)
+        {
             $sql = new Sql();
             $sql->query("UPDATE tb_userspasswordsrecoveries SET dtrecovery = NOW() WHERE idrecovery = :idrecovery", array(
                 ":idrecovery"=>$idrecovery
             ));
         }
 
-        public function setPassword($password){
+        public function setPassword($password)
+        {
             $aql = new Sql();
             $sql->query("UPDATE tb_users SET despassword = :password WHERE iduser = :udsuser", array(
-                
+                ":password" =>$password,
+                ":udsuser"  =>$udsuser
             ));
         }
     }

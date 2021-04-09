@@ -5,7 +5,8 @@
     
     class Acao extends Model {
 
-        public static function listAll($listacoes){
+        public static function listAll($listacoes)
+        {
             $sql = new Sql();
             
             if($listacoes === "listacoes"){
@@ -24,8 +25,8 @@
             }
         }
 
-        public function getByPerson($idperson) {
-        
+        public function getByPerson($idperson) 
+        {
             $sql = new Sql();
             
             $results = $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE p.idperson = :idperson AND e.qtdeestoque > 0", array(
@@ -44,11 +45,10 @@
             $data = $results[0];
             
             $this->setData($data);
-        
         }
 
-        public function getByBuy($idinvestiment) {
-        
+        public function getByBuy($idinvestiment) 
+        {
             $sql = new Sql();
             $id = explode("_", $idinvestiment);
             
@@ -78,15 +78,18 @@
         
         }
 
-        public function convertDateView($date){
+        public function convertDateView($date)
+        {
             return $data = date("d-m-Y", strToTime($date));
         }
 
-        public function convertDateDataBase($date){
+        public function convertDateDataBase($date)
+        {
             return $data = date("Y-m-d", strToTime($date));
         }
         
-        public function save_buy(){
+        public function save_buy()
+        {
             $sql = new Sql();
           
             $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :tptransaction, :tipe, :prcaverage)", array(
@@ -106,9 +109,9 @@
             $this->setData($results);
         }
 
-        public function save_sell(){
+        public function save_sell()
+        {
             $sql = new Sql();
-          
        
             $results = $sql->select("CALL sp_acoes_save_sell(:iduser, :descompany, :sgcompany, :descnpj, :dtsell, :qtdesell, :prcsell, :tlsell, :tptransaction, :tipe, :prcaverage)", array(
                 ":iduser"           => $this->getiduser(),    
@@ -127,7 +130,8 @@
             $this->setData($results);
         }
         
-        public function update(){
+        public function update()
+        {
             $sql = new Sql();
             if ($this->tptransaction() == 'C') {
                 $qtdeTotal = ["qtdetotal"=>$this->getqtdetotal() + $this->getqtdebuy() - $this->getqtdesell()];
@@ -161,10 +165,10 @@
             ));
            
             $this->setData($results);
-
         }
 
-        public function delete(){
+        public function delete()
+        {
             $sql = new Sql();
             
             $sql->query("CALL sp_acoes_delete(:idinvestiment, :idestoque, :qtdetotal)", array(
@@ -173,87 +177,5 @@
                 ":qtdetotal"        =>$this->getqtdetotal()
             ));
         }
-
-        public static function getForgot($email){
-            $sql = new Sql();
-            $results = $sql->select("
-                SELECT * FROM tb_persons a
-                INNER JOIN tb_users b USING(idperson)
-                WHERE a.desemail = :email",
-                 array(
-                     ":email"=>$email
-            ));
-            if(count($results) === 0){
-                throw new \Exception("Não foi pssível recuperar a senha.");
-            } else {
-                $data = $results[0];
-                $results2 = $sql->select("CALL sp_userspasswordsrecoveries_create(:iduser, :desid)", array(
-                    ":iduser"=>$data["iduser"],
-                    ":desid"=>$_SERVER["REMOTE_ADDR"]
-                ));
-                if (count($results2) === 0) {
-                    throw new \Exception("Não foi pssível recuperar a senha.");
-                } else {
-                    $dataRecovery = $results2[0];
-                    $ivlen = openssl_cipher_iv_length("aes-256-ctr");
-                    $iv = openssl_random_pseudo_bytes($ivlen);
-                    $code = base64_encode(openssl_encrypt($dataRecovery["idrecovery"], "aes-256-ctr", USER::SECRET, 0, $iv));
-                    $link = "http://www.gbsuporte.com.br:99/admin/forgot/reset?code=$code";
-                    $mailer = new Mailer($data["desemail"], $data["desperson"], "Redefinir senha do aplicativo", "forgot", 
-                        array(
-                            "name"=>$data["desperson"],
-                            "link"=>$link
-                    ));
-
-                    $mailer->send();
-
-                    return $data;
-                }
-            }
-        }
-
-        public static function validForgotDecrypt($code){
-            $ivlen = openssl_cipher_iv_length("aes-256-ctr");
-            $iv = openssl_random_pseudo_bytes($ivlen);
-            $idrecovery = openssl_decrypt(base64_decode($code), "aes-256-ctr", USER::SECRET, 0, $iv);
-            $sql = new Sql();
-            $results = $sql->select("
-                SELECT *
-                FROM tb_userspasswordsrecoveries a
-                INNER JOIN tb_users b USING(iduser)
-                INNER JOIN tb_persons c USING(idperson)
-                WHERE
-                    a.idrecovery = :idrecovery
-                    AND
-                    AND
-                    a.dtrecovery IS NULL
-                    AND
-                    DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();
-            ", array(
-                ":idrecovery"=>$idrecovery
-            ));
-
-            if (count($results) === 0) {
-                throw new \Exception("Não foi possível recuperar a senha.");
-            } else {
-                return $results[0];
-            }
-        }
-
-        public static function setForgotUsed($idrecovery){
-            $sql = new Sql();
-            $sql->query("UPDATE tb_userspasswordsrecoveries SET dtrecovery = NOW() WHERE idrecovery = :idrecovery", array(
-                ":idrecovery"=>$idrecovery
-            ));
-        }
-
-        public function setPassword($password){
-            $aql = new Sql();
-            $sql->query("UPDATE tb_users SET despassword = :password WHERE iduser = :udsuser", array(
-                
-            ));
-        }
     }
-    
-
 ?>

@@ -5,13 +5,14 @@
     use \Acao\Mailer;
     
     class Person extends Model {
-        public static function listAll(){
+        public static function listAll()
+        {
             $sql = new Sql();
             return $sql->select("SELECT * FROM tb_persons ORDER BY idperson");
         }
 
-        public function get($idperson) {
-        
+        public function get($idperson) 
+        {
             $sql = new Sql();
             
             $results = $sql->select("SELECT * FROM tb_persons WHERE idperson = :idperson", array(
@@ -21,10 +22,10 @@
             $data = $results[0];
             
             $this->setData($data);
-        
         }
 
-        public function update(){
+        public function update()
+        {
             $sql = new Sql();
                                                      
             $results = $sql->select("CALL sp_persons_update_save(:idperson, :desperson, :sgcompany, :descpfcnpj)", array(
@@ -35,10 +36,10 @@
             ));
            
             $this->setData($results);
-
         }
 
-        public function delete(){
+        public function delete()
+        {
             $sql = new Sql();
             
             $sql->query("CALL sp_persons_delete(:idperson)", array(

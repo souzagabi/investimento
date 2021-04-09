@@ -18,16 +18,20 @@
 
 	$app->config('debug', true);
 
-	$app->get('/', function() {
-		User::verifyLogin();
-		$page = new PageAdmin();
-		$page->setTpl("index");
-		
-	});
 	
 /*======================================================================================*/
 /*										Rotas das Ações									*/
 /*======================================================================================*/
+	$app->get('/', function() {
+		User::verifyLogin();
+		$page = new PageAcoes();
+		$acoes = Acao::listAll("listacoes");
+			
+		$page->setTpl("acoes", array(
+			"acoes"=> $acoes
+		));
+		
+	});
 
 	$app->get('/acoes', function() {
 		User::verifyLogin();

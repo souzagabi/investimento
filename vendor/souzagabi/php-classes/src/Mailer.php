@@ -8,8 +8,8 @@
         const NAME_FROM = "Gabriel";
         private $mail;
 
-        public function __construct($toAddress, $toName, $subject, $tplName, $data = array()){
-            
+        public function __construct($toAddress, $toName, $subject, $tplName, $data = array())
+        {
             $config = array(
                 "tpl_dir"    => $_SERVER['DOCUMENT_ROOT']."/views/email/", 
                 "cache_dir"  => $_SERVER['DOCUMENT_ROOT']."/views-cache/", 
@@ -46,6 +46,5 @@
         public function send(){
             return $this->mail->send();
         }
-
     }
 ?>

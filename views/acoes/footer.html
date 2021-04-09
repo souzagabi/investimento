@@ -89,11 +89,11 @@
 <!-- REQUIRED JS SCRIPTS -->
 
 <!-- jQuery 2.2.3 -->
-<script src="../../res/admin/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="../../config/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
-<script src="../../res/admin/bootstrap/js/bootstrap.min.js"></script>
+<script src="../../config/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
-<script src="../../res/admin/dist/js/app.min.js"></script>
+<script src="../../config/js/app.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
 <script src="../../js/calculo.acao.js"></script>
 <script language="javascript">

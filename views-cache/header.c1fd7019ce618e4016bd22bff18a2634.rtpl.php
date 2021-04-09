@@ -62,9 +62,9 @@ desired effect
     <!-- Logo -->
     <a href="../../res/admin/index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
+      <span class="logo-mini"><b>I</b>AC</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Admin</b>LTE</span>
+      <span class="logo-lg"><b>Investimento</b>AC</span>
     </a>
 
     <!-- Header Navbar -->
@@ -258,7 +258,7 @@ desired effect
     <ul class="sidebar-menu">
       <li class="header">HEADER</li>
       <!-- Optionally, you can add icons to the links -->
-      <li class="active"><a href="/admin/users"><i class="fa fa-users"></i> <span>Usuários</span></a></li>
+      <li class="active"><a href="/users"><i class="fa fa-users"></i> <span>Usuários</span></a></li>
       <li><a href="/persons"><i class="fa fa-user"></i> <span>Pessoas</span></a></li>
       <li><a href="/acoes"><i class="fa fa-envelope"></i> <span>Ações</span></a></li>
       <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>

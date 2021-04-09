@@ -1,9 +1,0 @@
-.col {
-    height: 50px;
-}
-table thead .buy, table tbody .buy{
-    background-color: #dcf6e9;
-}
-table thead .sell, table tbody .sell{
-    background-color: #f6dcdc;
-}
