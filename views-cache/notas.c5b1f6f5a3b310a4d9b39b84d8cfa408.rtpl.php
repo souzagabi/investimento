@@ -11,15 +11,24 @@
   </section>
   <!-- Main content -->
   <section class="content">
-    <form action="/acoes/create" method="get">
-      <div class="box box-primary">
-        <div class="col form-control">
-          <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
-          <input type="submit" name="venda" class="btn btn-success" value="Cadastrar Venda">
-          <input type="text" name="notas" value="notas" hidden>
+    <div class="box box-primary">
+      <div class="col form-control">
+        <div class="row">
+          <div class="col col-md-6">
+            <form action="/acoes/create" method="get">
+              <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
+              <input type="submit" name="venda" class="btn btn-success" value="Cadastrar Venda">
+              <input type="text" name="notas" value="notas" hidden>
+            </form>
+          </div>
+          <form action="/acoes" method="get">
+            <div class="col col-md-2"><input type="text" name="dtbuy" id="dtbuy" class="form-control" onChange="replaceSlash(dtbuy)"></div>
+            <div class="col col-md-2"><input type="text" name="dtsell" id="dtsell" class="form-control" onChange="replaceSlash(dtsell)"></div>
+            <input type="submit" name="search" class="btn btn-primary" value="Search">
+          </form>
         </div>
       </div>
-    </form>
+    </div>
     <div class="box box-primary">
       <div class="box-body no-padding">
         <table class="table">
@@ -48,8 +57,8 @@
               <td class="sell"><?php echo htmlspecialchars( $value1["prcsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td><?php if( $value1["tipe"] == 1 ){ ?>Swing Trade<?php }else{ ?>Day Trade<?php } ?></td>
               <td>
-                <a href="/acoes/<?php echo htmlspecialchars( $value1["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
-                <a href="/acoes/<?php echo htmlspecialchars( $value1["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                <a href="/acoes/<?php echo htmlspecialchars( $value1["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>_<?php echo htmlspecialchars( $value1["tptransaction"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                <a href="/acoes/<?php echo htmlspecialchars( $value1["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>_<?php echo htmlspecialchars( $value1["tptransaction"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
             <?php } ?>

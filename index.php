@@ -42,6 +42,16 @@
 				$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
 				
 				$acoes = Acao::listAll($dtBuySell);
+
+				for ($i=0; $i < count($acoes); $i++) { 
+					if ($acoes[$i]["dtbuy"]) {
+						$acoes[$i]["dtbuy"] = Acao::convertDateView($acoes[$i]["dtbuy"]);
+					}
+					if ($acoes[$i]["dtsell"]) {
+						$acoes[$i]["dtsell"] = Acao::convertDateView($acoes[$i]["dtsell"]);
+					}
+				}
+				
 				$page->setTpl("/notas", array(
 					"acoes"=>$acoes
 				));
