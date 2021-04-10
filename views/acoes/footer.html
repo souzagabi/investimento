@@ -95,7 +95,7 @@
 <!-- AdminLTE App -->
 <script src="../../config/js/app.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
-<script src="../../js/calculo.acao.js"></script>
+<script src="../../config/js/calculo.acao.js"></script>
 <script language="javascript">
   $(document).ready(function () {
         $('#dtbuy').mask('99-99-9999');
