@@ -12,7 +12,6 @@
         ];
         public function __construct($opts = array(), $tpl_dir = "/views/")
         {
-            var_dump($this->defaults);
             $this->options = array_merge($this->defaults, $opts);
 
             $config = array(

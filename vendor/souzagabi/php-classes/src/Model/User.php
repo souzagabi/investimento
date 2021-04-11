@@ -38,6 +38,7 @@
                 exit;
             } 
         }
+
         public static function logout()
         {
             $_SESSION[User::SESSION] = NULL;
@@ -97,6 +98,7 @@
         public function delete()
         {
             $sql = new Sql();
+            
             $sql->query("CALL sp_users_delete(:iduser)", array(
                 ":iduser"=>$this->getiduser()
             ));
