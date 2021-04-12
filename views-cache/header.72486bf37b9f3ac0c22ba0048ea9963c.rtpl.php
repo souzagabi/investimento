@@ -60,7 +60,7 @@ desired effect
   <!-- Main Header -->
   <header class="main-header">
 
-    <!-- Logo -->
+<!-- Logo -->
     <a href="../../config/index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>I</b>AC</span>
@@ -186,7 +186,6 @@ desired effect
               
               <li class="user-header">
                 <img class="img-circle">
-
                 <p>
                   Gabriel Alves - Web Developer
                   <small>Member since Nov. 2012</small>

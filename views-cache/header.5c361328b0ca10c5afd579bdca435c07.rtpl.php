@@ -19,12 +19,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- jvectormap -->
   <link rel="stylesheet" href="../../config/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../../res/admin/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="../../config/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect.
   -->
-  <link rel="stylesheet" href="../../res/admin/dist/css/skins/skin-blue.min.css">
+  <link rel="stylesheet" href="../../config/css/skins/skin-blue.min.css">
   <link rel="stylesheet" href="../../config/css/index.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -61,7 +61,7 @@ desired effect
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="../../res/admin/index2.html" class="logo">
+    <a href="../../config/index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>I</b>AC</span>
       <!-- logo for regular state and mobile devices -->

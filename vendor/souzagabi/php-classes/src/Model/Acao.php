@@ -13,12 +13,12 @@
                 return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY e.sgecompany");
             }
             if($listacoes === "notascompra" || $listacoes === "notasvenda"){
-                return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY p.sgcompany");
+                return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) ORDER BY i.idinvestiment");
             }
             if (isset($listacoes)) {
                 $data = explode("_", $listacoes);
                 
-                return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 AND dtbuy >= :dtbuy OR dtsell <= :dtsell ORDER BY p.sgcompany", array(
+                return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE dtbuy >= :dtbuy OR dtsell <= :dtsell ORDER BY i.idinvestiment", array(
                    ":dtbuy"=>$data[0], 
                    ":dtsell"=>$data[1] 
                 ));

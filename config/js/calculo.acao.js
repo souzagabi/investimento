@@ -49,4 +49,14 @@ function replaceSlash(element)
     var dt = element.value.replace(/[\/\-]/g, '-');
     document.getElementById(element.name).value = dt;
 }
+
+function convertLowToUpper(element)
+{
+    var company = element.value;
+    if(company != '' || company != NULL)
+    {
+        document.getElementById(element.name).value = company.toUpperCase();
+        
+    }
+}
     
