@@ -22,6 +22,13 @@
 /*======================================================================================*/
 /*										Rotas das Ações									*/
 /*======================================================================================*/
+	$app->get('/ampli', function() {
+		
+		$page = new Page();
+			
+		$page->setTpl("ampliar-imagem");
+		
+	});
 	$app->get('/', function() {
 		User::verifyLogin();
 		$acoes = Acao::listAll("listacoes");
@@ -63,6 +70,14 @@
 				));
 				
 			}
+			if ($_GET["sgcompany"] != '' && $_GET["sgcompany"] != NULL )
+			{
+				$company = "sgcompany"."_".$_GET["sgcompany"];
+				$acoes = Acao::listAll($company);
+				$page->setTpl("/notas", array(
+					"acoes"=>$acoes
+				));
+			}
 			
 		} else {
 			$acoes = Acao::listAll("listacoes");
@@ -76,6 +91,7 @@
 	
 	$app->get('/acoes/create', function() {
 		User::verifyLogin();
+		
 		$voltar = ["voltar"=>"teste"];
 		if (isset($_GET["acoes"])) {
 			$voltar = ["voltar"=>"acoes"];
@@ -148,7 +164,7 @@
 		User::verifyLogin();
 		$acoes = new Acao();
 		$acoes->getByBuy($idinvestiment);
-		 
+		
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(

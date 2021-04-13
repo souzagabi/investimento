@@ -17,11 +17,16 @@
             }
             if (isset($listacoes)) {
                 $data = explode("_", $listacoes);
-                
-                return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE dtbuy >= :dtbuy OR dtsell <= :dtsell ORDER BY i.idinvestiment", array(
-                   ":dtbuy"=>$data[0], 
-                   ":dtsell"=>$data[1] 
-                ));
+                if ($data[0] === "sgcompany") {
+                    return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE i.sgcompany = :sgcompany ORDER BY i.idinvestiment", array(
+                        ":sgcompany"=>$data[1]
+                    ));
+                } else {
+                    return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE dtbuy >= :dtbuy OR dtsell <= :dtsell ORDER BY i.idinvestiment", array(
+                       ":dtbuy"=>$data[0], 
+                       ":dtsell"=>$data[1] 
+                    ));
+                }
             }
         }
 
@@ -92,9 +97,9 @@
         {
             $sql = new Sql();
           
-            $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :tptransaction, :tipe, :prcaverage)", array(
+            $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :desperson, :sgcompany, :descnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :tptransaction, :tipe, :prcaverage)", array(
                 ":iduser"           => $this->getiduser(),    
-                ":descompany"       => $this->getdescompany(),    
+                ":desperson"        => $this->getdesperson(),    
                 ":sgcompany"        => $this->getsgcompany(),    
                 ":descnpj"          => $this->getdescnpj(),    
                 ":dtbuy"            => $this->getdtbuy(),
@@ -112,12 +117,11 @@
         public function save_sell()
         {
             $sql = new Sql();
-       
-            $results = $sql->select("CALL sp_acoes_save_sell(:iduser, :descompany, :sgcompany, :descnpj, :dtsell, :qtdesell, :prcsell, :tlsell, :tptransaction, :tipe, :prcaverage)", array(
+            
+            $results = $sql->select("CALL sp_acoes_save_sell(:iduser, :desperson, :sgcompany, :dtsell, :qtdesell, :prcsell, :tlsell, :tptransaction, :tipe, :prcaverage)", array(
                 ":iduser"           => $this->getiduser(),    
-                ":descompany"       => $this->getdescompany(),    
+                ":desperson"        => $this->getdesperson(),    
                 ":sgcompany"        => $this->getsgcompany(),    
-                ":descnpj"          => $this->getdescnpj(),    
                 ":dtsell"           => $this->getdtsell(),
                 ":qtdesell"         => $this->getqtdesell(),
                 ":prcsell"          => $this->getprcsell(),
@@ -132,6 +136,9 @@
         
         public function update()
         {
+            echo '<pre>';
+            print_r($this);
+            echo '</pre>';//exit;
             $sql = new Sql();
             if ($this->tptransaction() == 'C') {
                 $qtdeTotal = ["qtdetotal"=>$this->getqtdetotal() + $this->getqtdebuy() - $this->getqtdesell()];
@@ -140,13 +147,13 @@
             }
             $this->setData($qtdeTotal);
 
-            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson, :iduser, :descompany, :sgcompany, :descnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :idestoque, :sgecompany, :qtdeestoque, :tptransaction)", array(
+            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson, :iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :idestoque, :sgecompany, :qtdeestoque, :tptransaction)", array(
                 ":idinvestiment"    => $this->getidinvestiment(),
                 ":idperson"         => $this->getidperson(),
-                ":iduser"          => $this->getiduser(),   
-                ":descompany"       => $this->getdescompany(),    
+                ":iduser"           => $this->getiduser(),   
+                ":desperson"        => $this->getdesperson(),    
                 ":sgcompany"        => $this->getsgcompany(),    
-                ":descnpj"          => $this->getdescnpj(),    
+                ":descpfcnpj"       => $this->getdescpfcnpj(),    
                 ":dtbuy"            => $this->getdtbuy(),
                 ":dtsell"           => $this->getdtsell(),
                 ":qtdebuy"          => $this->getqtdebuy(),

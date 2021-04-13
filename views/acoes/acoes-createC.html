@@ -27,8 +27,8 @@
           <div class="box-body">
             <div class="col col-md-2">
               <div class="form-group">
-                <label for="descompany">Empresa</label>
-                <input type="text" class="form-control" name="descompany" id="descompany" onKeyUp="convertLowToUpper(descompany)">
+                <label for="desperson">Empresa</label>
+                <input type="text" class="form-control" name="desperson" id="desperson" onKeyUp="convertLowToUpper(desperson)">
               </div>
             </div>
             <div class="col col-md-2">

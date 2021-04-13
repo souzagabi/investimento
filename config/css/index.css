@@ -1,5 +1,12 @@
+
 .col {
     height: 50px;
+}
+.top {
+    height: 80px;
+}
+.top .btn{
+    margin: 15px 0;
 }
 table thead .buy, table tbody .buy{
     background-color: #dcf6e9;
@@ -9,4 +16,7 @@ table thead .sell, table tbody .sell{
 }
 img{
     background: url('../../img/avatar.jpg') center/cover;
+}
+.pagination{
+    margin: 8px;
 }

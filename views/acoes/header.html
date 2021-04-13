@@ -26,6 +26,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   -->
   <link rel="stylesheet" href="../../config/css/skins/skin-blue.min.css">
   <link rel="stylesheet" href="../../config/css/index.css">
+  <link rel="stylesheet" href="../../config/css/magiczoomplus.css">
+  <link rel="stylesheet" href="../../config/js/magiczoomplus.js">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -233,7 +235,16 @@ desired effect
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel">
       <div class="pull-left image">
-        <img src="../../img/avatar.jpg" class="img-circle">
+        <a href="../../img/avatar-lg.jpg" class="MagicZoom" data-options="zoomPosition: inner;hint: off" id="mz-1111545658008">
+          <figure class="mz-figure mz-hover-zoom mz-inner-zoom mz-ready">
+              <img src="../../img/avatar.jpg" style="max-width: 320px; max-height: 190px;">
+              <div class="mz-lens" style="top: 0px; transform: translate(-10000px, -10000px); width: 106px; height: 63px;">
+                  <img src="../../img/avatar.jpg" style="position: absolute; top: 0px; left: 0px; width: 320px; height: 190px;">
+              </div>
+              <div class="mz-loading"></div>
+          </figure>
+        </a>
+        <!-- <a href="../../img/avatar-lg.jpg" class="MagicZoom"><img src="../../img/avatar.jpg" width="50" height="50" class="img-circle"></a> -->
       </div>
       <div class="pull-left info">
         <p>Gabriel Alves</p>

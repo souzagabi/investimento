@@ -26,8 +26,8 @@
             <div class="box-body">
               <div class="col col-md-2">
                 <div class="form-group">
-                  <label for="descompany">Empresa</label>
-                  <input type="text" class="form-control" name="descompany" id="descompany" value="<?php echo htmlspecialchars( $acoes["descompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
+                  <label for="desperson">Empresa</label>
+                  <input type="text" class="form-control" name="desperson" id="desperson" value="<?php echo htmlspecialchars( $acoes["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                 </div>
               </div>
               <div class="col col-md-2">
@@ -38,8 +38,8 @@
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
-                  <label for="descnpj">CPF/CNPJ</label>
-                  <input type="text" class="form-control" name="descnpj" id="descnpj" value="<?php echo htmlspecialchars( $acoes["descnpj"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
+                  <label for="descpfcnpj">CPF/cpfcnpj</label>
+                  <input type="text" class="form-control" name="descpfcnpj" id="descpfcnpj" value="<?php echo htmlspecialchars( $acoes["descpfcnpj"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                 </div>
               </div>
               <div class="col col-md-2">
