@@ -22,13 +22,6 @@
 /*======================================================================================*/
 /*										Rotas das Ações									*/
 /*======================================================================================*/
-	$app->get('/ampli', function() {
-		
-		$page = new Page();
-			
-		$page->setTpl("ampliar-imagem");
-		
-	});
 	$app->get('/', function() {
 		User::verifyLogin();
 		$acoes = Acao::listAll("listacoes");
@@ -92,7 +85,7 @@
 	$app->get('/acoes/create', function() {
 		User::verifyLogin();
 		
-		$voltar = ["voltar"=>"teste"];
+		$voltar = ["voltar"=>"acoes"];
 		if (isset($_GET["acoes"])) {
 			$voltar = ["voltar"=>"acoes"];
 		}
@@ -142,13 +135,15 @@
 
 		if (isset($_POST["compra"])) {
 			$acao->save_buy();
+			$tipo = "compra";
 		}
 		if (isset($_POST["venda"])) {
 			$acao->save_sell();
+			$tipo = "venda";
 		}
-
-		header("Location: /acoes");
-			exit;
+		
+		header("Location: /acoes/create?$tipo=$tipo");
+		exit;
 	});
 	
 	$app->get("/acoes/:idinvestiment/delete", function ($idinvestiment){

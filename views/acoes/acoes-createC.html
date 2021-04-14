@@ -2,9 +2,11 @@
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
 <section class="content-header">
-  <h1>
-    Cadastro de Compra de Ações
-  </h1>
+  <div class="box box-success title" style="background-color: #d5f8da;">
+    <h4>
+      Cadastro de Compra de Ações
+    </h4>
+  </div>
   <ol class="breadcrumb">
     <li><a href="/acoes"><i class="fa fa-dashboard"></i> Home</a></li>
     <li><a href="/acoes">Ação</a></li>
@@ -28,7 +30,7 @@
             <div class="col col-md-2">
               <div class="form-group">
                 <label for="desperson">Empresa</label>
-                <input type="text" class="form-control" name="desperson" id="desperson" onKeyUp="convertLowToUpper(desperson)">
+                <input type="text" class="form-control" name="desperson" id="desperson" onKeyUp="convertLowToUpper(desperson)" autofocus="autofocus">
               </div>
             </div>
             <div class="col col-md-2">

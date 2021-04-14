@@ -8,6 +8,16 @@
 .top .btn{
     margin: 15px 0;
 }
+.title{
+    height: 40px;
+}
+.title h4{
+    margin-left: 10px;
+}
+.breadcrumb{
+    margin-right: 20px;
+    line-height: 30px;
+}
 table thead .buy, table tbody .buy{
     background-color: #dcf6e9;
 }

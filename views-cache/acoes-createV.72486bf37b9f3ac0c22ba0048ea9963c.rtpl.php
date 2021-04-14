@@ -2,9 +2,11 @@
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
 <section class="content-header">
-  <h1>
-    Cadastro de Venda de Ações
-  </h1>
+  <div class="box box-danger title" style="background-color: #f8dad5;">
+    <h4>
+      Cadastro de Venda de Ações
+    </h4>
+  </div>
   <ol class="breadcrumb">
     <li><a href="/acoes"><i class="fa fa-dashboard"></i> Home</a></li>
     <li><a href="/acoes">Ação</a></li>
@@ -17,7 +19,7 @@
 
   <div class="row">
   	<div class="col-md-12">
-  		<div class="box box-success">
+  		<div class="box box-danger">
         <div class="box-header with-border">
           <h3 class="box-title">Nova Ação</h3>
         </div>
@@ -28,7 +30,7 @@
             <div class="col col-md-2">
               <div class="form-group">
                 <label for="desperson">Empresa</label>
-                <input type="text" class="form-control" name="desperson" id="desperson" onKeyUp="convertLowToUpper(desperson)">
+                <input type="text" class="form-control" name="desperson" id="desperson" onKeyUp="convertLowToUpper(desperson)" autofocus="autofocus">
               </div>
             </div>
             <div class="col col-md-2">
