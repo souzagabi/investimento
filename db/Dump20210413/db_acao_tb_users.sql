@@ -19,10 +19,10 @@
 -- Table structure for table `tb_users`
 --
 
-DROP TABLE IF EXISTS `tb_users`;
+DROP TABLE IF EXISTS `db_acao`.`tb_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tb_users` (
+CREATE TABLE `db_acao`.`tb_users` (
   `iduser` int(11) NOT NULL AUTO_INCREMENT,
   `idperson` int(11) NOT NULL,
   `deslogin` varchar(64) NOT NULL,
@@ -39,10 +39,10 @@ CREATE TABLE `tb_users` (
 -- Dumping data for table `tb_users`
 --
 
-LOCK TABLES `tb_users` WRITE;
-/*!40000 ALTER TABLE `tb_users` DISABLE KEYS */;
-INSERT INTO `tb_users` VALUES (1,1,'admin','$2y$12$YlooCyNvyTji8bPRcrfNfOKnVMmZA9ViM2A3IpFjmrpIbp5ovNmga',1,'2021-03-13 06:00:00'),(2,2,'suporte','$2y$12$HFjgUm/mk1RzTy4ZkJaZBe0Mc/BA2hQyoUckvm.lFa6TesjtNpiMe',1,'2021-03-15 19:10:27');
-/*!40000 ALTER TABLE `tb_users` ENABLE KEYS */;
+LOCK TABLES `db_acao`.`tb_users` WRITE;
+/*!40000 ALTER TABLE `db_acao`.`tb_users` DISABLE KEYS */;
+INSERT INTO `db_acao`.`tb_users` VALUES (1,1,'admin','$2y$12$YlooCyNvyTji8bPRcrfNfOKnVMmZA9ViM2A3IpFjmrpIbp5ovNmga',1,'2021-03-13 06:00:00'),(2,2,'suporte','$2y$12$HFjgUm/mk1RzTy4ZkJaZBe0Mc/BA2hQyoUckvm.lFa6TesjtNpiMe',1,'2021-03-15 19:10:27');
+/*!40000 ALTER TABLE `db_acao`.`tb_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

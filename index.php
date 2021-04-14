@@ -189,7 +189,7 @@
 		
 		$acoes->getByBuy($idinvestiment);
 		$acoes->setData($_POST);
-
+		
 		$acoes->update();
 		header("Location: /acoes");
 		exit;

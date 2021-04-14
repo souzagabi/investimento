@@ -19,10 +19,10 @@
 -- Table structure for table `tb_estoques`
 --
 
-DROP TABLE IF EXISTS `tb_estoques`;
+DROP TABLE IF EXISTS `db_acao`.`tb_estoques`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tb_estoques` (
+CREATE TABLE `db_acao`.`tb_estoques` (
   `idestoque` int(11) NOT NULL AUTO_INCREMENT,
   `idperson` int(11) DEFAULT NULL,
   `sgecompany` varchar(20) DEFAULT NULL,
@@ -39,10 +39,10 @@ CREATE TABLE `tb_estoques` (
 -- Dumping data for table `tb_estoques`
 --
 
-LOCK TABLES `tb_estoques` WRITE;
-/*!40000 ALTER TABLE `tb_estoques` DISABLE KEYS */;
-INSERT INTO `tb_estoques` VALUES (1,4,'MGLU3',0,57.66,'2021-04-12 17:16:37'),(2,5,'PETR3',11,19.46,'2021-04-12 17:53:41'),(3,3,'ABEV3',5,11.85,'2021-04-12 18:48:26'),(4,6,'SPRI3',2,25.59,'2021-04-12 18:50:09'),(5,8,'ELET3',0,23.71,'2021-04-13 10:26:29'),(6,7,'KLBN11',7,19.66,'2021-04-13 10:30:37'),(7,9,'AZUL4',10,15.25,'2021-04-13 14:18:55'),(8,10,'EMBR3',1,6.52,'2021-04-13 17:01:39');
-/*!40000 ALTER TABLE `tb_estoques` ENABLE KEYS */;
+LOCK TABLES `db_acao`.`tb_estoques` WRITE;
+/*!40000 ALTER TABLE `db_acao`.`tb_estoques` DISABLE KEYS */;
+INSERT INTO `db_acao`.`tb_estoques` VALUES (1,4,'MGLU3',0,57.66,'2021-04-12 17:16:37'),(2,5,'PETR3',11,19.46,'2021-04-12 17:53:41'),(3,3,'ABEV3',5,11.85,'2021-04-12 18:48:26'),(4,6,'SPRI3',2,25.59,'2021-04-12 18:50:09'),(5,8,'ELET3',0,23.71,'2021-04-13 10:26:29'),(6,7,'KLBN11',7,19.66,'2021-04-13 10:30:37'),(7,9,'AZUL4',10,15.25,'2021-04-13 14:18:55'),(8,10,'EMBR3',1,6.52,'2021-04-13 17:01:39');
+/*!40000 ALTER TABLE `db_acao`.`tb_estoques` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

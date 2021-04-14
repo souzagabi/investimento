@@ -19,15 +19,15 @@
   		<div class="box box-primary">
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/acoes/<?php echo htmlspecialchars( $acoes["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" method="post">
+        <form role="form" action="/acoes/<?php echo htmlspecialchars( $acoes["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>_<?php echo htmlspecialchars( $acoes["tptransaction"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" method="post">
           <input type="text" name="idinvestiment" value="<?php echo htmlspecialchars( $acoes["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" hidden>
           <input type="text" name="idperson" value="<?php echo htmlspecialchars( $acoes["idperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" hidden>
           <div class="box-body">
             <div class="box-body">
               <div class="col col-md-2">
                 <div class="form-group">
-                  <label for="descompany">Empresa</label>
-                  <input type="text" class="form-control" name="descompany" id="descompany" value="<?php echo htmlspecialchars( $acoes["descompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
+                  <label for="desperson">Empresa</label>
+                  <input type="text" class="form-control" name="desperson" id="desperson" value="<?php echo htmlspecialchars( $acoes["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                 </div>
               </div>
               <div class="col col-md-2">
@@ -38,8 +38,8 @@
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
-                  <label for="descnpj">CPF/CNPJ</label>
-                  <input type="text" class="form-control" name="descnpj" id="descnpj" value="<?php echo htmlspecialchars( $acoes["descnpj"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
+                  <label for="descpfcnpj">CPF/cpfcnpj</label>
+                  <input type="text" class="form-control" name="descpfcnpj" id="descpfcnpj" value="<?php echo htmlspecialchars( $acoes["descpfcnpj"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                 </div>
               </div>
               <div class="col col-md-2">
@@ -56,19 +56,19 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="dtbuy">Data Compra</label>
-                  <input type="text" class="form-control" name="dtbuy" id="dtbuy" value="<?php echo htmlspecialchars( $acoes["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" onChange="replaceSlash(dtbuy)" required>
+                  <input type="text" class="form-control" name="dtbuy" id="dtbuy" value="<?php echo htmlspecialchars( $acoes["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" onChange="replaceSlash(dtbuy)">
                 </div>
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="qtdebuy">Qtde</label>
-                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="<?php echo htmlspecialchars( $acoes["qtdebuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" required>
+                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="<?php echo htmlspecialchars( $acoes["qtdebuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                 </div>
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="prcbuy">Valor Compra</label>
-                  <input type="text" class="form-control" name="prcbuy" id="prcbuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="<?php echo htmlspecialchars( $acoes["prcbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" required>
+                  <input type="text" class="form-control" name="prcbuy" id="prcbuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="<?php echo htmlspecialchars( $acoes["prcbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                 </div>
               </div>
               <div class="col col-md-2">

@@ -12,20 +12,47 @@
   <!-- Main content -->
   <section class="content">
     <div class="box box-primary">
-      <div class="col form-control">
+      <div class="col form-control top">
         <div class="row">
-          <div class="col col-md-6">
+          <div class="col col-md-5">
             <form action="/acoes/create" method="get">
               <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
               <input type="submit" name="venda" class="btn btn-success" value="Cadastrar Venda">
               <input type="text" name="notas" value="notas" hidden>
             </form>
           </div>
+          
           <form action="/acoes" method="get">
-            <div class="col col-md-2"><input type="text" name="dtbuy" id="dtbuy" class="form-control" onChange="replaceSlash(dtbuy)"></div>
-            <div class="col col-md-2"><input type="text" name="dtsell" id="dtsell" class="form-control" onChange="replaceSlash(dtsell)"></div>
+            <div class="col col-md-2"><label for="sgcompany">Sigla</label><input type="text" name="sgcompany" id="sgcompany" class="form-control"></div>
+            <div class="col col-md-2"><label for="dtbuy">Data Inicio</label><input type="text" name="dtbuy" id="dtbuy" class="form-control" onChange="replaceSlash(dtbuy)"></div>
+            <div class="col col-md-2"><label for="dtsell">Data Fim</label><input type="text" name="dtsell" id="dtsell" class="form-control" onChange="replaceSlash(dtsell)"></div>
             <input type="submit" name="search" class="btn btn-primary" value="Search">
           </form>
+        </div>
+      </div>
+    </div>
+    <div class="box box-primary">
+      <div class="row">
+        <div class="col col-md-12">
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              <li>
+                <a href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+              <li><a href="#">5</a></li>
+              <li>
+                <a href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
