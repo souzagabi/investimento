@@ -22,7 +22,7 @@
                         ":sgcompany"=>$data[1]
                     ));
                 } else {
-                    return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE dtbuy >= :dtbuy OR dtsell <= :dtsell ORDER BY i.idinvestiment", array(
+                    return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE (dtbuy >= :dtbuy AND dtbuy <= :dtbuy) OR (dtsell >= :dtsell AND dtsell <= :dtsell) ORDER BY i.idinvestiment", array(
                        ":dtbuy"=>$data[0], 
                        ":dtsell"=>$data[1] 
                     ));

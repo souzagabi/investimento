@@ -16,30 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `tb_persons`
+-- Table structure for table `tb_users`
 --
 
-DROP TABLE IF EXISTS `db_acao`.`tb_persons`;
+DROP TABLE IF EXISTS `tb_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `db_acao`.`tb_persons` (
-  `idperson` int(11) NOT NULL AUTO_INCREMENT,
-  `desperson` varchar(64) NOT NULL,
-  `sgcompany` varchar(20) DEFAULT NULL,
-  `descpfcnpj` varchar(20) DEFAULT NULL,
+CREATE TABLE `tb_users` (
+  `iduser` int(11) NOT NULL AUTO_INCREMENT,
+  `idperson` int(11) NOT NULL,
+  `deslogin` varchar(64) NOT NULL,
+  `despassword` varchar(256) NOT NULL,
+  `inadmin` tinyint(1) NOT NULL DEFAULT 0,
   `dtregister` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`idperson`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`iduser`),
+  KEY `FK_users_persons_idx` (`idperson`),
+  CONSTRAINT `fk_users_persons` FOREIGN KEY (`idperson`) REFERENCES `tb_persons` (`idperson`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_persons`
+-- Dumping data for table `tb_users`
 --
 
-LOCK TABLES `db_acao`.`tb_persons` WRITE;
-/*!40000 ALTER TABLE `db_acao`.`tb_persons` DISABLE KEYS */;
-INSERT INTO `db_acao`.`tb_persons` VALUES (1,'Gabriel Alves','GS','14573057803','2021-03-01 06:00:00'),(2,'Suporte','SP','12354865202','2021-03-15 19:10:27'),(3,'AMBEV S.A.','ABEV3','07.526.557/0001-00','2021-04-12 11:21:21'),(4,'MAGAZINE LUIZA S.A.','MGLU3','47.960.950/0001-21','2021-04-12 11:22:09'),(5,'PETROLEO BRASILEIRO S.A.','PETR3','33.000.167/0001-01','2021-04-12 17:53:40'),(6,'SPRINGER S.A','SPRI3','92.929.520/0001-00','2021-04-12 18:48:25'),(7,'KLABIN S.A.','KLBN11','89.637.490/0001-45','2021-04-13 10:30:36'),(8,'CENTRAIS ELET BRAS S.A.','ELET3','00.001.180/0001-26','2021-04-13 03:00:00'),(9,'AZUL S.A.','AZUL4','09.305.994/0001-29','2021-04-13 14:18:54'),(10,'EMBRAER S.A.','EMBR3','07.689.002/0001-89','2021-04-13 17:01:39');
-/*!40000 ALTER TABLE `db_acao`.`tb_persons` ENABLE KEYS */;
+LOCK TABLES `tb_users` WRITE;
+/*!40000 ALTER TABLE `tb_users` DISABLE KEYS */;
+INSERT INTO `tb_users` VALUES (1,1,'admin','$2y$12$YlooCyNvyTji8bPRcrfNfOKnVMmZA9ViM2A3IpFjmrpIbp5ovNmga',1,'2021-03-13 06:00:00'),(2,2,'suporte','$2y$12$HFjgUm/mk1RzTy4ZkJaZBe0Mc/BA2hQyoUckvm.lFa6TesjtNpiMe',1,'2021-03-15 19:10:27');
+/*!40000 ALTER TABLE `tb_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-13 17:39:23
+-- Dump completed on 2021-04-15  6:17:29
