@@ -35,6 +35,46 @@
 		
 	});
 
+	$app->get('/acoes-estoque', function() {
+		User::verifyLogin();
+
+		if (isset($_GET["search"])) 
+		{
+			$dtbuy = 'NULL';
+			$dtsell = 'NULL';
+			$company = 'NULL';
+			$i = 0;
+			foreach ($_GET as $key => $value) {
+				if ($i === 0 && $value != NULL) {
+					$company = $value;
+				} 
+				if ($i === 1 && $value != NULL) {
+					$dtbuy = Acao::convertDateDataBase($value);
+				} 
+				if ($i === 2 && $value != NULL) {
+					$dtsell = Acao::convertDateDataBase($value);
+				} 
+				$i++;
+			}
+			$param = $company."_".$dtbuy."_".$dtsell;
+		}
+		
+		$acoes = Acao::listAll($param);
+		echo '<pre>';
+		print_r($acoes).' <br>';
+		echo '</pre>';
+		exit;
+
+		$page = new PageAcoes([
+			"acoes"=> $acoes
+		]);
+			
+		$page->setTpl("acoes-estoque", array(
+			"acoes"=> $acoes
+		));
+		
+	});
+
 	$app->get('/acoes', function() {
 		User::verifyLogin();
 		$page = new PageAcoes();

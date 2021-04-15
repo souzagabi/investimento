@@ -11,19 +11,25 @@
   </section>
   <!-- Main content -->
   <section class="content">
-    <form action="/acoes/create" method="get">
-      <div class="box box-primary">
-        <div class="col form-control">
-          <div class="row">
-            <div class="col col-md-6">
+    <div class="box box-primary">
+      <div class="col form-control top">
+        <div class="row">
+          <div class="col col-md-5">
+            <form action="/acoes/create" method="get">
               <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
               <input type="submit" name="venda" class="btn btn-success" value="Cadastrar Venda">
               <input type="text" name="acoes" value="acoes" hidden>
-            </div>
+            </form>
           </div>
+          <form action="/acoes-estoque" method="get">
+            <div class="col col-md-2"><label for="sgcompany">Sigla</label><input type="text" name="sgcompany" id="sgcompany" class="form-control"></div>
+            <div class="col col-md-2"><label for="dtbuy">Data Inicio</label><input type="text" name="dtbuy" id="dtbuy" class="form-control" onChange="replaceSlash(dtbuy)"></div>
+            <div class="col col-md-2"><label for="dtsell">Data Fim</label><input type="text" name="dtsell" id="dtsell" class="form-control" onChange="replaceSlash(dtsell)"></div>
+            <input type="submit" name="search" class="btn btn-primary" value="Search">
+          </form>
         </div>
       </div>
-    </form>
+    </div>
     <div class="box box-primary">
       <div class="box-body no-padding">
     

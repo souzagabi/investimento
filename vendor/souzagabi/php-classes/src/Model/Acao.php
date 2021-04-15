@@ -17,6 +17,15 @@
             }
             if (isset($listacoes)) {
                 $data = explode("_", $listacoes);
+                var_dump(count($data));
+                if (count($data) === 3) {
+                    
+                    return $sql->select("CALL sp_acoes_select_company(:sgcompany, :dtbuy, :dtsell)", array(
+                        ":sgcompany" => $data[0],    
+                        ":dtbuy"     => $data[1],
+                        ":dtsell"    => $data[2]
+                    ));
+                }
                 if ($data[0] === "sgcompany") {
                     return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE i.sgcompany = :sgcompany ORDER BY i.idinvestiment", array(
                         ":sgcompany"=>$data[1]
@@ -185,4 +194,5 @@
             ));
         }
     }
+    
 ?>
