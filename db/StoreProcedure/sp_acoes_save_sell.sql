@@ -23,8 +23,14 @@ BEGIN
     
     IF IDE IS NOT NULL THEN
     BEGIN
-		UPDATE tb_estoques SET qtdeestoque = (SELECT SUM(e.qtdeestoque - pqtdesell) FROM tb_estoques e WHERE e.idperson = IDE)
-		WHERE idperson = IDE;
+		UPDATE tb_estoques 
+        SET 
+			qtdeestoque = (SELECT SUM(e.qtdeestoque - pqtdesell) FROM tb_estoques e WHERE e.idperson = IDE)
+        WHERE idperson = IDE;
+        CASE 
+			WHEN  (SELECT SUM(e.qtdeestoque - pqtdesell) FROM tb_estoques e WHERE e.idperson = IDE) = 0 THEN
+				SET prcaverage = 0;
+		END CASE;
     END;
     END IF;
     
