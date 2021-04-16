@@ -70,10 +70,12 @@
 			}
 		}
 		
+		// echo '<pre>';	
+		// print_r($acoes);
+		// echo '</pre>';exit;	
 		$page = new PageAcoes([
 			"acoes"=> $acoes
 		]);
-			
 		$page->setTpl("acoes-estoque", array(
 			"acoes"=> $acoes
 		));
@@ -205,6 +207,9 @@
 		$acoes = new Acao();
 		$acoes->getByBuy($idinvestiment);
 		
+		// echo '<pre>';	
+		// print_r($acoes);
+		// echo '</pre>';//exit;
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(

@@ -4,18 +4,21 @@ pdtbuy DATE,
 pdtsell DATE
 )
 BEGIN
-
+	
     /*==========================================================================================*/
     /*						Filtra os registros usando nenhum parâmetros						*/
     /*==========================================================================================*/
     IF ((pdtbuy = '') AND (pdtsell = '')) AND (psgcompany = '') THEN
     BEGIN
 		SELECT p.idperson, p.desperson, p.desperson AS VAZIO, p.sgcompany, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				(sum(i.tlbuy) - sum(i.tlsell)) / (sum(i.qtdebuy) - sum(i.qtdesell))  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal
-		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p 
+        INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson)
 		GROUP BY p.sgcompany;
     END;
     END IF;
@@ -26,13 +29,13 @@ BEGIN
     IF ((pdtbuy = '') AND (pdtsell = '')) AND (psgcompany != '') THEN
     BEGIN
 		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
-        INNER JOIN tb_estoques e USING(idperson)
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal 
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
 		WHERE i.sgcompany = psgcompany 
 		GROUP BY p.sgcompany;
     END;
@@ -43,17 +46,16 @@ BEGIN
     /*==========================================================================================*/
     IF ((pdtbuy = '') AND pdtsell != '') AND (psgcompany != '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.sgcompany, p.desperson AS SIGSELL, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
-        INNER JOIN tb_estoques e USING(idperson)
-		WHERE i.sgcompany = psgcompany 
-        AND ((i.dtbuy <= pdtsell) 
-			OR (i.dtsell <= pdtsell)) 
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND ((i.dtbuy <= pdtsell) 
+		  OR (i.dtsell <= pdtsell)) 
 		GROUP BY p.sgcompany;
     END;
     END IF;
@@ -63,17 +65,16 @@ BEGIN
     /*==========================================================================================*/
     IF (pdtbuy != '' AND (pdtsell = '')) AND (psgcompany != '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.sgcompany, p.desperson AS SIGSELL, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
-        INNER JOIN tb_estoques e USING(idperson)
-		WHERE i.sgcompany = psgcompany 
-			AND ((i.dtbuy >= pdtbuy) 
-            OR (i.dtsell >= pdtbuy))
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND ((i.dtbuy >= pdtbuy) 
+		  OR (i.dtsell >= pdtbuy) )
 		GROUP BY p.sgcompany;
     END;
     END IF;
@@ -83,14 +84,14 @@ BEGIN
     /*==========================================================================================*/
     IF (pdtbuy != '' AND pdtsell != '') AND (psgcompany = '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.sgcompany, p.desperson AS BuySell, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
-        INNER JOIN tb_estoques e USING(idperson)
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
 		WHERE (i.dtbuy >= pdtbuy AND i.dtbuy <= pdtsell) 
 		  OR (i.dtsell >= pdtbuy AND i.dtsell <= pdtsell) 
 		GROUP BY p.sgcompany;
@@ -102,14 +103,14 @@ BEGIN
     /*==========================================================================================*/
     IF ((pdtbuy IS NOT NULL) AND (pdtsell = '')) AND (psgcompany = '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.desperson AS BUY, p.sgcompany, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
-        INNER JOIN tb_estoques e USING(idperson)
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
 		WHERE (i.dtbuy >= pdtbuy) 
 		  OR (i.dtsell >= pdtbuy) 
 		GROUP BY p.sgcompany;
@@ -121,13 +122,13 @@ BEGIN
     /*==========================================================================================*/
     IF ((pdtbuy = '') AND pdtsell != '') AND (psgcompany = '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.desperson AS SELL, p.sgcompany, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
         INNER JOIN tb_estoques e USING(idperson) 
 		WHERE (i.dtbuy <= pdtsell) 
 		  OR (i.dtsell <= pdtsell) 
@@ -140,13 +141,13 @@ BEGIN
     /*==========================================================================================*/
     IF (pdtbuy != '' AND pdtsell != '') AND (psgcompany != '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.desperson AS CHEIO, p.sgcompany, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
         INNER JOIN tb_estoques e USING(idperson) 
 		WHERE i.sgcompany = psgcompany
 			AND ((i.dtbuy >= pdtbuy AND i.dtbuy <= pdtsell) 

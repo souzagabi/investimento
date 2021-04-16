@@ -106,13 +106,13 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="lucre">Lucro</label>
-                  <input type="text" class="form-control" id="lucre" name="lucre" value="<?php echo htmlspecialchars( $acoes["lucre"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
+                  <input type="text" class="form-control" id="lucre" name="lucre" value="<?php echo htmlspecialchars( $acoes["tlsell"] - ($acoes["qtdetotal"] * $acoes["prcaverage"]), ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
                 </div>
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="tax">Taxa</label>
-                  <input type="text" class="form-control" id="tax" name="tax" value="<?php echo htmlspecialchars( $acoes["tax"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
+                  <input type="text" class="form-control" id="tax" name="tax" value="<?php echo htmlspecialchars( $acoes["tlsell"] * 100 / ($acoes["qtdetotal"] * $acoes["prcaverage"]) - 100, ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
                 </div>
               </div>
             </div>

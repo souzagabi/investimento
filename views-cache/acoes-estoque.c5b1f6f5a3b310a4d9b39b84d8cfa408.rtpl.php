@@ -34,7 +34,26 @@
       <div class="box-body no-padding">
         <table class="table table-striped">
           <thead class="thead-dark">
-            <tr class="com-estoque"><th colspan="6">Ações com Estoque até a data filtrada</th></tr>
+            
+            <tr class="com-estoque">
+              <th colspan="8">
+                Ações com Estoque até a data  
+                <?php if( (isset($acoes["0"]["dtbuy"])) && (isset($acoes["0"]["dtsell"])) ){ ?> 
+                  entre <?php echo htmlspecialchars( $acoes["0"]["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?> e <?php echo htmlspecialchars( $acoes["0"]["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.
+                <?php }else{ ?>
+                  <?php if( (isset($acoes["0"]["dtbuy"])) && (!isset($acoes["0"]["dtsell"])) ){ ?>
+                    <?php echo htmlspecialchars( $acoes["0"]["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.
+                  <?php } ?>
+                  <?php if( (!isset($acoes["0"]["dtbuy"])) && (isset($acoes["0"]["dtsell"])) ){ ?>
+                    <?php echo htmlspecialchars( $acoes["0"]["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.
+                  <?php } ?>
+                  <?php if( (!isset($acoes["0"]["dtbuy"])) && (!isset($acoes["0"]["dtsell"])) ){ ?>
+                    atual.
+                  <?php } ?>
+                <?php } ?>
+              </th>
+            </tr>
+            
             <tr>
               <th>Empresa</th>
               <th>Sigla</th>
@@ -42,6 +61,8 @@
               <th>Qtde Compra</th>
               <th>Qtde Venda</th>
               <th>Estoque Total</th>
+              <th>Valor Médio</th>
+              <th>Valor Total</th>
             </tr>
           </thead>
           <tbody>
@@ -53,6 +74,8 @@
                  <td><?php echo htmlspecialchars( $value1["buyTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?>  </td> 
                  <td><?php echo htmlspecialchars( $value1["sellTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?> </td> 
                  <td><?php echo htmlspecialchars( $value1["finalTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td> 
+                 <td><?php echo htmlspecialchars( $value1["average"], ENT_COMPAT, 'UTF-8', FALSE ); ?>   </td> 
+                 <td><?php echo htmlspecialchars( $value1["vlrtotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?>  </td>
                </tr> <?php } ?>
             <?php } ?>
           </tbody>
@@ -63,7 +86,24 @@
       <div class="box-body no-padding">
         <table class="table table-striped">
           <thead class="thead-dark">
-            <tr class="sem-estoque"><th colspan="6">Ações sem Estoque até a data filtrada</th></tr>
+            <tr class="sem-estoque">
+              <th colspan="8">
+                Ações sem Estoque até a data 
+                <?php if( (isset($acoes["0"]["dtbuy"])) && (isset($acoes["0"]["dtsell"])) ){ ?> 
+                  entre <?php echo htmlspecialchars( $acoes["0"]["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?> e <?php echo htmlspecialchars( $acoes["0"]["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.
+                <?php }else{ ?>
+                  <?php if( (isset($acoes["0"]["dtbuy"])) && (!isset($acoes["0"]["dtsell"])) ){ ?>
+                    <?php echo htmlspecialchars( $acoes["0"]["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.
+                  <?php } ?>
+                  <?php if( (!isset($acoes["0"]["dtbuy"])) && (isset($acoes["0"]["dtsell"])) ){ ?>
+                    <?php echo htmlspecialchars( $acoes["0"]["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.
+                  <?php } ?>
+                  <?php if( (!isset($acoes["0"]["dtbuy"])) && (!isset($acoes["0"]["dtsell"])) ){ ?>
+                    atual.
+                  <?php } ?>
+                <?php } ?>
+              </th>
+            </tr>
             <tr>
               <th>Empresa</th>
               <th>Sigla</th>
@@ -71,6 +111,8 @@
               <th>Qtde Compra</th>
               <th>Qtde Venda</th>
               <th>Estoque Total</th>
+              <th>Valor Médio</th>
+              <th>Valor Total</th>
             </tr>
           </thead>
           <tbody>
@@ -82,6 +124,8 @@
                  <td><?php echo htmlspecialchars( $value1["buyTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?>  </td> 
                  <td><?php echo htmlspecialchars( $value1["sellTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?> </td> 
                  <td><?php echo htmlspecialchars( $value1["finalTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td> 
+                 <td><?php if( $value1["finalTotal"] != 0 ){ ?><?php echo htmlspecialchars( $value1["average"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php }else{ ?>0.00<?php } ?>  </td> 
+                 <td><?php if( $value1["finalTotal"] != 0 ){ ?><?php echo htmlspecialchars( $value1["vlrtotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php }else{ ?>0.00<?php } ?> </td> 
                </tr> <?php } ?>
             <?php } ?>
           </tbody>

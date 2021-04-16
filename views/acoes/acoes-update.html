@@ -106,13 +106,13 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="lucre">Lucro</label>
-                  <input type="text" class="form-control" id="lucre" name="lucre" value="{$acoes.lucre}" readonly>
+                  <input type="text" class="form-control" id="lucre" name="lucre" value="{$acoes.tlsell - ($acoes.qtdetotal * $acoes.prcaverage)}" readonly>
                 </div>
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="tax">Taxa</label>
-                  <input type="text" class="form-control" id="tax" name="tax" value="{$acoes.tax}" readonly>
+                  <input type="text" class="form-control" id="tax" name="tax" value="{$acoes.tlsell * 100 / ($acoes.qtdetotal * $acoes.prcaverage) - 100}" readonly>
                 </div>
               </div>
             </div>
