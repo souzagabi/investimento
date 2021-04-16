@@ -34,7 +34,26 @@
       <div class="box-body no-padding">
         <table class="table table-striped">
           <thead class="thead-dark">
-            <tr class="com-estoque"><th colspan="6">Ações com Estoque até a data filtrada</th></tr>
+            
+            <tr class="com-estoque">
+              <th colspan="8">
+                Ações com Estoque até a data  
+                {if="(isset($acoes[0].dtbuy)) && (isset($acoes[0].dtsell))"} 
+                  entre {$acoes[0].dtbuy} e {$acoes[0].dtsell}.
+                {else}
+                  {if="(isset($acoes[0].dtbuy)) && (!isset($acoes[0].dtsell))"}
+                    {$acoes[0].dtbuy}.
+                  {/if}
+                  {if="(!isset($acoes[0].dtbuy)) && (isset($acoes[0].dtsell))"}
+                    {$acoes[0].dtsell}.
+                  {/if}
+                  {if="(!isset($acoes[0].dtbuy)) && (!isset($acoes[0].dtsell))"}
+                    atual.
+                  {/if}
+                {/if}
+              </th>
+            </tr>
+            
             <tr>
               <th>Empresa</th>
               <th>Sigla</th>
@@ -42,6 +61,8 @@
               <th>Qtde Compra</th>
               <th>Qtde Venda</th>
               <th>Estoque Total</th>
+              <th>Valor Médio</th>
+              <th>Valor Total</th>
             </tr>
           </thead>
           <tbody>
@@ -53,6 +74,8 @@
                  <td>{$value.buyTotal}  </td> 
                  <td>{$value.sellTotal} </td> 
                  <td>{$value.finalTotal}</td> 
+                 <td>{$value.average}   </td> 
+                 <td>{$value.vlrtotal}  </td>
                </tr> {/if}
             {/loop}
           </tbody>
@@ -63,7 +86,24 @@
       <div class="box-body no-padding">
         <table class="table table-striped">
           <thead class="thead-dark">
-            <tr class="sem-estoque"><th colspan="6">Ações sem Estoque até a data filtrada</th></tr>
+            <tr class="sem-estoque">
+              <th colspan="8">
+                Ações sem Estoque até a data 
+                {if="(isset($acoes[0].dtbuy)) && (isset($acoes[0].dtsell))"} 
+                  entre {$acoes[0].dtbuy} e {$acoes[0].dtsell}.
+                {else}
+                  {if="(isset($acoes[0].dtbuy)) && (!isset($acoes[0].dtsell))"}
+                    {$acoes[0].dtbuy}.
+                  {/if}
+                  {if="(!isset($acoes[0].dtbuy)) && (isset($acoes[0].dtsell))"}
+                    {$acoes[0].dtsell}.
+                  {/if}
+                  {if="(!isset($acoes[0].dtbuy)) && (!isset($acoes[0].dtsell))"}
+                    atual.
+                  {/if}
+                {/if}
+              </th>
+            </tr>
             <tr>
               <th>Empresa</th>
               <th>Sigla</th>
@@ -71,6 +111,8 @@
               <th>Qtde Compra</th>
               <th>Qtde Venda</th>
               <th>Estoque Total</th>
+              <th>Valor Médio</th>
+              <th>Valor Total</th>
             </tr>
           </thead>
           <tbody>
@@ -82,6 +124,8 @@
                  <td>{$value.buyTotal}  </td> 
                  <td>{$value.sellTotal} </td> 
                  <td>{$value.finalTotal}</td> 
+                 <td>{if="$value.finalTotal != 0"}{$value.average}{else}0.00{/if}  </td> 
+                 <td>{if="$value.finalTotal != 0"}{$value.vlrtotal}{else}0.00{/if} </td> 
                </tr> {/if}
             {/loop}
           </tbody>

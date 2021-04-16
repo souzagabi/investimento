@@ -60,6 +60,15 @@
 		}
 		
 		$acoes = Acao::listAll($param);
+
+		for ($i=0; $i < count($acoes); $i++) { 
+			if (isset($dtbuy)) {
+				$acoes[$i]["dtbuy"] = Acao::convertDateView($dtbuy);
+			}
+			if (isset($dtsell)) {
+				$acoes[$i]["dtsell"] = Acao::convertDateView($dtsell);
+			}
+		}
 		
 		$page = new PageAcoes([
 			"acoes"=> $acoes
