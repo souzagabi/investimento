@@ -1,4 +1,4 @@
-<?php if(!class_exists('Rain\Tpl')){exit;}?><div class="content-wrapper">
+<div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
@@ -6,7 +6,7 @@
     </h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active"><a href="/acoes">Ações</a></li>
+      <li class="active"><a href="/acoes-estoque">Ações Estoque</a></li>
     </ol>
   </section>
   <!-- Main content -->
@@ -32,27 +32,58 @@
     </div>
     <div class="box box-primary">
       <div class="box-body no-padding">
-    
         <table class="table table-striped">
           <thead class="thead-dark">
+            <tr class="com-estoque"><th colspan="6">Ações com Estoque até a data filtrada</th></tr>
             <tr>
               <th>Empresa</th>
               <th>Sigla</th>
-              <th>Qtde Estoque</th>
-              <th>Valor Médio</th>
-              <th>Valor Total</th>
+              <th>CNPJ</th>
+              <th>Qtde Compra</th>
+              <th>Qtde Venda</th>
+              <th>Estoque Total</th>
             </tr>
           </thead>
           <tbody>
-            <?php $counter1=-1;  if( isset($acoes) && ( is_array($acoes) || $acoes instanceof Traversable ) && sizeof($acoes) ) foreach( $acoes as $key1 => $value1 ){ $counter1++; ?>
+            {loop="$acoes"}
+              {if="$value.finalTotal > 0"} <tr> 
+                 <th>{$value.desperson} </th> 
+                 <th>{$value.sgcompany} </th> 
+                 <th>{$value.descpfcnpj}</th> 
+                 <td>{$value.buyTotal}  </td> 
+                 <td>{$value.sellTotal} </td> 
+                 <td>{$value.finalTotal}</td> 
+               </tr> {/if}
+            {/loop}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="box box-primary">
+      <div class="box-body no-padding">
+        <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr class="sem-estoque"><th colspan="6">Ações sem Estoque até a data filtrada</th></tr>
             <tr>
-              <th><?php echo htmlspecialchars( $value1["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?></th>
-              <th><?php echo htmlspecialchars( $value1["sgecompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?></th>
-              <td><?php echo htmlspecialchars( $value1["qtdeestoque"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td><?php echo htmlspecialchars( $value1["prcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td><?php echo htmlspecialchars( $value1["prcaverage"] * $value1["qtdeestoque"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <th>Empresa</th>
+              <th>Sigla</th>
+              <th>CNPJ</th>
+              <th>Qtde Compra</th>
+              <th>Qtde Venda</th>
+              <th>Estoque Total</th>
             </tr>
-            <?php } ?>
+          </thead>
+          <tbody>
+            {loop="$acoes"}
+              {if="$value.finalTotal == 0"} <tr> 
+                 <th>{$value.desperson} </th> 
+                 <th>{$value.sgcompany} </th> 
+                 <th>{$value.descpfcnpj}</th> 
+                 <td>{$value.buyTotal}  </td> 
+                 <td>{$value.sellTotal} </td> 
+                 <td>{$value.finalTotal}</td> 
+               </tr> {/if}
+            {/loop}
           </tbody>
         </table>
       </div>

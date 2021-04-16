@@ -40,9 +40,9 @@
 
 		if (isset($_GET["search"])) 
 		{
-			$dtbuy = 'NULL';
-			$dtsell = 'NULL';
-			$company = 'NULL';
+			$dtbuy 		= NULL;
+			$dtsell 	= NULL;
+			$company 	= NULL;
 			$i = 0;
 			foreach ($_GET as $key => $value) {
 				if ($i === 0 && $value != NULL) {
@@ -60,11 +60,7 @@
 		}
 		
 		$acoes = Acao::listAll($param);
-		echo '<pre>';
-		print_r($acoes).' <br>';
-		echo '</pre>';
-		exit;
-
+		
 		$page = new PageAcoes([
 			"acoes"=> $acoes
 		]);

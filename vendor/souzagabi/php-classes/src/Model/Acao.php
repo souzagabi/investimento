@@ -15,9 +15,10 @@
             if($listacoes === "notascompra" || $listacoes === "notasvenda"){
                 return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) ORDER BY i.idinvestiment");
             }
+
             if (isset($listacoes)) {
                 $data = explode("_", $listacoes);
-                var_dump(count($data));
+                
                 if (count($data) === 3) {
                     
                     return $sql->select("CALL sp_acoes_select_company(:sgcompany, :dtbuy, :dtsell)", array(

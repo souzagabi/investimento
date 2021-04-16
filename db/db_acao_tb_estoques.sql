@@ -26,7 +26,7 @@ CREATE TABLE `tb_estoques` (
   `idestoque` int(11) NOT NULL AUTO_INCREMENT,
   `idperson` int(11) DEFAULT NULL,
   `sgecompany` varchar(20) DEFAULT NULL,
-  `qtdeestoque` int(11) DEFAULT 0,
+  `qtdeestoque` int(11) DEFAULT NULL,
   `prcaverage` decimal(10,2) DEFAULT NULL,
   `dteregister` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`idestoque`),
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-15 17:42:16
+-- Dump completed on 2021-04-16  6:06:00

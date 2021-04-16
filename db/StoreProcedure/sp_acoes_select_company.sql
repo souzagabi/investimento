@@ -6,11 +6,60 @@ pdtsell DATE
 BEGIN
 	
     /*==========================================================================================*/
+    /*						Filtra os registros usando nenhum parâmetros						*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '') AND (pdtsell = '')) AND (psgcompany = '') THEN
+    BEGIN
+		SELECT p.idperson, p.desperson, p.desperson AS VAZIO, p.sgcompany, p.descpfcnpj, sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal  
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*					Filtra os registros usando os 1 parâmetros - sigla						*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '') AND (pdtsell = '')) AND (psgcompany != '') THEN
+    BEGIN
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal  
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+		WHERE i.sgcompany = psgcompany 
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 2 parâmetros - sigla e data sell				*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '') AND pdtsell != '') AND (psgcompany != '') THEN
+    BEGIN
+		SELECT p.idperson, p.desperson, p.sgcompany, p.desperson AS SIGSELL, p.descpfcnpj, sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal  
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND ((i.dtbuy <= pdtsell) 
+		  OR (i.dtsell <= pdtsell)) 
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 2 parâmetros - sigla e data buy				*/
+    /*==========================================================================================*/
+    IF (pdtbuy != '' AND (pdtsell = '')) AND (psgcompany != '') THEN
+    BEGIN
+		SELECT p.idperson, p.desperson, p.sgcompany, p.desperson AS SIGBUY, p.descpfcnpj, sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal  
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND ((i.dtbuy >= pdtbuy) 
+		  OR (i.dtsell >= pdtbuy) )
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
     /*						Filtra os registros usando os 2 parâmetros - data					*/
     /*==========================================================================================*/
-    IF pdtbuy IS NOT NULL AND pdtsell IS NOT NULL AND psgcompany IS NULL THEN
+    IF (pdtbuy != '' AND pdtsell != '') AND (psgcompany = '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.sgcompany, p.descpfcnpj, sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal  
+		SELECT p.idperson, p.desperson, p.sgcompany, p.desperson AS BuySell, p.descpfcnpj, sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal  
 		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
 		WHERE (i.dtbuy >= pdtbuy AND i.dtbuy <= pdtsell) 
 		  OR (i.dtsell >= pdtbuy AND i.dtsell <= pdtsell) 
@@ -19,30 +68,43 @@ BEGIN
     END IF;
     
     /*==========================================================================================*/
-    /*						Filtra os registros usando os 1 parâmetros - sigla					*/
+    /*					Filtra os registros usando os 1 parâmetros - data buy					*/
     /*==========================================================================================*/
-    IF pdtbuy IS NULL AND pdtsell IS NULL AND psgcompany IS NOT NULL THEN
+    IF ((pdtbuy IS NOT NULL) AND (pdtsell = '')) AND (psgcompany = '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.sgcompany, p.descpfcnpj, sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal  
+		SELECT p.idperson, p.desperson, p.desperson AS BUY, p.sgcompany, p.descpfcnpj, sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal  
 		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
-		WHERE i.sgcompany = psgcompany 
+		WHERE (i.dtbuy >= pdtbuy) 
+		  OR (i.dtsell >= pdtbuy) 
 		GROUP BY p.sgcompany;
     END;
     END IF;
     
     /*==========================================================================================*/
-    /*						Filtra os registros usando os 3 parâmetros							*/
+    /*					Filtra os registros usando os 1 parâmetros - data sell					*/
     /*==========================================================================================*/
-    IF pdtbuy IS NOT NULL AND pdtsell IS NOT NULL AND psgcompany IS NOT NULL THEN
+    IF ((pdtbuy = '') AND pdtsell != '') AND (psgcompany = '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.sgcompany, p.descpfcnpj, sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal  
+		SELECT p.idperson, p.desperson, p.desperson AS SELL, p.sgcompany, p.descpfcnpj, sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal  
 		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
-		WHERE i.sgcompany = psgcompany 
-			AND ((i.dtbuy >= pdtbuy AND i.dtbuy <= pdtsell) 
-			OR (i.dtsell >= pdtbuy AND i.dtsell <= pdtsell))
-        GROUP BY p.sgcompany;
+		WHERE (i.dtbuy <= pdtsell) 
+		  OR (i.dtsell <= pdtsell) 
+		GROUP BY p.sgcompany;
     END;
     END IF;
     
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 3 parâmetros - sigla e data					*/
+    /*==========================================================================================*/
+    IF (pdtbuy != '' AND pdtsell != '') AND (psgcompany != '') THEN
+    BEGIN
+		SELECT p.idperson, p.desperson, p.desperson AS CHEIO, p.sgcompany, p.descpfcnpj, sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal  
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+		WHERE i.sgcompany = psgcompany
+			AND ((i.dtbuy >= pdtbuy AND i.dtbuy <= pdtsell) 
+			OR (i.dtsell >= pdtbuy AND i.dtsell <= pdtsell) )
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
     
 END
