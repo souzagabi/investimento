@@ -74,7 +74,15 @@
                 ));
             } else 
             {
-                $results = $sql->select("SELECT *, sum(e.qtdeestoque + i.qtdesell) AS qtdetotal FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE i.idinvestiment = :idinvestiment", array(
+                $results = $sql->select("SELECT p.idperson, p.desperson, p.descpfcnpj , i.idinvestiment, i.sgcompany, i.dtbuy, i.dtsell, i.qtdebuy, i.prcbuy, i.qtdesell, i.prcsell, i.tlsell, i.tptransaction, i.tipe, 
+                                (SELECT sum(tlbuy) FROM tb_investiments WHERE idperson = p.idperson) AS tlbuy , 
+                                sum(e.qtdeestoque + i.qtdesell) AS qtdetotal,
+                                sum(i.tlsell - (e.qtdeestoque + i.qtdesell) * e.prcaverage) AS lucre,
+                                sum(((i.tlsell * 100) / (SELECT sum(tlbuy) FROM tb_investiments WHERE idperson = p.idperson)) - 100) AS tax 
+                                FROM tb_persons p 
+                                INNER JOIN tb_investiments i USING(idperson) 
+                                INNER JOIN tb_estoques e USING(idperson) 
+                                WHERE i.idinvestiment = :idinvestiment", array(
                     ":idinvestiment"=>(int)$id[0]
                 ));
             }

@@ -77,6 +77,12 @@
                   <input type="text" class="form-control" id="tlbuy" name="tlbuy" value="{$acoes.tlbuy}" readonly>
                 </div>
               </div>
+              <div class="col col-md-2">
+                <div class="form-group">
+                  <label for="prcaverage">Valor Médio</label>
+                  <input type="text" class="form-control" id="prcaverage" name="prcaverage" readonly>
+                </div>
+              </div>
             </div>
             <div class="box-body">
               <div class="col col-md-2">
@@ -94,7 +100,7 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="prcsell">Valor Venda</label>
-                  <input type="text" class="form-control" name="prcsell" id="prcsell" onChange="sumTotal(qtdesell.value, prcsell, tlsell)" value="{$acoes.prcsell}">
+                  <input type="text" class="form-control" name="prcsell" id="prcsell" value="{$acoes.prcsell}" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
                 </div>
               </div>
               <div class="col col-md-2">
@@ -106,13 +112,13 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="lucre">Lucro</label>
-                  <input type="text" class="form-control" id="lucre" name="lucre" value="{$acoes.tlsell - ($acoes.qtdetotal * $acoes.prcaverage)}" readonly>
+                  <input type="text" class="form-control" id="lucre" name="lucre" value="{$acoes.lucre}" readonly>
                 </div>
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="tax">Taxa</label>
-                  <input type="text" class="form-control" id="tax" name="tax" value="{$acoes.tlsell * 100 / ($acoes.qtdetotal * $acoes.prcaverage) - 100}" readonly>
+                  <input type="text" class="form-control" id="tax" name="tax" value="{$acoes.tax}" readonly>
                 </div>
               </div>
             </div>
