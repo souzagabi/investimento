@@ -77,6 +77,12 @@
                   <input type="text" class="form-control" id="tlbuy" name="tlbuy" value="<?php echo htmlspecialchars( $acoes["tlbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
                 </div>
               </div>
+              <div class="col col-md-2">
+                <div class="form-group">
+                  <label for="iprcaverage">Valor Médio</label>
+                  <input type="text" class="form-control" id="iprcaverage" name="iprcaverage" value="<?php echo htmlspecialchars( $acoes["iprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
+                </div>
+              </div>
             </div>
             <div class="box-body">
               <div class="col col-md-2">
@@ -94,7 +100,7 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="prcsell">Valor Venda</label>
-                  <input type="text" class="form-control" name="prcsell" id="prcsell" onChange="sumTotal(qtdesell.value, prcsell, tlsell)" value="<?php echo htmlspecialchars( $acoes["prcsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
+                  <input type="text" class="form-control" name="prcsell" id="prcsell" value="<?php echo htmlspecialchars( $acoes["prcsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
                 </div>
               </div>
               <div class="col col-md-2">

@@ -154,7 +154,10 @@ BEGIN
     END;    
     ELSE
     BEGIN
-		UPDATE tb_estoques SET qtdeestoque = (SELECT SUM(e.qtdeestoque  + pqtdebuy) FROM tb_estoques e WHERE e.idperson = IDP), prcaverage = ((SELECT SUM(e.qtdeestoque * e.prcaverage) FROM tb_estoques e WHERE e.idperson = IDP) + ptlbuy) / (SELECT SUM(e.qtdeestoque  + pqtdebuy) FROM tb_estoques e WHERE e.idperson = IDP)
+		UPDATE tb_estoques 
+        SET 
+			qtdeestoque = (SELECT SUM(e.qtdeestoque  + pqtdebuy) FROM tb_estoques e WHERE e.idperson = IDP), 
+            prcaverage = ((SELECT SUM(e.qtdeestoque * e.prcaverage) FROM tb_estoques e WHERE e.idperson = IDP) + ptlbuy) / (SELECT SUM(e.qtdeestoque  + pqtdebuy) FROM tb_estoques e WHERE e.idperson = IDP)
 		WHERE idperson = IDP;
     
     END;
@@ -162,55 +165,6 @@ BEGIN
     
     
     SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) WHERE p.idperson = IDP;
-    
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_save_sell` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_save_sell`(
-	piduser INT(11),
-	pdescompany VARCHAR(64),
-	psgcompany VARCHAR(20),
-	pdtsell DATE,
-	pqtdesell INT(11),
-	pprcsell DECIMAL(10,2),
-	ptlsell DECIMAL(10,2),    
-	ptptransaction CHAR(1),
-	ptipe CHAR(1), 
-	pprcaverage DECIMAL(10, 2)
-
-)
-BEGIN
-
-	DECLARE IDE INT;
-    
-    SELECT idperson INTO IDE FROM tb_estoques WHERE sgecompany = psgcompany;
-
-    INSERT INTO tb_investiments
-		(iduser, idperson, sgcompany, dtsell, qtdesell, prcsell, tlsell, tptransaction, tipe)
-		VALUES (piduser, IDE, psgcompany, pdtsell, pqtdesell, pprcsell, ptlsell, ptptransaction, ptipe);
-    
-    IF IDE IS NOT NULL THEN
-    BEGIN
-		UPDATE tb_estoques SET qtdeestoque = (SELECT SUM(e.qtdeestoque - pqtdesell) FROM tb_estoques e WHERE e.idperson = IDE)
-		WHERE idperson = IDE;
-    END;
-    END IF;
-    
-    
-    SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) WHERE p.idperson = IDE;
     
 END ;;
 DELIMITER ;
@@ -422,7 +376,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_update_save`(
 	pidestoque INT(11),     
 	psgecompany VARCHAR(20),
     pqtdeestoque INT(11),
-    ptptransaction CHAR(1)
+    ptptransaction CHAR(1),
+    piprcaverage DECIMAL(10,2)
 )
 BEGIN
 	DECLARE IDP INT;
@@ -442,6 +397,7 @@ BEGIN
 		dtbuy         = pdtbuy,
 		dtsell        = pdtsell,
 		qtdebuy       = pqtdebuy,
+        iprcaverage   = piprcaverage,
 		qtdesell      = pqtdesell,
 		prcbuy        = pprcbuy,
 		prcsell       = pprcsell,
@@ -673,4 +629,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-16 13:38:12
+-- Dump completed on 2021-04-19 17:08:53

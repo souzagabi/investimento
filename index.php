@@ -119,6 +119,12 @@
 				$page->setTpl("/notas", array(
 					"acoes"=>$acoes
 				));
+			} else {
+				$acoes = Acao::listAll("notascompra");
+			
+				$page->setTpl("notas", array(
+					"acoes"=> $acoes
+				));	
 			}
 			
 		} else {
@@ -199,8 +205,12 @@
 		User::verifyLogin();
 		$acao = new Acao();
 		$acao->getByBuy($idinvestiment);
+		$array = (array) $acao;
+		foreach ($array as $key => $value) {
+			$company = $value["sgcompany"];
+		}
 		$acao->delete();
-		header("Location: /notasC");
+		header("Location: /acoes?sgcompany=".$company."&dtbuy=&dtsell=&search=Search");
 		exit;
 	});
 

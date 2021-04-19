@@ -69,7 +69,7 @@
             
             if ($id[1] == 'C') 
             {
-                $results = $sql->select("SELECT *, sum(e.qtdeestoque - i.qtdebuy) AS qtdetotal FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE i.idinvestiment = :idinvestiment", array(
+                $results = $sql->select("SELECT *, sum(e.qtdeestoque - i.qtdebuy + i.qtdesell) AS qtdetotal FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE i.idinvestiment = :idinvestiment", array(
                     ":idinvestiment"=>(int)$id[0]
                 ));
             } else 
@@ -85,6 +85,7 @@
                     ":idinvestiment"=>(int)$id[0]
                 ));
             }
+            
             if ($results[0]["tax"] > 0) {
                 $results[0]["tax"] = $results[0]["tax"]." %";
             }
