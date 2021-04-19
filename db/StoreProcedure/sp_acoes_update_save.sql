@@ -19,7 +19,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_update_save`(
 	pidestoque INT(11),     
 	psgecompany VARCHAR(20),
     pqtdeestoque INT(11),
-    ptptransaction CHAR(1)
+    ptptransaction CHAR(1),
+    piprcaverage DECIMAL(10,2)
 )
 BEGIN
 	DECLARE IDP INT;
@@ -39,6 +40,7 @@ BEGIN
 		dtbuy         = pdtbuy,
 		dtsell        = pdtsell,
 		qtdebuy       = pqtdebuy,
+        iprcaverage   = piprcaverage,
 		qtdesell      = pqtdesell,
 		prcbuy        = pprcbuy,
 		prcsell       = pprcsell,

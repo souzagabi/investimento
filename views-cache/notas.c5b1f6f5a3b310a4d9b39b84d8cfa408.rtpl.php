@@ -64,10 +64,11 @@
               <th>Empresa</th>
               <th class="buy">DtCompra</th>
               <th class="buy">Qtde</th>
-              <th class="buy">Valor</th>
+              <th class="buy">Valor Compra</th>
+              <th class="buy">Valor Médio</th>
               <th class="sell">DtVenda</th>
               <th class="sell">Qtde</th>
-              <th class="sell">Valor</th>
+              <th class="sell">Valor Venda</th>
               <th>Tipo</th>
               <th>Ação</th>
             </tr>
@@ -79,6 +80,7 @@
               <td class="buy"><?php echo htmlspecialchars( $value1["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="buy"><?php echo htmlspecialchars( $value1["qtdebuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="buy"><?php echo htmlspecialchars( $value1["prcbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <td class="buy"><?php echo htmlspecialchars( $value1["iprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="sell"><?php echo htmlspecialchars( $value1["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="sell"><?php echo htmlspecialchars( $value1["qtdesell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="sell"><?php echo htmlspecialchars( $value1["prcsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>

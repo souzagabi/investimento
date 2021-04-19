@@ -25,6 +25,7 @@
 	$app->get('/', function() {
 		User::verifyLogin();
 		$acoes = Acao::listAll("listacoes");
+		
 		$page = new PageAcoes([
 			"acoes"=> $acoes
 		]);
@@ -84,6 +85,7 @@
 
 	$app->get('/acoes', function() {
 		User::verifyLogin();
+		
 		$page = new PageAcoes();
 		
 		if (isset($_GET["search"])) {
@@ -207,9 +209,6 @@
 		$acoes = new Acao();
 		$acoes->getByBuy($idinvestiment);
 		
-		// echo '<pre>';	
-		// print_r($acoes);
-		// echo '</pre>';//exit;
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(
@@ -236,7 +235,7 @@
 		$acoes->setData($_POST);
 		
 		$acoes->update();
-		header("Location: /acoes");
+		header("Location: /acoes?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search");
 		exit;
 	});
 

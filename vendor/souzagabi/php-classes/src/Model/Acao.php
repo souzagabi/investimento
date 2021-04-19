@@ -74,11 +74,10 @@
                 ));
             } else 
             {
-                $results = $sql->select("SELECT p.idperson, p.desperson, p.descpfcnpj , i.idinvestiment, i.sgcompany, i.dtbuy, i.dtsell, i.qtdebuy, i.prcbuy, i.qtdesell, i.prcsell, i.tlsell, i.tptransaction, i.tipe, 
+                $results = $sql->select("SELECT p.idperson, p.desperson, p.descpfcnpj , i.idinvestiment, i.sgcompany, i.dtbuy, i.dtsell, i.qtdebuy, i.prcbuy, i.iprcaverage, i.qtdesell, i.prcsell, 
+                                i.tlsell, i.tptransaction, i.tipe, i.lucre, i.tax, e.idestoque,
                                 (SELECT sum(tlbuy) FROM tb_investiments WHERE idperson = p.idperson) AS tlbuy , 
-                                sum(e.qtdeestoque + i.qtdesell) AS qtdetotal,
-                                sum(i.tlsell - (e.qtdeestoque + i.qtdesell) * e.prcaverage) AS lucre,
-                                sum(((i.tlsell * 100) / (SELECT sum(tlbuy) FROM tb_investiments WHERE idperson = p.idperson)) - 100) AS tax 
+                                sum(e.qtdeestoque + i.qtdesell) - sum(e.qtdeestoque - i.qtdebuy) AS qtdetotal
                                 FROM tb_persons p 
                                 INNER JOIN tb_investiments i USING(idperson) 
                                 INNER JOIN tb_estoques e USING(idperson) 
@@ -154,9 +153,6 @@
         
         public function update()
         {
-            echo '<pre>';
-            print_r($this);
-            echo '</pre>';//exit;
             $sql = new Sql();
             if ($this->tptransaction() == 'C') {
                 $qtdeTotal = ["qtdetotal"=>$this->getqtdetotal() + $this->getqtdebuy() - $this->getqtdesell()];
@@ -165,28 +161,29 @@
             }
             $this->setData($qtdeTotal);
 
-            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson, :iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :idestoque, :sgecompany, :qtdeestoque, :tptransaction)", array(
-                ":idinvestiment"    => $this->getidinvestiment(),
-                ":idperson"         => $this->getidperson(),
-                ":iduser"           => $this->getiduser(),   
-                ":desperson"        => $this->getdesperson(),    
-                ":sgcompany"        => $this->getsgcompany(),    
-                ":descpfcnpj"       => $this->getdescpfcnpj(),    
-                ":dtbuy"            => $this->getdtbuy(),
-                ":dtsell"           => $this->getdtsell(),
-                ":qtdebuy"          => $this->getqtdebuy(),
-                ":qtdesell"         => $this->getqtdesell(),
-                ":prcbuy"           => $this->getprcbuy(),
-                ":prcsell"          => $this->getprcsell(),
-                ":tlbuy"            => $this->gettlbuy(),
-                ":tlsell"           => $this->gettlsell(),
-                ":tax"              => $this->gettax(),
-                ":lucre"            => $this->getlucre(),
-                ":tipe"             => $this->gettipe(),
-                ":idestoque"        => $this->getidestoque(),
-                ":sgecompany"       => $this->getsgecompany(),
-                ":qtdeestoque"      => $this->getqtdetotal(),
-                ":tptransaction"    => $this->gettptransaction()
+            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson, :iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :idestoque, :sgecompany, :qtdeestoque, :tptransaction, :iprcaverage)", array(
+                    ":idinvestiment"    => $this->getidinvestiment(),
+                    ":idperson"         => $this->getidperson(),
+                    ":iduser"           => $this->getiduser(),   
+                    ":desperson"        => $this->getdesperson(),    
+                    ":sgcompany"        => $this->getsgcompany(),    
+                    ":descpfcnpj"       => $this->getdescpfcnpj(),    
+                    ":dtbuy"            => $this->getdtbuy(),
+                    ":dtsell"           => $this->getdtsell(),
+                    ":qtdebuy"          => $this->getqtdebuy(),
+                    ":qtdesell"         => $this->getqtdesell(),
+                    ":prcbuy"           => $this->getprcbuy(),
+                    ":prcsell"          => $this->getprcsell(),
+                    ":tlbuy"            => $this->gettlbuy(),
+                    ":tlsell"           => $this->gettlsell(),
+                    ":tax"              => $this->gettax(),
+                    ":lucre"            => $this->getlucre(),
+                    ":tipe"             => $this->gettipe(),
+                    ":idestoque"        => $this->getidestoque(),
+                    ":sgecompany"       => $this->getsgecompany(),
+                    ":qtdeestoque"      => $this->getqtdetotal(),
+                    ":tptransaction"    => $this->gettptransaction(),
+                    ":iprcaverage"      => $this->getiprcaverage()
             ));
            
             $this->setData($results);
