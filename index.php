@@ -206,6 +206,7 @@
 		$acao = new Acao();
 		$acao->getByBuy($idinvestiment);
 		$array = (array) $acao;
+
 		foreach ($array as $key => $value) {
 			$company = $value["sgcompany"];
 		}

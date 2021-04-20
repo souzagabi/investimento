@@ -77,7 +77,7 @@
                 $results = $sql->select("SELECT p.idperson, p.desperson, p.descpfcnpj , i.idinvestiment, i.sgcompany, i.dtbuy, i.dtsell, i.qtdebuy, i.prcbuy, i.iprcaverage, i.qtdesell, i.prcsell, 
                                 i.tlsell, i.tptransaction, i.tipe, i.lucre, i.tax, e.idestoque,
                                 (SELECT sum(tlbuy) FROM tb_investiments WHERE idperson = p.idperson) AS tlbuy , 
-                                sum(e.qtdeestoque + i.qtdesell) - sum(e.qtdeestoque - i.qtdebuy) AS qtdetotal
+                                sum(e.qtdeestoque + i.qtdesell - i.qtdebuy) AS qtdetotal
                                 FROM tb_persons p 
                                 INNER JOIN tb_investiments i USING(idperson) 
                                 INNER JOIN tb_estoques e USING(idperson) 
