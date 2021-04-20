@@ -62,18 +62,8 @@
 		
 		$acoes = Acao::listAll($param);
 
-		for ($i=0; $i < count($acoes); $i++) { 
-			if (isset($dtbuy)) {
-				$acoes[$i]["dtbuy"] = Acao::convertDateView($dtbuy);
-			}
-			if (isset($dtsell)) {
-				$acoes[$i]["dtsell"] = Acao::convertDateView($dtsell);
-			}
-		}
-		
-		// echo '<pre>';	
-		// print_r($acoes);
-		// echo '</pre>';exit;	
+		$acoes = Acao::convertDate($acoes);
+			
 		$page = new PageAcoes([
 			"acoes"=> $acoes
 		]);
@@ -83,6 +73,7 @@
 		
 	});
 
+	
 	$app->get('/acoes', function() {
 		User::verifyLogin();
 		
@@ -98,15 +89,8 @@
 				
 				$acoes = Acao::listAll($dtBuySell);
 
-				for ($i=0; $i < count($acoes); $i++) { 
-					if ($acoes[$i]["dtbuy"]) {
-						$acoes[$i]["dtbuy"] = Acao::convertDateView($acoes[$i]["dtbuy"]);
-					}
-					if ($acoes[$i]["dtsell"]) {
-						$acoes[$i]["dtsell"] = Acao::convertDateView($acoes[$i]["dtsell"]);
-					}
-				}
-				
+				$acoes = Acao::convertDate($acoes);
+								
 				$page->setTpl("/notas", array(
 					"acoes"=>$acoes
 				));
@@ -116,12 +100,17 @@
 			{
 				$company = "sgcompany"."_".$_GET["sgcompany"];
 				$acoes = Acao::listAll($company);
+
+				$acoes = Acao::convertDate($acoes);
+				
 				$page->setTpl("/notas", array(
 					"acoes"=>$acoes
 				));
 			} else {
 				$acoes = Acao::listAll("notascompra");
 			
+				$acoes = Acao::convertDate($acoes);
+				
 				$page->setTpl("notas", array(
 					"acoes"=> $acoes
 				));	
@@ -130,6 +119,8 @@
 		} else {
 			$acoes = Acao::listAll("listacoes");
 			
+			$acoes = Acao::convertDate($acoes);
+
 			$page->setTpl("acoes", array(
 				"acoes"=> $acoes
 			));
@@ -259,14 +250,7 @@
 		$acoes = Acao::listAll("notascompra");
 		$page = new PageAcoes();
 		
-		for ($i=0; $i < count($acoes); $i++) { 
-			if ($acoes[$i]["dtbuy"]) {
-				$acoes[$i]["dtbuy"] = Acao::convertDateView($acoes[$i]["dtbuy"]);
-			}
-			if ($acoes[$i]["dtsell"]) {
-				$acoes[$i]["dtsell"] = Acao::convertDateView($acoes[$i]["dtsell"]);
-			}
-		}
+		$acoes = Acao::convertDate($acoes);
 		
 		$page->setTpl("notas", array(
 			"acoes"=> $acoes
@@ -278,14 +262,9 @@
 		User::verifyLogin();
 		$acoes = Acao::listAll("notasvenda");
 		$page = new PageAcoes();
-		for ($i=0; $i < count($acoes); $i++) { 
-			if ($acoes[$i]["dtbuy"]) {
-				$acoes[$i]["dtbuy"] = Acao::convertDateView($acoes[$i]["dtbuy"]);
-			}
-			if ($acoes[$i]["dtsell"]) {
-				$acoes[$i]["dtsell"] = Acao::convertDateView($acoes[$i]["dtsell"]);
-			}
-		}
+		
+		$acoes = Acao::convertDate($acoes);
+
 		$page->setTpl("notas", array(
 			"acoes"=> $acoes
 		));
@@ -298,6 +277,7 @@
 		
 		$acoes->getByBuy((int)$idinvestiment);
 		
+		$acoes = Acao::convertDate($acoes);
        
 		$page = new PageAcoes();
 		

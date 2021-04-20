@@ -101,6 +101,18 @@
         
         }
 
+        public function convertDate($object = array())
+        {
+            for ($i=0; $i < count($object); $i++) { 
+                if ($object[$i]["dtbuy"]) {
+                    $object[$i]["dtbuy"] = Acao::convertDateView($object[$i]["dtbuy"]);
+                }
+                if ($object[$i]["dtsell"]) {
+                    $object[$i]["dtsell"] = Acao::convertDateView($object[$i]["dtsell"]);
+                }
+            }
+            return $object;
+        }
         public function convertDateView($date)
         {
             return $data = date("d-m-Y", strToTime($date));
