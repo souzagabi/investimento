@@ -17,7 +17,6 @@
           <div class="col col-md-5">
             <form action="/acoes/create" method="get">
               <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
-              <input type="submit" name="venda" class="btn btn-success" value="Cadastrar Venda">
               <input type="text" name="acoes" value="acoes" hidden>
             </form>
           </div>

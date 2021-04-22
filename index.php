@@ -38,7 +38,7 @@
 
 	$app->get('/acoes-estoque', function() {
 		User::verifyLogin();
-
+		$param = ""."_".""."_"."";
 		if (isset($_GET["search"])) 
 		{
 			$dtbuy 		= NULL;
@@ -109,8 +109,8 @@
 					"acoes"=>$acoes
 				));
 			} else {
-				$acoes = Acao::listAll("notascompra");
-			
+				$acoes = Acao::listAll("notas");
+				
 				$acoes = Acao::convertDate($acoes);
 				
 				$page->setTpl("notas", array(
@@ -138,20 +138,16 @@
 			$voltar = ["voltar"=>"acoes"];
 		}
 		if (isset($_GET["notas"])) {
-			$voltar = ["voltar"=>"notasC"];
+			$voltar = ["voltar"=>"notas"];
 		}
 		$page = new PageAcoes();
 
 		if (isset($_GET["compra"])) {
-			$page->setTpl("acoes-createC", array(
+			$page->setTpl("acoes-create", array(
 				"voltar"=>$voltar
 			));
 		}
-		if (isset($_GET["venda"])) {
-			$page->setTpl("acoes-createV", array(
-				"voltar"=>$voltar
-			));
-		}
+		
 		
 	});
 
@@ -247,9 +243,9 @@
 /*										Rotas das Notas									*/
 /*======================================================================================*/
 	
-	$app->get('/notasC', function() {
+	$app->get('/notas', function() {
 		User::verifyLogin();
-		$acoes = Acao::listAll("notascompra");
+		$acoes = Acao::listAll("notas");
 		$page = new PageAcoes();
 		
 		$acoes = Acao::convertDate($acoes);
@@ -260,18 +256,6 @@
 		
 	});
 
-	$app->get('/notasV', function() {
-		User::verifyLogin();
-		$acoes = Acao::listAll("notasvenda");
-		$page = new PageAcoes();
-		
-		$acoes = Acao::convertDate($acoes);
-
-		$page->setTpl("notas", array(
-			"acoes"=> $acoes
-		));
-		
-	});
 
 	$app->get("/notas/:idinvestiment", function($idinvestiment) {
 		User::verifyLogin();

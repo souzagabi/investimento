@@ -10,13 +10,9 @@
             $sql = new Sql();
             
             if($listacoes === "listacoes"){
-                return $sql->select("SELECT * 
-                FROM tb_persons p 
-                INNER JOIN tb_estoques e USING(idperson) 
-                WHERE e.qtdeestoque > 0 ORDER BY e.sgecompany;
-                SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) ORDER BY i.idinvestiment;");
+                return $sql->select("CALL sp_acoes_list()");
             }
-            if($listacoes === "notascompra" || $listacoes === "notasvenda"){
+            if($listacoes === "notas"){
                 return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell)", array(
                     ":sgcompany" => '',    
                     ":dtbuy"     => '',
@@ -84,14 +80,15 @@
             }
         }
 
+        //não está sendo usada
         public function getByPerson($idperson) 
         {
             $sql = new Sql();
             
-            $results = $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE p.idperson = :idperson AND e.qtdeestoque > 0", array(
+            $results = $sql->select("CALL sp_acoes_person(:idperson)", array(
             ":idperson"=>$idperson
             ));
-            
+            var_dump($results);exit;
             if (isset($results[0]["tax"])) {
                 $results[0]["tax"] = $results[0]["tax"]." %";
             }
@@ -110,27 +107,14 @@
         {
             $sql = new Sql();
             $id = explode("_", $idinvestiment);
-            
             if ($id[1] == 'C') 
             {
-                $results = $sql->select("SELECT *, sum(e.qtdeestoque - i.qtdebuy + i.qtdesell) AS qtdetotal FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE i.idinvestiment = :idinvestiment", array(
+                $results = $sql->select("CALL sp_acoes_select_buy(:idinvestiment)", array(
                     ":idinvestiment"=>(int)$id[0]
                 ));
-            } else 
-            {
-                $results = $sql->select("SELECT p.idperson, p.desperson, p.descpfcnpj , i.idinvestiment, i.sgcompany, i.dtbuy, i.dtsell, i.qtdebuy, i.prcbuy, i.iprcaverage, i.qtdesell, i.prcsell, 
-                                i.tlsell, i.tptransaction, i.tipe, i.lucre, i.tax, e.idestoque,
-                                (SELECT sum(tlbuy) FROM tb_investiments WHERE idperson = p.idperson) AS tlbuy , 
-                                sum(e.qtdeestoque + i.qtdesell - i.qtdebuy) AS qtdetotal
-                                FROM tb_persons p 
-                                INNER JOIN tb_investiments i USING(idperson) 
-                                INNER JOIN tb_estoques e USING(idperson) 
-                                WHERE i.idinvestiment = :idinvestiment", array(
-                    ":idinvestiment"=>(int)$id[0]
-                ));
-            }
+            } 
             
-            if ($results[0]["tax"] > 0) {
+            if (isset($results[0]["tax"]) && $results[0]["tax"] > 0) {
                 $results[0]["tax"] = $results[0]["tax"]." %";
             }
             if ($results[0]["dtbuy"]) {
@@ -139,6 +123,7 @@
             if ($results[0]["dtsell"]) {
                 $results[0]["dtsell"] = $this->convertDateView($results[0]["dtsell"]);
             }
+            
             $data = $results[0];
             
             $this->setData($data);
@@ -187,35 +172,12 @@
             
             $this->setData($results);
         }
-
-        public function save_sell()
-        {
-            $sql = new Sql();
-            
-            $results = $sql->select("CALL sp_acoes_save_sell(:iduser, :desperson, :sgcompany, :dtsell, :qtdesell, :prcsell, :tlsell, :tptransaction, :tipe, :prcaverage)", array(
-                ":iduser"           => $this->getiduser(),    
-                ":desperson"        => $this->getdesperson(),    
-                ":sgcompany"        => $this->getsgcompany(),    
-                ":dtsell"           => $this->getdtsell(),
-                ":qtdesell"         => $this->getqtdesell(),
-                ":prcsell"          => $this->getprcsell(),
-                ":tlsell"           => $this->gettlsell(),
-                ":tptransaction"    => $this->gettptransaction(),
-                ":tipe"             => $this->gettipe(),
-                ":prcaverage"       => $this->getprcaverage()
-            ));
-            
-            $this->setData($results);
-        }
         
         public function update()
         {
             $sql = new Sql();
-            if ($this->tptransaction() == 'C') {
-                $qtdeTotal = ["qtdetotal"=>$this->getqtdetotal() + $this->getqtdebuy() - $this->getqtdesell()];
-            } else {
-                $qtdeTotal = ["qtdetotal"=>$this->getqtdetotal() - $this->getqtdesell() + $this->getqtdebuy()];
-            }
+            $qtdeTotal = ["qtdetotal"=>$this->getqtdetotal() + $this->getqtdebuy() - $this->getqtdesell()];
+           
             $this->setData($qtdeTotal);
 
             $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson, :iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :idestoque, :sgecompany, :qtdeestoque, :tptransaction, :iprcaverage)", array(
