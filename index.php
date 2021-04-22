@@ -60,7 +60,7 @@
 			$param = $company."_".$dtbuy."_".$dtsell;
 		}
 		
-		$acoes = Acao::listAll($param);
+		$acoes = Acao::listAllEstoque($param);
 
 		$acoes = Acao::convertDate($acoes);
 			
@@ -80,13 +80,16 @@
 		$page = new PageAcoes();
 		
 		if (isset($_GET["search"])) {
-			if ($_GET["dtbuy"] != NULL || $_GET["dtsell"] != NULL) {
+			if ($_GET["dtbuy"] != '' || $_GET["dtsell"] != '') {
 				
-				$_GET["dtbuy"] = Acao::convertDateDataBase($_GET["dtbuy"]);
-				$_GET["dtsell"] = Acao::convertDateDataBase($_GET["dtsell"]);
+				if (isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '' && $_GET["dtbuy"] != NULL) {
+					$_GET["dtbuy"] = Acao::convertDateDataBase($_GET["dtbuy"]);
+				}
+				if (isset($_GET["dtsell"]) && $_GET["dtsell"] != '' && $_GET["dtsell"] != NULL) {
+					$_GET["dtsell"] = Acao::convertDateDataBase($_GET["dtsell"]);
+				}
 				
 				$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
-				
 				$acoes = Acao::listAll($dtBuySell);
 
 				$acoes = Acao::convertDate($acoes);
@@ -95,12 +98,11 @@
 					"acoes"=>$acoes
 				));
 				
-			}
-			if ($_GET["sgcompany"] != '' && $_GET["sgcompany"] != NULL )
+			} else if ($_GET["sgcompany"] != '' && $_GET["sgcompany"] != NULL )
 			{
 				$company = "sgcompany"."_".$_GET["sgcompany"];
 				$acoes = Acao::listAll($company);
-
+				
 				$acoes = Acao::convertDate($acoes);
 				
 				$page->setTpl("/notas", array(

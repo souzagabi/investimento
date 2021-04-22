@@ -1,8 +1,8 @@
 <?php if(!class_exists('Rain\Tpl')){exit;}?><!-- Main Footer -->
 <footer class="main-footer">
     <!-- Default to the left -->
-    <div class="footer-copyright text-center py-3">© 2021 Copyright:
-      <strong>Copyright &copy; 2021 <a href="#">Souteramoto.com</a>.</strong> All rights reserved.
+    <div class="footer-copyright text-center py-3">
+      <strong>© Copyright &copy; 2021 <a href="#">Souteramoto.com</a>.</strong> All rights reserved.
     </div>
     
   </footer>

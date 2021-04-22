@@ -5,8 +5,8 @@
       Anything you want
     </div>
     <!-- Default to the left -->
-    <div class="footer-copyright text-center py-3">© 2021 Copyright:
-      <strong>Copyright &copy; 2021 <a href="#">Souteramoto.com</a>.</strong> All rights reserved.
+    <div class="footer-copyright text-center py-3">
+      <strong>© Copyright &copy; 2021 <a href="#">Souteramoto.com</a>.</strong> All rights reserved.
     </div>
     
   </footer>

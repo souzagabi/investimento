@@ -10,10 +10,18 @@
             $sql = new Sql();
             
             if($listacoes === "listacoes"){
-                return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_estoques e USING(idperson) WHERE e.qtdeestoque > 0 ORDER BY e.sgecompany");
+                return $sql->select("SELECT * 
+                FROM tb_persons p 
+                INNER JOIN tb_estoques e USING(idperson) 
+                WHERE e.qtdeestoque > 0 ORDER BY e.sgecompany;
+                SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) ORDER BY i.idinvestiment;");
             }
             if($listacoes === "notascompra" || $listacoes === "notasvenda"){
-                return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) ORDER BY i.idinvestiment");
+                return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell)", array(
+                    ":sgcompany" => '',    
+                    ":dtbuy"     => '',
+                    ":dtsell"    => ''
+                ));
             }
 
             if (isset($listacoes)) {
@@ -21,20 +29,56 @@
                 
                 if (count($data) === 3) {
                     
-                    return $sql->select("CALL sp_acoes_select_company(:sgcompany, :dtbuy, :dtsell)", array(
+                    return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell)", array(
                         ":sgcompany" => $data[0],    
                         ":dtbuy"     => $data[1],
                         ":dtsell"    => $data[2]
                     ));
                 }
                 if ($data[0] === "sgcompany") {
-                    return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE i.sgcompany = :sgcompany ORDER BY i.idinvestiment", array(
-                        ":sgcompany"=>$data[1]
+                    return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell)", array(
+                        ":sgcompany" => $data[1],    
+                        ":dtbuy"     => '',
+                        ":dtsell"    => ''
                     ));
+                
                 } else {
-                    return $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) WHERE (dtbuy >= :dtbuy AND dtbuy <= :dtbuy) OR (dtsell >= :dtsell AND dtsell <= :dtsell) ORDER BY i.idinvestiment", array(
-                       ":dtbuy"=>$data[0], 
-                       ":dtsell"=>$data[1] 
+                    return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell)", array(
+                        ":sgcompany" => '',    
+                        ":dtbuy"=>$data[0],
+                        ":dtsell"=>$data[1]
+                    ));
+                }
+            }
+        }
+
+        public static function listAllEstoque($listestoque)
+        {
+            $sql = new Sql();
+            
+            if (isset($listestoque)) {
+                $data = explode("_", $listestoque);
+                
+                if (count($data) === 3) {
+                    
+                    return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell)", array(
+                        ":sgcompany" => $data[0],    
+                        ":dtbuy"     => $data[1],
+                        ":dtsell"    => $data[2]
+                    ));
+                }
+                if ($data[0] === "sgcompany") {
+                    return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell)", array(
+                        ":sgcompany" => $data[1],    
+                        ":dtbuy"     => '',
+                        ":dtsell"    => ''
+                    ));
+                
+                } else {
+                    return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell)", array(
+                        ":sgcompany" => '',    
+                        ":dtbuy"=>$data[0],
+                        ":dtsell"=>$data[1]
                     ));
                 }
             }
@@ -104,10 +148,10 @@
         public function convertDate($object = array())
         {
             for ($i=0; $i < count($object); $i++) { 
-                if ($object[$i]["dtbuy"]) {
+                if (isset($object[$i]["dtbuy"])) {
                     $object[$i]["dtbuy"] = Acao::convertDateView($object[$i]["dtbuy"]);
                 }
-                if ($object[$i]["dtsell"]) {
+                if (isset($object[$i]["dtsell"])) {
                     $object[$i]["dtsell"] = Acao::convertDateView($object[$i]["dtsell"]);
                 }
             }
