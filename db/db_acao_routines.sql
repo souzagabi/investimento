@@ -25,9 +25,9 @@
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -60,11 +60,11 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_save`(
 	piduser INT(11),
@@ -87,14 +87,14 @@ BEGIN
 
 	IF IDP IS NULL THEN
 		BEGIN
-			INSERT INTO tb_persons (desperson, sgcompany, descpfcnpj) VALUES (psgcompany, psgcompany, pdescnpj);
+			INSERT INTO tb_persons (desperson, sgcompany, descpfcnpj) VALUES (pdescompany, psgcompany, pdescnpj);
 		END;
         SET IDP = LAST_INSERT_ID();
 	END IF;
     
     INSERT INTO tb_investiments
-    (iduser, idperson, descompany, sgcompany, descnpj, dtbuy, dtsell, qtdebuy, qtdesell, prcbuy, prcsell, tlbuy, tlsell, tax, lucre, tptransaction, tipe)
-    VALUES (piduser, IDP, pdescompany, psgcompany, pdescnpj, pdtbuy, pdtsell, pqtdebuy, pqtdesell, pprcbuy, pprcsell, ptlbuy, ptlsell, ptax, plucre, ptptransaction, ptipe);
+    (iduser, idperson, sgcompany, dtbuy, dtsell, qtdebuy, qtdesell, prcbuy, prcsell, tlbuy, tlsell, tax, lucre, tptransaction, tipe)
+    VALUES (piduser, IDP, psgcompany, pdtbuy, pdtsell, pqtdebuy, pqtdesell, pprcbuy, pprcsell, ptlbuy, ptlsell, ptax, plucre, ptptransaction, ptipe);
     
     INSERT INTO tb_estoques (qtdeestoque, prcAverage) VALUES ((SELECT qtdeestoque FROM tb_estoques WHERE sgecompany = psgcompany) + pqtdebuy, pprcAverage);
     
@@ -157,7 +157,7 @@ BEGIN
 		UPDATE tb_estoques 
         SET 
 			qtdeestoque = (SELECT SUM(e.qtdeestoque  + pqtdebuy) FROM tb_estoques e WHERE e.idperson = IDP), 
-            prcaverage = ((SELECT SUM(e.qtdeestoque * e.prcaverage) FROM tb_estoques e WHERE e.idperson = IDP) + ptlbuy) / (SELECT SUM(e.qtdeestoque  + pqtdebuy) FROM tb_estoques e WHERE e.idperson = IDP)
+			prcaverage = ((SELECT SUM(e.qtdeestoque * e.prcaverage) FROM tb_estoques e WHERE e.idperson = IDP) + ptlbuy) / (SELECT SUM(e.qtdeestoque  + pqtdebuy) FROM tb_estoques e WHERE e.idperson = IDP)
 		WHERE idperson = IDP;
     
     END;
@@ -165,6 +165,215 @@ BEGIN
     
     
     SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) WHERE p.idperson = IDP;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_save_sell` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_save_sell`(
+	piduser INT(11),
+	pdescompany VARCHAR(64),
+	psgcompany VARCHAR(20),
+	pdtsell DATE,
+	pqtdesell INT(11),
+	pprcsell DECIMAL(10,2),
+	ptlsell DECIMAL(10,2),    
+	ptptransaction CHAR(1),
+	ptipe CHAR(1), 
+	pprcaverage DECIMAL(10, 2)
+
+)
+BEGIN
+
+	DECLARE IDE INT;
+    
+    SELECT idperson INTO IDE FROM tb_estoques WHERE sgecompany = psgcompany;
+
+    INSERT INTO tb_investiments
+		(iduser, idperson, sgcompany, dtsell, qtdesell, prcsell, tlsell, tptransaction, tipe)
+		VALUES (piduser, IDE, psgcompany, pdtsell, pqtdesell, pprcsell, ptlsell, ptptransaction, ptipe);
+    
+    IF IDE IS NOT NULL THEN
+    BEGIN
+		UPDATE tb_estoques SET qtdeestoque = (SELECT SUM(e.qtdeestoque - pqtdesell) FROM tb_estoques e WHERE e.idperson = IDE)
+		WHERE idperson = IDE;
+        CASE 
+			WHEN  (SELECT SUM(e.qtdeestoque - pqtdesell) FROM tb_estoques e WHERE e.idperson = IDE) = 0 THEN
+				UPDATE tb_estoques
+					SET prcaverage = 0;
+		END CASE;
+    END;
+    END IF;
+    
+    
+    SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) WHERE p.idperson = IDE;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_select` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_select`(
+psgcompany VARCHAR(20) ,
+pdtbuy DATE,
+pdtsell DATE
+)
+BEGIN
+	
+    /*==========================================================================================*/
+    /*						Filtra os registros usando nenhum parâmetros						*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '') AND (pdtsell = '')) AND (psgcompany = '') THEN
+    BEGIN
+		SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) ORDER BY i.idinvestiment;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 3 parâmetros - sigla e data					*/
+    /*==========================================================================================*/
+    IF (pdtbuy != '' AND pdtsell != '') AND (psgcompany != '') THEN
+    BEGIN
+		SELECT *, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany
+			AND i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*					Filtra os registros usando os 1 parâmetros - sigla						*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '') AND (pdtsell = '')) AND (psgcompany != '') THEN
+    BEGIN
+		SELECT * 
+        FROM tb_persons p 
+        INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+        WHERE i.sgcompany = psgcompany
+        ORDER BY i.idinvestiment;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 2 parâmetros - sigla e data sell				*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '') AND pdtsell != '') AND (psgcompany != '') THEN
+    BEGIN
+		SELECT *, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND i.dtsell <= pdtsell 
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 2 parâmetros - sigla e data buy				*/
+    /*==========================================================================================*/
+    IF (pdtbuy != '' AND (pdtsell = '')) AND (psgcompany != '') THEN
+    BEGIN
+		SELECT *, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND i.dtbuy >= pdtbuy 
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*						Filtra os registros usando os 2 parâmetros - data					*/
+    /*==========================================================================================*/
+    IF (pdtbuy != '' AND pdtsell != '') AND (psgcompany = '') THEN
+    BEGIN
+		SELECT *, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell 
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*					Filtra os registros usando os 1 parâmetros - data buy					*/
+    /*==========================================================================================*/
+    IF ((pdtbuy IS NOT NULL) AND (pdtsell = '')) AND (psgcompany = '') THEN
+    BEGIN
+		SELECT *, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtbuy >= pdtbuy
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*					Filtra os registros usando os 1 parâmetros - data sell					*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '') AND pdtsell != '') AND (psgcompany = '') THEN
+    BEGIN
+		SELECT *, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtsell <= pdtsell
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
     
 END ;;
 DELIMITER ;
@@ -188,18 +397,176 @@ pdtbuy DATE,
 pdtsell DATE
 )
 BEGIN
-
+	
+    /*==========================================================================================*/
+    /*						Filtra os registros usando nenhum parâmetros						*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '') AND (pdtsell = '')) AND (psgcompany = '') THEN
+    BEGIN
+		SELECT * FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) ORDER BY i.idinvestiment;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 3 parâmetros - sigla e data					*/
+    /*==========================================================================================*/
+    IF (pdtbuy != '' AND pdtsell != '') AND (psgcompany != '') THEN
+    BEGIN
+		SELECT *, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany
+			AND i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*					Filtra os registros usando os 1 parâmetros - sigla						*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '') AND (pdtsell = '')) AND (psgcompany != '') THEN
+    BEGIN
+		SELECT * 
+        FROM tb_persons p 
+        INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+        WHERE i.sgcompany = psgcompany
+        ORDER BY i.idinvestiment;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 2 parâmetros - sigla e data sell				*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '') AND pdtsell != '') AND (psgcompany != '') THEN
+    BEGIN
+		SELECT *, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND i.dtsell <= pdtsell 
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 2 parâmetros - sigla e data buy				*/
+    /*==========================================================================================*/
+    IF (pdtbuy != '' AND (pdtsell = '')) AND (psgcompany != '') THEN
+    BEGIN
+		SELECT *, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND i.dtbuy >= pdtbuy 
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*						Filtra os registros usando os 2 parâmetros - data					*/
+    /*==========================================================================================*/
+    IF (pdtbuy != '' AND pdtsell != '') AND (psgcompany = '') THEN
+    BEGIN
+		SELECT *, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell 
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*					Filtra os registros usando os 1 parâmetros - data buy					*/
+    /*==========================================================================================*/
+    IF ((pdtbuy IS NOT NULL) AND (pdtsell = '')) AND (psgcompany = '') THEN
+    BEGIN
+		SELECT *, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtbuy >= pdtbuy
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*					Filtra os registros usando os 1 parâmetros - data sell					*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '') AND pdtsell != '') AND (psgcompany = '') THEN
+    BEGIN
+		SELECT *, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtsell <= pdtsell
+		GROUP BY p.sgcompany;
+    END;
+    END IF;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_select_estoque` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_select_estoque`(
+psgcompany VARCHAR(20) ,
+pdtbuy DATE,
+pdtsell DATE
+)
+BEGIN
+	
     /*==========================================================================================*/
     /*						Filtra os registros usando nenhum parâmetros						*/
     /*==========================================================================================*/
     IF ((pdtbuy = '') AND (pdtsell = '')) AND (psgcompany = '') THEN
     BEGIN
 		SELECT p.idperson, p.desperson, p.desperson AS VAZIO, p.sgcompany, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				(sum(i.tlbuy) - sum(i.tlsell)) / (sum(i.qtdebuy) - sum(i.qtdesell))  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal
-		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            e.prcaverage * (sum(i.qtdebuy) - sum(i.qtdesell)) AS vlrtotal
+		FROM tb_persons p 
+        INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson)
 		GROUP BY p.sgcompany;
     END;
     END IF;
@@ -210,13 +577,13 @@ BEGIN
     IF ((pdtbuy = '') AND (pdtsell = '')) AND (psgcompany != '') THEN
     BEGIN
 		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
-        INNER JOIN tb_estoques e USING(idperson)
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            e.prcaverage * (sum(i.qtdebuy) - sum(i.qtdesell)) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
 		WHERE i.sgcompany = psgcompany 
 		GROUP BY p.sgcompany;
     END;
@@ -227,17 +594,15 @@ BEGIN
     /*==========================================================================================*/
     IF ((pdtbuy = '') AND pdtsell != '') AND (psgcompany != '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.sgcompany, p.desperson AS SIGSELL, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
-        INNER JOIN tb_estoques e USING(idperson)
-		WHERE i.sgcompany = psgcompany 
-        AND ((i.dtbuy <= pdtsell) 
-			OR (i.dtsell <= pdtsell)) 
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            e.prcaverage * (sum(i.qtdebuy) - sum(i.qtdesell)) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND i.dtsell <= pdtsell 
 		GROUP BY p.sgcompany;
     END;
     END IF;
@@ -247,17 +612,15 @@ BEGIN
     /*==========================================================================================*/
     IF (pdtbuy != '' AND (pdtsell = '')) AND (psgcompany != '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.sgcompany, p.desperson AS SIGSELL, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
-        INNER JOIN tb_estoques e USING(idperson)
-		WHERE i.sgcompany = psgcompany 
-			AND ((i.dtbuy >= pdtbuy) 
-            OR (i.dtsell >= pdtbuy))
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            e.prcaverage * (sum(i.qtdebuy) - sum(i.qtdesell)) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND i.dtbuy >= pdtbuy
 		GROUP BY p.sgcompany;
     END;
     END IF;
@@ -267,16 +630,15 @@ BEGIN
     /*==========================================================================================*/
     IF (pdtbuy != '' AND pdtsell != '') AND (psgcompany = '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.sgcompany, p.desperson AS BuySell, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
-        INNER JOIN tb_estoques e USING(idperson)
-		WHERE (i.dtbuy >= pdtbuy AND i.dtbuy <= pdtsell) 
-		  OR (i.dtsell >= pdtbuy AND i.dtsell <= pdtsell) 
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            e.prcaverage * (sum(i.qtdebuy) - sum(i.qtdesell)) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell 
 		GROUP BY p.sgcompany;
     END;
     END IF;
@@ -286,16 +648,15 @@ BEGIN
     /*==========================================================================================*/
     IF ((pdtbuy IS NOT NULL) AND (pdtsell = '')) AND (psgcompany = '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.desperson AS BUY, p.sgcompany, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
-        INNER JOIN tb_estoques e USING(idperson)
-		WHERE (i.dtbuy >= pdtbuy) 
-		  OR (i.dtsell >= pdtbuy) 
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            e.prcaverage * (sum(i.qtdebuy) - sum(i.qtdesell)) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtbuy >= pdtbuy
 		GROUP BY p.sgcompany;
     END;
     END IF;
@@ -305,16 +666,15 @@ BEGIN
     /*==========================================================================================*/
     IF ((pdtbuy = '') AND pdtsell != '') AND (psgcompany = '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.desperson AS SELL, p.sgcompany, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            e.prcaverage * (sum(i.qtdebuy) - sum(i.qtdesell)) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
         INNER JOIN tb_estoques e USING(idperson) 
-		WHERE (i.dtbuy <= pdtsell) 
-		  OR (i.dtsell <= pdtsell) 
+		WHERE i.dtsell <= pdtsell 
 		GROUP BY p.sgcompany;
     END;
     END IF;
@@ -324,17 +684,16 @@ BEGIN
     /*==========================================================================================*/
     IF (pdtbuy != '' AND pdtsell != '') AND (psgcompany != '') THEN
     BEGIN
-		SELECT p.idperson, p.desperson, p.desperson AS CHEIO, p.sgcompany, p.descpfcnpj, 
-				sum(i.qtdebuy) AS buyTotal, sum(i.qtdesell) AS sellTotal, 
-                sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage  AS average,
-                (sum(i.tlbuy) - sum(i.tlsell)) AS vlrtotal  
-		FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(idperson) 
+		SELECT p.idperson, p.desperson, p.desperson AS SIGLA, p.sgcompany, p.descpfcnpj, 
+			sum(i.qtdebuy) AS buyTotal, 
+			sum(i.qtdesell) AS sellTotal, 
+			sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
+            e.prcaverage AS average,
+            e.prcaverage * (sum(i.qtdebuy) - sum(i.qtdesell)) AS vlrtotal
+		FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
         INNER JOIN tb_estoques e USING(idperson) 
 		WHERE i.sgcompany = psgcompany
-			AND ((i.dtbuy >= pdtbuy AND i.dtbuy <= pdtsell) 
-			OR (i.dtsell >= pdtbuy AND i.dtsell <= pdtsell) )
+			AND i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell
 		GROUP BY p.sgcompany;
     END;
     END IF;
@@ -425,9 +784,9 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -466,9 +825,9 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -513,9 +872,9 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -573,9 +932,9 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -629,4 +988,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-20 17:39:10
+-- Dump completed on 2021-04-22  5:59:38
