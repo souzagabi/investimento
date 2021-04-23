@@ -19,7 +19,7 @@
   		<div class="box box-primary">
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/acoes/<?php echo htmlspecialchars( $acoes["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>_<?php echo htmlspecialchars( $acoes["tptransaction"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" method="post">
+        <form role="form" action="/notas/<?php echo htmlspecialchars( $acoes["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" method="post">
           <input type="text" name="idinvestiment" value="<?php echo htmlspecialchars( $acoes["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" hidden>
           <input type="text" name="idperson" value="<?php echo htmlspecialchars( $acoes["idperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" hidden>
           <div class="box-body">
@@ -125,7 +125,7 @@
             <!-- /.box-body -->
             <div class="box-footer">
               <button type="submit" class="btn btn-primary">Alualizar</button>
-              <a href="/notasC" class="btn btn-warning">Voltar</a>
+              <a href="/notas" class="btn btn-warning">Voltar</a>
             </div>
         </form>
       </div>

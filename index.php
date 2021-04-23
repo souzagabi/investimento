@@ -62,7 +62,7 @@
 		
 		$acoes = Acao::listAllEstoque($param);
 
-		$acoes = Acao::convertDate($acoes);
+		$acoes = Acao::convertDateToView($acoes);
 			
 		$page = new PageAcoes([
 			"acoes"=> $acoes
@@ -72,59 +72,19 @@
 		));
 		
 	});
-
 	
 	$app->get('/acoes', function() {
 		User::verifyLogin();
 		
 		$page = new PageAcoes();
-		
-		/*if (isset($_GET["search"])) {
-			if ($_GET["dtbuy"] != '' || $_GET["dtsell"] != '') {
-				$dtBuySell = ""."_"."";
-				$_GET = Acao::convertDateToDataBase($_GET);
-			
-				if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
-					$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
-				}
-				$acoes = Acao::listAll($dtBuySell);
-
-				$acoes = Acao::convertDate($acoes);
-								
-				$page->setTpl("/notas", array(
-					"acoes"=>$acoes
-				));
-				
-			} else if ($_GET["sgcompany"] != '' && $_GET["sgcompany"] != NULL )
-			{
-				$company = "sgcompany"."_".$_GET["sgcompany"];
-				$acoes = Acao::listAll($company);
-				
-				$acoes = Acao::convertDate($acoes);
-				
-				$page->setTpl("/notas", array(
-					"acoes"=>$acoes
-				));
-			} else {
-				$acoes = Acao::listAll("notas");
-				
-				$acoes = Acao::convertDate($acoes);
-				
-				$page->setTpl("notas", array(
-					"acoes"=> $acoes
-				));	
-			}
-			
-		}*/ 
 
 		$acoes = Acao::listAll("listacoes");
 		
-		$acoes = Acao::convertDate($acoes);
+		$acoes = Acao::convertDateToView($acoes);
 
 		$page->setTpl("acoes", array(
 			"acoes"=> $acoes
 		));
-
 		
 	});
 	
@@ -193,6 +153,8 @@
 		$acoes = new Acao();
 		$acoes->getByBuy($idinvestiment);
 		
+		$acoes = Acao::convertDateToView($acoes);
+
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(
@@ -200,7 +162,7 @@
 		));
 	});
 	
-	$app->post("/acoes/:idinvestiment", function ($idinvestiment){
+	/*$app->post("/acoes/:idinvestiment", function ($idinvestiment){
 		User::verifyLogin();
 		$acoes = new Acao();
 		if ($_POST["tax"]) {
@@ -217,7 +179,7 @@
 		$acoes->update();
 		header("Location: /acoes?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search");
 		exit;
-	});
+	});*/
 
 /*======================================================================================*/
 /*										Rotas das Notas									*/
@@ -226,7 +188,6 @@
 	$app->get('/notas', function() {
 		User::verifyLogin();
 		$page = new PageAcoes();
-		
 		
 		if (isset($_GET["search"])) {
 			if ($_GET["dtbuy"] != '' || $_GET["dtsell"] != '') {
@@ -238,7 +199,7 @@
 				}
 				$acoes = Acao::listAll($dtBuySell);
 
-				$acoes = Acao::convertDate($acoes);
+				$acoes = Acao::convertDateToView($acoes);
 								
 				$page->setTpl("/notas", array(
 					"acoes"=>$acoes
@@ -249,7 +210,7 @@
 				$company = "sgcompany"."_".$_GET["sgcompany"];
 				$acoes = Acao::listAll($company);
 				
-				$acoes = Acao::convertDate($acoes);
+				$acoes = Acao::convertDateToView($acoes);
 				
 				$page->setTpl("/notas", array(
 					"acoes"=>$acoes
@@ -257,7 +218,7 @@
 			} else {
 				$acoes = Acao::listAll("notas");
 				
-				$acoes = Acao::convertDate($acoes);
+				$acoes = Acao::convertDateToView($acoes);
 				
 				$page->setTpl("notas", array(
 					"acoes"=> $acoes
@@ -267,7 +228,7 @@
 		} else 
 		{
 			$acoes = Acao::listAll("notas");
-			$acoes = Acao::convertDate($acoes);
+			$acoes = Acao::convertDateToView($acoes);
 			$page->setTpl("notas", array(
 				"acoes"=> $acoes
 			));
@@ -275,20 +236,49 @@
 		
 	});
 
-
+	// $app->get("/notas/:idinvestiment", function($idinvestiment) {
+	// 	User::verifyLogin();
+	// 	$acoes = new Acao();
+		
+	// 	$acoes->getByBuy((int)$idinvestiment);
+		
+	// 	$acoes = Acao::convertDateToView($acoes);
+       
+	// 	$page = new PageAcoes();
+		
+	// 	$page ->setTpl("acoes-update", array(
+	// 		"acoes"=>$acoes->getValues()
+	// 	));
+	// });
 	$app->get("/notas/:idinvestiment", function($idinvestiment) {
 		User::verifyLogin();
 		$acoes = new Acao();
+		$acoes->getByBuy($idinvestiment);
 		
-		$acoes->getByBuy((int)$idinvestiment);
-		
-		$acoes = Acao::convertDate($acoes);
-       
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(
 			"acoes"=>$acoes->getValues()
 		));
+	});
+	
+	$app->post("/notas/:idinvestiment", function ($idinvestiment){
+		User::verifyLogin();
+		$acoes = new Acao();
+		if ($_POST["tax"]) {
+			$tax = explode(" ",$_POST["tax"]);
+			$_POST["tax"] = $tax[0];
+		}
+		$_POST = Acao::convertDateToDataBase($_POST);
+		
+		$_POST["iduser"] = $_SESSION["User"]["iduser"];
+		
+		$acoes->getByBuy($idinvestiment);
+		$acoes->setData($_POST);
+		
+		$acoes->update();
+		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search");
+		exit;
 	});
 	
 /*======================================================================================*/
