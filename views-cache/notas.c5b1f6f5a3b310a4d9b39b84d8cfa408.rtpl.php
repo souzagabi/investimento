@@ -17,12 +17,11 @@
           <div class="col col-md-5">
             <form action="/acoes/create" method="get">
               <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
-              <input type="submit" name="venda" class="btn btn-success" value="Cadastrar Venda">
               <input type="text" name="notas" value="notas" hidden>
             </form>
           </div>
           
-          <form action="/acoes" method="get">
+          <form action="/notas" method="get">
             <div class="col col-md-2"><label for="sgcompany">Sigla</label><input type="text" name="sgcompany" id="sgcompany" class="form-control"></div>
             <div class="col col-md-2"><label for="dtbuy">Data Inicio</label><input type="text" name="dtbuy" id="dtbuy" class="form-control" onChange="replaceSlash(dtbuy)"></div>
             <div class="col col-md-2"><label for="dtsell">Data Fim</label><input type="text" name="dtsell" id="dtsell" class="form-control" onChange="replaceSlash(dtsell)"></div>

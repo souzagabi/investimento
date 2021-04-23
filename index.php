@@ -79,17 +79,14 @@
 		
 		$page = new PageAcoes();
 		
-		if (isset($_GET["search"])) {
+		/*if (isset($_GET["search"])) {
 			if ($_GET["dtbuy"] != '' || $_GET["dtsell"] != '') {
-				
-				if (isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '' && $_GET["dtbuy"] != NULL) {
-					$_GET["dtbuy"] = Acao::convertDateDataBase($_GET["dtbuy"]);
+				$dtBuySell = ""."_"."";
+				$_GET = Acao::convertDateToDataBase($_GET);
+			
+				if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
+					$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
 				}
-				if (isset($_GET["dtsell"]) && $_GET["dtsell"] != '' && $_GET["dtsell"] != NULL) {
-					$_GET["dtsell"] = Acao::convertDateDataBase($_GET["dtsell"]);
-				}
-				
-				$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
 				$acoes = Acao::listAll($dtBuySell);
 
 				$acoes = Acao::convertDate($acoes);
@@ -118,15 +115,16 @@
 				));	
 			}
 			
-		} else {
-			$acoes = Acao::listAll("listacoes");
-			
-			$acoes = Acao::convertDate($acoes);
+		}*/ 
 
-			$page->setTpl("acoes", array(
-				"acoes"=> $acoes
-			));
-		}
+		$acoes = Acao::listAll("listacoes");
+		
+		$acoes = Acao::convertDate($acoes);
+
+		$page->setTpl("acoes", array(
+			"acoes"=> $acoes
+		));
+
 		
 	});
 	
@@ -159,32 +157,18 @@
 			$tax = explode(" ",$_POST["tax"]);
 			$_POST["tax"] = $tax[0];
 		}
-		if (isset($_POST["dtbuy"])) {
-			$_POST["dtbuy"] = Acao::convertDateDataBase($_POST["dtbuy"]);
-		}
-		if (isset($_POST["dtsell"])) {
-			$_POST["dtsell"] = Acao::convertDateDataBase($_POST["dtsell"]);
-		}
+
+		$_POST = Acao::convertDateToDataBase($_POST);
+
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		
-		if (isset($_POST["compra"])) {
-			$_POST["tptransaction"] = "C";
-		}
-		if (isset($_POST["venda"])) {
-			$_POST["tptransaction"] = "V";
-		}
+   		$_POST["tptransaction"] = "C";
 
 
 		$acao->setData($_POST);
 
-		if (isset($_POST["compra"])) {
-			$acao->save_buy();
-			$tipo = "compra";
-		}
-		if (isset($_POST["venda"])) {
-			$acao->save_sell();
-			$tipo = "venda";
-		}
+		$acao->save();
+		$tipo = "compra";
 		
 		header("Location: /acoes/create?$tipo=$tipo");
 		exit;
@@ -223,12 +207,8 @@
 			$tax = explode(" ",$_POST["tax"]);
 			$_POST["tax"] = $tax[0];
 		}
-		if ($_POST["dtbuy"]) {
-			$_POST["dtbuy"] = Acao::convertDateDataBase($_POST["dtbuy"]);
-		}
-		if ($_POST["dtsell"]) {
-			$_POST["dtsell"] = Acao::convertDateDataBase($_POST["dtsell"]);
-		}
+		$_POST = Acao::convertDateToDataBase($_POST);
+		
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		
 		$acoes->getByBuy($idinvestiment);
@@ -245,14 +225,53 @@
 	
 	$app->get('/notas', function() {
 		User::verifyLogin();
-		$acoes = Acao::listAll("notas");
 		$page = new PageAcoes();
 		
-		$acoes = Acao::convertDate($acoes);
 		
-		$page->setTpl("notas", array(
-			"acoes"=> $acoes
-		));
+		if (isset($_GET["search"])) {
+			if ($_GET["dtbuy"] != '' || $_GET["dtsell"] != '') {
+				$dtBuySell = ""."_"."";
+				$_GET = Acao::convertDateToDataBase($_GET);
+			
+				if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
+					$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
+				}
+				$acoes = Acao::listAll($dtBuySell);
+
+				$acoes = Acao::convertDate($acoes);
+								
+				$page->setTpl("/notas", array(
+					"acoes"=>$acoes
+				));
+				
+			} else if ($_GET["sgcompany"] != '' && $_GET["sgcompany"] != NULL )
+			{
+				$company = "sgcompany"."_".$_GET["sgcompany"];
+				$acoes = Acao::listAll($company);
+				
+				$acoes = Acao::convertDate($acoes);
+				
+				$page->setTpl("/notas", array(
+					"acoes"=>$acoes
+				));
+			} else {
+				$acoes = Acao::listAll("notas");
+				
+				$acoes = Acao::convertDate($acoes);
+				
+				$page->setTpl("notas", array(
+					"acoes"=> $acoes
+				));	
+			}
+			
+		} else 
+		{
+			$acoes = Acao::listAll("notas");
+			$acoes = Acao::convertDate($acoes);
+			$page->setTpl("notas", array(
+				"acoes"=> $acoes
+			));
+		}
 		
 	});
 
