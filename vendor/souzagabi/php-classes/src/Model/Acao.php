@@ -5,50 +5,55 @@
     
     class Acao extends Model {
 
-        public static function listAll($listacoes)
+        public static function listAll($listacoes,$limit)
         {
             $sql = new Sql();
-			
+            $start = '';
+            $pg = isset($_GET["pg"]) ? $_GET["pg"] : 1;
+            if ($limit > 1) {
+                $start = ($pg - 1) * $limit + 1;
+            }
+         
             if($listacoes === "listacoes"){
                 return $sql->select("CALL sp_acoes_list()");
             }
             if($listacoes === "notas"){
-                return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell)", array(
+                return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
                     ":sgcompany" => '',    
                     ":dtbuy"     => '',
-                    ":dtsell"    => ''
+                    ":dtsell"    => '',
+                    ":start"     => $start,
+                    ":limit"     => $limit
                 ));
             }
-
             if (isset($listacoes)) {
                 $data = explode("_", $listacoes);
                 
                 if (count($data) === 3) {
-                    
-                    return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell)", array(
+                    return $sql->select("CALL sp_acoes_select_teste(:sgcompany, :dtbuy, :dtsell)", array(
                         ":sgcompany" => $data[0],    
                         ":dtbuy"     => $data[1],
                         ":dtsell"    => $data[2]
                     ));
                 }
                 if ($data[0] === "sgcompany") {
-                    return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell)", array(
+                    return $sql->select("CALL sp_acoes_select_teste(:sgcompany, :dtbuy, :dtsell)", array(
                         ":sgcompany" => $data[1],    
                         ":dtbuy"     => '',
                         ":dtsell"    => ''
                     ));
                 
                 } else {
-                    return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell)", array(
+                    return $sql->select("CALL sp_acoes_select_teste(:sgcompany, :dtbuy, :dtsell)", array(
                         ":sgcompany" => '',    
-                        ":dtbuy"=>$data[0],
-                        ":dtsell"=>$data[1]
+                        ":dtbuy"    =>$data[0],
+                        ":dtsell"   =>$data[1]
                     ));
                 }
             }
         }
 
-        public static function listAllEstoque($listestoque)
+        public static function listAllEstoque($listestoque, $limit)
         {
             $sql = new Sql();
             
