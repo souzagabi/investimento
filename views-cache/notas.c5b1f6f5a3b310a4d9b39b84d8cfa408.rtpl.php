@@ -40,11 +40,10 @@
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
+              <?php $i = 1; ?>
+              <?php $counter1=-1;  if( isset($pgs) && ( is_array($pgs) || $pgs instanceof Traversable ) && sizeof($pgs) ) foreach( $pgs as $key1 => $value1 ){ $counter1++; ?>
+              <li><a href="notas?pg=<?php echo htmlspecialchars( $i, ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $i++, ENT_COMPAT, 'UTF-8', FALSE ); ?></a></li>
+              <?php } ?>
               <li>
                 <a href="#" aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>
@@ -85,13 +84,37 @@
               <td class="sell"><?php echo htmlspecialchars( $value1["prcsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td><?php if( $value1["tipe"] == 1 ){ ?>Swing Trade<?php }else{ ?>Day Trade<?php } ?></td>
               <td>
-                <a href="/acoes/<?php echo htmlspecialchars( $value1["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>_<?php echo htmlspecialchars( $value1["tptransaction"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
-                <a href="/acoes/<?php echo htmlspecialchars( $value1["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>_<?php echo htmlspecialchars( $value1["tptransaction"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                <a href="/notas/<?php echo htmlspecialchars( $value1["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                <a href="/notas/<?php echo htmlspecialchars( $value1["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
             <?php } ?>
           </tbody>
         </table>
+      </div>
+    </div>
+    <div class="box box-primary">
+      <div class="row">
+        <div class="col col-md-12">
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              <li>
+                <a href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <?php $i = 1; ?>
+              <?php $counter1=-1;  if( isset($pgs) && ( is_array($pgs) || $pgs instanceof Traversable ) && sizeof($pgs) ) foreach( $pgs as $key1 => $value1 ){ $counter1++; ?>
+              <li><a href="notas?pg=<?php echo htmlspecialchars( $i, ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $i++, ENT_COMPAT, 'UTF-8', FALSE ); ?></a></li>
+              <?php } ?>
+              <li>
+                <a href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </div>
   </section>

@@ -24,7 +24,7 @@
 /*======================================================================================*/
 	$app->get('/', function() {
 		User::verifyLogin();
-		$acoes = Acao::listAll("listacoes");
+		$acoes = Acao::listAll("listacoes", "");
 		
 		$page = new PageAcoes([
 			"acoes"=> $acoes
@@ -60,7 +60,7 @@
 			$param = $company."_".$dtbuy."_".$dtsell;
 		}
 		
-		$acoes = Acao::listAllEstoque($param);
+		$acoes = Acao::listAllEstoque($param, "50");
 
 		$acoes = Acao::convertDateToView($acoes);
 			
@@ -78,7 +78,7 @@
 		
 		$page = new PageAcoes();
 
-		$acoes = Acao::listAll("listacoes");
+		$acoes = Acao::listAll("listacoes", "10");
 		
 		$acoes = Acao::convertDateToView($acoes);
 
@@ -197,7 +197,7 @@
 				if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
 					$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
 				}
-				$acoes = Acao::listAll($dtBuySell);
+				$acoes = Acao::listAll($dtBuySell, "");
 
 				$acoes = Acao::convertDateToView($acoes);
 								
@@ -208,7 +208,7 @@
 			} else if ($_GET["sgcompany"] != '' && $_GET["sgcompany"] != NULL )
 			{
 				$company = "sgcompany"."_".$_GET["sgcompany"];
-				$acoes = Acao::listAll($company);
+				$acoes = Acao::listAll($company, "");
 				
 				$acoes = Acao::convertDateToView($acoes);
 				
@@ -216,7 +216,7 @@
 					"acoes"=>$acoes
 				));
 			} else {
-				$acoes = Acao::listAll("notas");
+				$acoes = Acao::listAll("notas", "");
 				
 				$acoes = Acao::convertDateToView($acoes);
 				
@@ -227,29 +227,30 @@
 			
 		} else 
 		{
-			$acoes = Acao::listAll("notas");
+			$acoes = Acao::listAll("notas", "10");
+
 			$acoes = Acao::convertDateToView($acoes);
+			
+			for ($i=0; $i < count($acoes); $i++) { 
+				$acoes[$i]["pgs"] = ceil($acoes[$i]["pgs"]);
+			}
+			
+			$p = $acoes[0]["pgs"];
+			for ($j=0; $j < $p; $j++) { 
+				$pgs[$j] = $j;
+			}
+			// echo '<pre>';
+			// print_r($pgs);
+			// echo '</pre>';
+			// exit;
 			$page->setTpl("notas", array(
-				"acoes"=> $acoes
+				"acoes"=> $acoes,
+				"pgs"=> $pgs
 			));
 		}
 		
 	});
 
-	// $app->get("/notas/:idinvestiment", function($idinvestiment) {
-	// 	User::verifyLogin();
-	// 	$acoes = new Acao();
-		
-	// 	$acoes->getByBuy((int)$idinvestiment);
-		
-	// 	$acoes = Acao::convertDateToView($acoes);
-       
-	// 	$page = new PageAcoes();
-		
-	// 	$page ->setTpl("acoes-update", array(
-	// 		"acoes"=>$acoes->getValues()
-	// 	));
-	// });
 	$app->get("/notas/:idinvestiment", function($idinvestiment) {
 		User::verifyLogin();
 		$acoes = new Acao();
