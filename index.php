@@ -190,61 +190,80 @@
 		$page = new PageAcoes();
 		
 		if (isset($_GET["search"])) {
-			if ($_GET["dtbuy"] != '' || $_GET["dtsell"] != '') {
-				$dtBuySell = ""."_"."";
+			$dtBuySell = ""."_"."";
+			if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
+				$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
+			}
+			if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') && (isset($_GET["dtsell"]) && $_GET["dtsell"] != '') && ($_GET["sgcompany"] == '' || (!isset($_GET["sgcompany"])))) {
 				$_GET = Acao::convertDateToDataBase($_GET);
+				// echo '<pre>';
+				// print_r($_GET);
+				// echo '</pre>';exit;
 			
-				if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
-					$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
-				}
-				$acoes = Acao::listAll($dtBuySell, "");
-
+				$acoes = Acao::listAll($dtBuySell, "10");
 				$acoes = Acao::convertDateToView($acoes);
+				$acoes 	= Acao::convertToInt($acoes);
+				$p = $acoes[0]["pgs"];
+				var_dump($acoes);exit;
+				$pgs 	= Acao::countRegister($acoes[0]["pgs"], "" , $dtBuySell );
 								
 				$page->setTpl("/notas", array(
-					"acoes"=>$acoes
+					"acoes"=>$acoes,
+					"pgs"=>$pgs
 				));
 				
-			} else if ($_GET["sgcompany"] != '' && $_GET["sgcompany"] != NULL )
+			} else if (isset($_GET["sgcompany"]) && ($_GET["sgcompany"] != '' && $_GET["sgcompany"] != NULL) )
 			{
 				$company = "sgcompany"."_".$_GET["sgcompany"];
-				$acoes = Acao::listAll($company, "");
+				$acoes = Acao::listAll($company, "10");
 				
-				$acoes = Acao::convertDateToView($acoes);
-				$acoes = Acao::convertToInt($acoes);
-				echo '<pre>';
-			print_r($acoes);
-			echo '</pre>';
-			exit;
+				$acoes 	= Acao::convertDateToView($acoes);
+				$acoes 	= Acao::convertToInt($acoes);
+				$p = $acoes[0]["pgs"];
+				$pgs 	= Acao::countRegister($acoes[0]["pgs"], $_GET["sgcompany"], "" );
+				
 				$page->setTpl("/notas", array(
-					"acoes"=>$acoes
+					"acoes"=>$acoes,
+					"pgs"=>$pgs
 				));
+			} else if ((!isset($_GET["dtbuy"]) || $_GET["dtbuy"] == '') || (!isset($_GET["dtsell"]) || $_GET["dtsell"] == '') && $_GET["sgcompany"] == '') 
+			{
+				$acoes = Acao::listAll("notas", "10");
+
+				$acoes 	= Acao::convertDateToView($acoes);
+				$acoes 	= Acao::convertToInt($acoes);
+				$pgs 	= Acao::countRegister($acoes[0]["pgs"], "", "" );
+				// echo '<pre>';
+				// print_r($acoes);
+				// echo '</pre>';exit;
+				$page->setTpl("notas", array(
+					"acoes"=> $acoes,
+					"pgs"=> $pgs
+				));	
 			} else {
-				$acoes = Acao::listAll("notas", "");
+				$acoes = Acao::listAll("notas", "10");
+				// echo '<pre>';
+				// print_r($acoes);
+				// echo '</pre>';exit;
 				
 				$acoes = Acao::convertDateToView($acoes);
-				
+				$acoes 	= Acao::convertToInt($acoes);
+				$pgs 	= Acao::countRegister($acoes[0]["pgs"], $acoes[0]["sgcompany"], $dtBuySell );
 				$page->setTpl("notas", array(
-					"acoes"=> $acoes
+					"acoes"=> $acoes,
+					"pgs"=> $pgs
 				));	
 			}
 			
-		} else 
+			
+		} else // Fim do Search
 		{
 			$acoes = Acao::listAll("notas", "10");
 
-			$acoes = Acao::convertDateToView($acoes);
-			$acoes = Acao::convertToInt($acoes);
+			$acoes 	= Acao::convertDateToView($acoes);
+			$acoes 	= Acao::convertToInt($acoes);
+			$pgs 	= Acao::countRegister($acoes[0]["pgs"], "", "" );
 			
-			
-			$p = $acoes[0]["pgs"];
-			for ($j=0; $j < $p; $j++) { 
-				$pgs[$j] = $j;
-			}
-			// echo '<pre>';
-			// print_r($pgs);
-			// echo '</pre>';
-			// exit;
 			$page->setTpl("notas", array(
 				"acoes"=> $acoes,
 				"pgs"=> $pgs

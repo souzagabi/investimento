@@ -42,7 +42,7 @@
               </li>
               {$i = 1}
               {loop="$pgs"}
-              <li><a href="notas?pg={$i}">{$i++}</a></li>
+              <li><a href="notas?pg={$i}{if="$pgs.list.sgcompany"}&sgcompany={$pgs.list.sgcompany}{/if}{if="$pgs.list.dtbuy"}&dtbuy={$pgs.list.dtbuy}{/if}{if="$pgs.list.dtsell"}&dtsell={$pgs.list.dtsell}{/if}{if="$pgs.list.search"}&search={$pgs.list.search}{/if}">{$i++}</a></li>
               {/loop}
               <li>
                 <a href="#" aria-label="Next">
@@ -105,7 +105,7 @@
               </li>
               {$i = 1}
               {loop="$pgs"}
-              <li><a href="notas?pg={$i}">{$i++}</a></li>
+              <li><a href="notas?pg={$i}{if="$pgs.list.sgcompany"}&sgcompany={$pgs.list.sgcompany}{/if}{if="$pgs.list.dtbuy"}&dtbuy={$pgs.list.dtbuy}{/if}{if="$pgs.list.dtsell"}&dtsell={$pgs.list.dtsell}{/if}{if="$pgs.list.search"}&search={$pgs.list.search}{/if}">{$i++}</a></li>
               {/loop}
               <li>
                 <a href="#" aria-label="Next">

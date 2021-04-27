@@ -27,28 +27,40 @@
                 ));
             }
             if (isset($listacoes)) {
+                $pg = isset($_GET["pg"]) ? $_GET["pg"] : 1;
+                if ($limit > 1) {
+                    $start = ($pg - 1) * $limit + 1;
+                }
                 $data = explode("_", $listacoes);
-                //var_dump($data);exit;
+                
                 
                 if (count($data) === 3) {
-                    return $sql->select("CALL sp_acoes_select_teste(:sgcompany, :dtbuy, :dtsell)", array(
+                    return $sql->select("CALL sp_acoes_select_teste(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
                         ":sgcompany" => $data[0],    
                         ":dtbuy"     => $data[1],
-                        ":dtsell"    => $data[2]
+                        ":dtsell"    => $data[2],
+                        ":start"     => $start,
+                        ":limit"     => $limit
                     ));
                 }
                 if ($data[0] === "sgcompany") {
-                    return $sql->select("CALL sp_acoes_select_teste(:sgcompany, :dtbuy, :dtsell)", array(
+                    return $sql->select("CALL sp_acoes_select_teste(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
                         ":sgcompany" => $data[1],    
                         ":dtbuy"     => '',
-                        ":dtsell"    => ''
+                        ":dtsell"    => '',
+                        ":start"    => $start,
+                        ":limit"    => $limit
                     ));
                 
                 } else {
-                    return $sql->select("CALL sp_acoes_select_teste(:sgcompany, :dtbuy, :dtsell)", array(
+                    // var_dump($start." ".$limit);;
+                    // var_dump($data);exit;
+                    return $sql->select("CALL sp_acoes_select_teste(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
                         ":sgcompany" => '',    
                         ":dtbuy"    =>$data[0],
-                        ":dtsell"   =>$data[1]
+                        ":dtsell"   =>$data[1],
+                        ":start"     => $start,
+                        ":limit"     => $limit
                     ));
                 }
             }
@@ -253,6 +265,48 @@
 				$object[$i]["pgs"] = ceil($object[$i]["pgs"]);
             }
             return $object;
+        }
+
+        public function countRegister($qtdeRegister, $company, $date){
+            
+            $pgs = [];
+            // for ($j=0; $j < $qtdeRegister - 3; $j++) { 
+            //     $pgs[$j]        = $j;
+                
+            // }
+            
+            if ($date != '' && $date != NULL) 
+            {
+                $d = explode("_", $date);
+            }
+            if ($date != '' && $date != NULL && $company = '') 
+            {
+                for ($j=0; $j < $qtdeRegister - 1; $j++) { 
+                    $pgs[$j]            = $j;
+                }
+                $pgs["list"]   = ["sgcompany"=>$company, "dtbuy"=>$d[0], "dtsell"=>$d[1], "search"=> "Search" ];
+                 
+            } else if ($company != '' && $company != NULL) {
+                for ($j=0; $j < $qtdeRegister - 1; $j++) { 
+                    $pgs[$j]            = $j;
+                }
+                $pgs["list"]   = ["sgcompany"=>$company, "dtbuy"=>"", "dtsell"=>"", "search"=> "Search" ];
+                
+            } else if (!isset($company) || ($company == '' && $company == NULL) && (!isset($date) || $date == '')) {
+                for ($j=0; $j < $qtdeRegister - 1; $j++) { 
+                    $pgs[$j]            = $j;
+                }
+                $pgs["list"]   = ["sgcompany"=>$company, "dtbuy"=>"", "dtsell"=>"", "search"=> "" ];
+                
+            } else{
+                for ($j=0; $j < $qtdeRegister - 1; $j++) { 
+                    $pgs[$j]            = $j;
+                }
+                $pgs["list"]   = ["sgcompany"=>"", "dtbuy"=>"", "dtsell"=>"", "search"=> "Search" ];
+            }
+            // var_dump($pgs);
+            // var_dump($qtdeRegister.' '.$company.''.$date);exit;
+            return $pgs;
         }
     }
 ?>
