@@ -28,6 +28,7 @@
             }
             if (isset($listacoes)) {
                 $data = explode("_", $listacoes);
+                //var_dump($data);exit;
                 
                 if (count($data) === 3) {
                     return $sql->select("CALL sp_acoes_select_teste(:sgcompany, :dtbuy, :dtsell)", array(
@@ -128,57 +129,6 @@
             $this->setData($data);
         }
 
-        public function convertDateToView($object = array())
-        {
-            if (isset($object["unit"])) {
-                
-                for ($i=0; $i < count($object); $i++) { 
-                    if (isset($object["dtbuy"]) && $object["dtbuy"] != '') {
-                        $object["dtbuy"] =  Acao::convertDateView($object["dtbuy"]);
-                    }
-                    if (isset($object["dtsell"]) && $object["dtsell"] != '') {
-                        $object["dtsell"] =     Acao::convertDateView($object["dtsell"]);
-                    }
-                }
-                
-            } else
-            {
-                for ($i=0; $i < count($object); $i++) { 
-                    if (isset($object[$i]["dtbuy"]) && $object[$i]["dtbuy"] != '') {
-                        $object[$i]["dtbuy"] =  Acao::convertDateView($object[$i]["dtbuy"]);
-                    }
-                    if (isset($object[$i]["dtsell"]) && $object[$i]["dtsell"] != '') {
-                        $object[$i]["dtsell"] =     Acao::convertDateView($object[$i]["dtsell"]);
-                    }
-                }
-            }
-            
-            return $object;
-        }
-        public function convertDateToDataBase($object = array())
-        {
-            for ($i=0; $i < count($object); $i++) { 
-                if (isset($object["dtbuy"]) && $object["dtbuy"] !='') {
-                    $object["dtbuy"] =  Acao::convertDateDataBase($object["dtbuy"]);
-                }
-                if (isset($object["dtsell"]) && $object["dtsell"] !='') {
-                    $object["dtsell"] =     Acao::convertDateDataBase($object["dtsell"]);
-                }
-            }
-            return $object;
-           
-        }
-
-        public function convertDateView($date)
-        {
-            return $data = date("d-m-Y", strToTime($date));
-        }
-
-        public function convertDateDataBase($date)
-        {
-            return $data = date("Y-m-d", strToTime($date));
-        }
-        
         public function save()
         {
             $sql = new Sql();
@@ -244,6 +194,65 @@
                 ":idestoque"        =>$this->getidestoque(),
                 ":qtdetotal"        =>$this->getqtdetotal()
             ));
+        }
+        
+        public function convertDateToView($object = array())
+        {
+            if (isset($object["unit"])) {
+                
+                for ($i=0; $i < count($object); $i++) { 
+                    if (isset($object["dtbuy"]) && $object["dtbuy"] != '') {
+                        $object["dtbuy"] =  Acao::convertDateView($object["dtbuy"]);
+                    }
+                    if (isset($object["dtsell"]) && $object["dtsell"] != '') {
+                        $object["dtsell"] =     Acao::convertDateView($object["dtsell"]);
+                    }
+                }
+                
+            } else
+            {
+                for ($i=0; $i < count($object); $i++) { 
+                    if (isset($object[$i]["dtbuy"]) && $object[$i]["dtbuy"] != '') {
+                        $object[$i]["dtbuy"] =  Acao::convertDateView($object[$i]["dtbuy"]);
+                    }
+                    if (isset($object[$i]["dtsell"]) && $object[$i]["dtsell"] != '') {
+                        $object[$i]["dtsell"] =     Acao::convertDateView($object[$i]["dtsell"]);
+                    }
+                }
+            }
+            
+            return $object;
+        }
+        
+        public function convertDateToDataBase($object = array())
+        {
+            for ($i=0; $i < count($object); $i++) { 
+                if (isset($object["dtbuy"]) && $object["dtbuy"] !='') {
+                    $object["dtbuy"] =  Acao::convertDateDataBase($object["dtbuy"]);
+                }
+                if (isset($object["dtsell"]) && $object["dtsell"] !='') {
+                    $object["dtsell"] =     Acao::convertDateDataBase($object["dtsell"]);
+                }
+            }
+            return $object;
+           
+        }
+
+        public function convertDateView($date)
+        {
+            return $data = date("d-m-Y", strToTime($date));
+        }
+
+        public function convertDateDataBase($date)
+        {
+            return $data = date("Y-m-d", strToTime($date));
+        }
+        
+        public function convertToInt($object = array()){
+            for ($i=0; $i < count($object); $i++) { 
+				$object[$i]["pgs"] = ceil($object[$i]["pgs"]);
+            }
+            return $object;
         }
     }
 ?>

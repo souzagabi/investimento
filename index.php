@@ -211,7 +211,11 @@
 				$acoes = Acao::listAll($company, "");
 				
 				$acoes = Acao::convertDateToView($acoes);
-				
+				$acoes = Acao::convertToInt($acoes);
+				echo '<pre>';
+			print_r($acoes);
+			echo '</pre>';
+			exit;
 				$page->setTpl("/notas", array(
 					"acoes"=>$acoes
 				));
@@ -219,10 +223,7 @@
 				$acoes = Acao::listAll("notas", "");
 				
 				$acoes = Acao::convertDateToView($acoes);
-				echo '<pre>';
-			print_r($pgs);
-			echo '</pre>';
-			exit;
+				
 				$page->setTpl("notas", array(
 					"acoes"=> $acoes
 				));	
@@ -233,19 +234,17 @@
 			$acoes = Acao::listAll("notas", "10");
 
 			$acoes = Acao::convertDateToView($acoes);
+			$acoes = Acao::convertToInt($acoes);
 			
-			for ($i=0; $i < count($acoes); $i++) { 
-				$acoes[$i]["pgs"] = ceil($acoes[$i]["pgs"]);
-			}
 			
 			$p = $acoes[0]["pgs"];
 			for ($j=0; $j < $p; $j++) { 
 				$pgs[$j] = $j;
 			}
-			echo '<pre>';
-			print_r($pgs);
-			echo '</pre>';
-			exit;
+			// echo '<pre>';
+			// print_r($pgs);
+			// echo '</pre>';
+			// exit;
 			$page->setTpl("notas", array(
 				"acoes"=> $acoes,
 				"pgs"=> $pgs
