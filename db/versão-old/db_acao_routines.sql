@@ -277,7 +277,9 @@ BEGIN
     BEGIN
 		IF pstart != '' AND plimit != '' THEN
         BEGIN
-			SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pgs FROM tb_persons p INNER JOIN (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i USING(idperson) INNER JOIN tb_estoques e USING(idperson) ORDER BY i.idinvestiment;
+			SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pgs FROM tb_persons p 
+            INNER JOIN (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i USING(idperson) 
+            INNER JOIN tb_estoques e USING(idperson) ORDER BY i.idinvestiment;
 		END;
         ELSE
         BEGIN
@@ -854,6 +856,141 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_select_teste` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_select_teste`(
+	psgcompany VARCHAR(20) ,
+	pdtbuy DATE,
+	pdtsell DATE
+)
+BEGIN
+	/*==========================================================================================*/
+    /*					Filtra os registros usando os nenhum parâmetros							*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany = '' OR psgcompany IS NULL) THEN
+    BEGIN
+		SELECT *
+		FROM tb_persons p 
+		INNER JOIN tb_investiments i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		ORDER BY i.idinvestiment;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*					Filtra os registros usando os 1 parâmetros - sigla						*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
+    BEGIN
+		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments WHERE sgcompany = psgcompany) / 10 AS pgs
+		FROM tb_persons p 
+		INNER JOIN (SELECT * FROM tb_investiments i WHERE i.sgcompany = psgcompany LIMIT 10) AS i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany
+		ORDER BY i.idinvestiment;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 2 parâmetros - sigla e data sell				*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '' OR pdtbuy IS NULL) AND pdtsell != '' AND pdtsell IS NOT NULL) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
+    BEGIN
+		SELECT *
+		FROM tb_persons p 
+		INNER JOIN tb_investiments i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND i.dtsell <= pdtsell 
+		ORDER BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 2 parâmetros - sigla e data buy				*/
+    /*==========================================================================================*/
+    IF (pdtbuy != '' AND pdtbuy IS NOT NULL) AND (pdtsell = '' OR pdtsell IS NULL) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
+    BEGIN
+		SELECT *
+		FROM tb_persons p 
+		INNER JOIN tb_investiments i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND i.dtbuy >= pdtbuy 
+		ORDER BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*						Filtra os registros usando os 2 parâmetros - data					*/
+    /*==========================================================================================*/
+    IF (pdtbuy != '' AND pdtbuy IS NOT NULL) AND (pdtsell != '' AND pdtsell IS NOT NULL) AND (psgcompany = '' OR psgcompany IS NULL) THEN
+    BEGIN
+		SELECT *
+		FROM tb_persons p 
+		INNER JOIN tb_investiments i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell 
+		ORDER BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*					Filtra os registros usando os 1 parâmetros - data buy					*/
+    /*==========================================================================================*/
+    IF ((pdtbuy != '' AND pdtbuy IS NOT NULL) AND (pdtsell = '' OR pdtsell IS NULL)) AND (psgcompany = '' OR psgcompany IS NULL) THEN
+    BEGIN
+		SELECT *
+		FROM tb_persons p 
+		INNER JOIN tb_investiments i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtbuy >= pdtbuy
+		ORDER BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*					Filtra os registros usando os 1 parâmetros - data sell					*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '' OR pdtbuy IS NULL) AND pdtsell != '' AND pdtsell IS NOT NULL) AND (psgcompany = '' OR psgcompany IS NULL) THEN
+    BEGIN
+		SELECT *
+		FROM tb_persons p 
+		INNER JOIN tb_investiments i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtsell <= pdtsell
+		ORDER BY p.sgcompany;
+    END;
+    END IF;
+    
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 3 parâmetros - sigla e data					*/
+    /*==========================================================================================*/
+    IF (pdtbuy != '' AND pdtbuy IS NOT NULL) AND (pdtsell != '' AND pdtsell IS NOT NULL) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
+    BEGIN
+		SELECT *
+		FROM tb_persons p 
+		INNER JOIN tb_investiments i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany
+			AND i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell
+		ORDER BY p.sgcompany;
+    END;
+    END IF;
+    
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_update_save` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1138,4 +1275,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-26  6:21:00
+-- Dump completed on 2021-04-27  6:05:48

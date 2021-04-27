@@ -38,7 +38,7 @@
 
 	$app->get('/acoes-estoque', function() {
 		User::verifyLogin();
-		$param = ""."_".""."_"."";
+		$param = "";
 		if (isset($_GET["search"])) 
 		{
 			$dtbuy 		= NULL;
@@ -60,10 +60,17 @@
 			$param = $company."_".$dtbuy."_".$dtsell;
 		}
 		
-		$acoes = Acao::listAllEstoque($param, "50");
-
+		$acoes = Acao::listAllEstoque($param, "10");
+		echo '<pre>';
+		print_r($acoes);
+		echo '</pre>';exit;
 		$acoes = Acao::convertDateToView($acoes);
-			
+		
+		$acoes 	= Acao::convertToInt($acoes);
+		// $p = $acoes[0]["pgs"];
+		// var_dump($acoes);exit;
+		// $pgs 	= Acao::countRegister($acoes[0]["pgs"], "" , $dtBuySell );
+
 		$page = new PageAcoes([
 			"acoes"=> $acoes
 		]);
@@ -161,25 +168,6 @@
 			"acoes"=>$acoes->getValues()
 		));
 	});
-	
-	/*$app->post("/acoes/:idinvestiment", function ($idinvestiment){
-		User::verifyLogin();
-		$acoes = new Acao();
-		if ($_POST["tax"]) {
-			$tax = explode(" ",$_POST["tax"]);
-			$_POST["tax"] = $tax[0];
-		}
-		$_POST = Acao::convertDateToDataBase($_POST);
-		
-		$_POST["iduser"] = $_SESSION["User"]["iduser"];
-		
-		$acoes->getByBuy($idinvestiment);
-		$acoes->setData($_POST);
-		
-		$acoes->update();
-		header("Location: /acoes?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search");
-		exit;
-	});*/
 
 /*======================================================================================*/
 /*										Rotas das Notas									*/

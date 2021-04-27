@@ -53,8 +53,6 @@
                     ));
                 
                 } else {
-                    // var_dump($start." ".$limit);;
-                    // var_dump($data);exit;
                     return $sql->select("CALL sp_acoes_select_teste(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
                         ":sgcompany" => '',    
                         ":dtbuy"    =>$data[0],
@@ -69,33 +67,47 @@
         public static function listAllEstoque($listestoque, $limit)
         {
             $sql = new Sql();
-            
-            if (isset($listestoque)) {
+            if (isset($listestoque) && $listestoque != '') {
+                echo '<pre>';
+                print_r($limit);
+                echo '</pre>';exit;
                 $data = explode("_", $listestoque);
                 
                 if (count($data) === 3) {
                     
-                    return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell)", array(
-                        ":sgcompany" => $data[0],    
-                        ":dtbuy"     => $data[1],
-                        ":dtsell"    => $data[2]
+                    return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell, :limit)", array(
+                        ":sgcompany"    => $data[0],    
+                        ":dtbuy"        => $data[1],
+                        ":dtsell"       => $data[2],
+                        ":limit"        => $limit
                     ));
-                }
-                if ($data[0] === "sgcompany") {
-                    return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell)", array(
-                        ":sgcompany" => $data[1],    
-                        ":dtbuy"     => '',
-                        ":dtsell"    => ''
+                } else if ($data[0] === "sgcompany") {
+                    return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell, :limit)", array(
+                        ":sgcompany"    => $data[1],    
+                        ":dtbuy"        => '',
+                        ":dtsell"       => '',
+                        ":limit"        => $limit
                     ));
                 
                 } else {
-                    return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell)", array(
-                        ":sgcompany" => '',    
-                        ":dtbuy"=>$data[0],
-                        ":dtsell"=>$data[1]
+                    return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell, :limit)", array(
+                        ":sgcompany"    => '',    
+                        ":dtbuy"        =>$data[0],
+                        ":dtsell"       =>$data[1],
+                        ":limit"        => $limit
                     ));
                 }
+            } else{ // (isset($listestoque) && $listestoque != '')
+                return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell, :limit)", array(
+                    ":sgcompany"    => '',    
+                    ":dtbuy"        => '',
+                    ":dtsell"       => '',
+                    ":limit"        => ''
+                ));
             }
+            echo '<pre>';
+            print_r($limit." TEste:");
+            echo '</pre>';exit;
         }
 
         //não está sendo usada
@@ -260,7 +272,8 @@
             return $data = date("Y-m-d", strToTime($date));
         }
         
-        public function convertToInt($object = array()){
+        public function convertToInt($object = array())
+        {
             for ($i=0; $i < count($object); $i++) { 
 				$object[$i]["pgs"] = ceil($object[$i]["pgs"]);
             }
@@ -270,10 +283,6 @@
         public function countRegister($qtdeRegister, $company, $date){
             
             $pgs = [];
-            // for ($j=0; $j < $qtdeRegister - 3; $j++) { 
-            //     $pgs[$j]        = $j;
-                
-            // }
             
             if ($date != '' && $date != NULL) 
             {
@@ -304,8 +313,6 @@
                 }
                 $pgs["list"]   = ["sgcompany"=>"", "dtbuy"=>"", "dtsell"=>"", "search"=> "Search" ];
             }
-            // var_dump($pgs);
-            // var_dump($qtdeRegister.' '.$company.''.$date);exit;
             return $pgs;
         }
     }

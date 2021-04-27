@@ -66,13 +66,13 @@
           </thead>
           <tbody>
             {loop="$acoes"}
-              {if="$value.finalTotal > 0"} <tr> 
+              {if="$value.qtdeTotal > 0"} <tr> 
                  <th>{$value.desperson} </th> 
                  <th>{$value.sgcompany} </th> 
                  <th>{$value.descpfcnpj}</th> 
                  <td>{$value.buyTotal}  </td> 
                  <td>{$value.sellTotal} </td> 
-                 <td>{$value.finalTotal}</td> 
+                 <td>{$value.qtdeTotal}</td> 
                  <td>{$value.average}   </td> 
                  <td>{$value.vlrtotal}  </td>
                </tr> {/if}
@@ -116,15 +116,15 @@
           </thead>
           <tbody>
             {loop="$acoes"}
-              {if="$value.finalTotal == 0"} <tr> 
+              {if="$value.qtdeTotal == 0"} <tr> 
                  <th>{$value.desperson} </th> 
                  <th>{$value.sgcompany} </th> 
                  <th>{$value.descpfcnpj}</th> 
                  <td>{$value.buyTotal}  </td> 
                  <td>{$value.sellTotal} </td> 
-                 <td>{$value.finalTotal}</td> 
-                 <td>{if="$value.finalTotal != 0"}{$value.average}{else}0.00{/if}  </td> 
-                 <td>{if="$value.finalTotal != 0"}{$value.vlrtotal}{else}0.00{/if} </td> 
+                 <td>{$value.qtdeTotal}</td> 
+                 <td>{if="$value.qtdeTotal != 0"}{$value.average}{else}0.00{/if}  </td> 
+                 <td>{if="$value.qtdeTotal != 0"}{$value.vlrtotal}{else}0.00{/if} </td> 
                </tr> {/if}
             {/loop}
           </tbody>
