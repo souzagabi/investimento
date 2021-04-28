@@ -180,20 +180,20 @@
 		if (isset($_GET["search"])) {
 			$dtBuySell = ""."_"."";
 			if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
+				$_GET = Acao::convertDateToDataBase($_GET);
 				$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
 			}
 			if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') && (isset($_GET["dtsell"]) && $_GET["dtsell"] != '') && ($_GET["sgcompany"] == '' || (!isset($_GET["sgcompany"])))) {
-				$_GET = Acao::convertDateToDataBase($_GET);
-				// echo '<pre>';
-				// print_r($_GET);
-				// echo '</pre>';exit;
-			
+				
 				$acoes = Acao::listAll($dtBuySell, "10");
 				$acoes = Acao::convertDateToView($acoes);
+				
 				$acoes 	= Acao::convertToInt($acoes);
-				$p = $acoes[0]["pgs"];
-				var_dump($acoes);exit;
+				
 				$pgs 	= Acao::countRegister($acoes[0]["pgs"], "" , $dtBuySell );
+				// echo '<pre>';
+				// print_r($acoes);
+				// echo '</pre>';exit;
 								
 				$page->setTpl("/notas", array(
 					"acoes"=>$acoes,
@@ -207,7 +207,7 @@
 				
 				$acoes 	= Acao::convertDateToView($acoes);
 				$acoes 	= Acao::convertToInt($acoes);
-				$p = $acoes[0]["pgs"];
+				
 				$pgs 	= Acao::countRegister($acoes[0]["pgs"], $_GET["sgcompany"], "" );
 				
 				$page->setTpl("/notas", array(

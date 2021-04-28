@@ -44,6 +44,10 @@
                     ));
                 }
                 if ($data[0] === "sgcompany") {
+                        
+                    var_dump($start." ".$limit);
+                    var_dump($data);
+                    exit;
                     return $sql->select("CALL sp_acoes_select_teste(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
                         ":sgcompany" => $data[1],    
                         ":dtbuy"     => '',
@@ -280,15 +284,16 @@
             return $object;
         }
 
-        public function countRegister($qtdeRegister, $company, $date){
+        public function countRegister($qtdeRegister, $company, $date)
+        {
             
             $pgs = [];
             
-            if ($date != '' && $date != NULL) 
+            if (isset($date) || $date != '') 
             {
                 $d = explode("_", $date);
             }
-            if ($date != '' && $date != NULL && $company = '') 
+            if (isset($d) && ($company == '' || (!isset($company)) || $company == NULL)) 
             {
                 for ($j=0; $j < $qtdeRegister - 1; $j++) { 
                     $pgs[$j]            = $j;
@@ -313,6 +318,7 @@
                 }
                 $pgs["list"]   = ["sgcompany"=>"", "dtbuy"=>"", "dtsell"=>"", "search"=> "Search" ];
             }
+           
             return $pgs;
         }
     }
