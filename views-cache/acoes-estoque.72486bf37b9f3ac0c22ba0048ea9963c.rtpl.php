@@ -66,13 +66,13 @@
           </thead>
           <tbody>
             <?php $counter1=-1;  if( isset($acoes) && ( is_array($acoes) || $acoes instanceof Traversable ) && sizeof($acoes) ) foreach( $acoes as $key1 => $value1 ){ $counter1++; ?>
-              <?php if( $value1["finalTotal"] > 0 ){ ?> <tr> 
+              <?php if( $value1["qtdeTotal"] > 0 ){ ?> <tr> 
                  <th><?php echo htmlspecialchars( $value1["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?> </th> 
                  <th><?php echo htmlspecialchars( $value1["sgcompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?> </th> 
                  <th><?php echo htmlspecialchars( $value1["descpfcnpj"], ENT_COMPAT, 'UTF-8', FALSE ); ?></th> 
                  <td><?php echo htmlspecialchars( $value1["buyTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?>  </td> 
                  <td><?php echo htmlspecialchars( $value1["sellTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?> </td> 
-                 <td><?php echo htmlspecialchars( $value1["finalTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td> 
+                 <td><?php echo htmlspecialchars( $value1["qtdeTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td> 
                  <td><?php echo htmlspecialchars( $value1["average"], ENT_COMPAT, 'UTF-8', FALSE ); ?>   </td> 
                  <td><?php echo htmlspecialchars( $value1["vlrtotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?>  </td>
                </tr> <?php } ?>
@@ -116,15 +116,15 @@
           </thead>
           <tbody>
             <?php $counter1=-1;  if( isset($acoes) && ( is_array($acoes) || $acoes instanceof Traversable ) && sizeof($acoes) ) foreach( $acoes as $key1 => $value1 ){ $counter1++; ?>
-              <?php if( $value1["finalTotal"] == 0 ){ ?> <tr> 
+              <?php if( $value1["qtdeTotal"] == 0 ){ ?> <tr> 
                  <th><?php echo htmlspecialchars( $value1["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?> </th> 
                  <th><?php echo htmlspecialchars( $value1["sgcompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?> </th> 
                  <th><?php echo htmlspecialchars( $value1["descpfcnpj"], ENT_COMPAT, 'UTF-8', FALSE ); ?></th> 
                  <td><?php echo htmlspecialchars( $value1["buyTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?>  </td> 
                  <td><?php echo htmlspecialchars( $value1["sellTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?> </td> 
-                 <td><?php echo htmlspecialchars( $value1["finalTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td> 
-                 <td><?php if( $value1["finalTotal"] != 0 ){ ?><?php echo htmlspecialchars( $value1["average"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php }else{ ?>0.00<?php } ?>  </td> 
-                 <td><?php if( $value1["finalTotal"] != 0 ){ ?><?php echo htmlspecialchars( $value1["vlrtotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php }else{ ?>0.00<?php } ?> </td> 
+                 <td><?php echo htmlspecialchars( $value1["qtdeTotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td> 
+                 <td><?php if( $value1["qtdeTotal"] != 0 ){ ?><?php echo htmlspecialchars( $value1["average"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php }else{ ?>0.00<?php } ?>  </td> 
+                 <td><?php if( $value1["qtdeTotal"] != 0 ){ ?><?php echo htmlspecialchars( $value1["vlrtotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php }else{ ?>0.00<?php } ?> </td> 
                </tr> <?php } ?>
             <?php } ?>
           </tbody>
