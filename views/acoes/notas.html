@@ -14,7 +14,7 @@
     <div class="box box-primary">
       <div class="col form-control top">
         <div class="row">
-          <div class="col col-md-5">
+          <div class="col col-md-4">
             <form action="/acoes/create" method="get">
               <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
               <input type="text" name="notas" value="notas" hidden>
@@ -25,6 +25,16 @@
             <div class="col col-md-2"><label for="sgcompany">Sigla</label><input type="text" name="sgcompany" id="sgcompany" class="form-control"></div>
             <div class="col col-md-2"><label for="dtbuy">Data Inicio</label><input type="text" name="dtbuy" id="dtbuy" class="form-control" onChange="replaceSlash(dtbuy)"></div>
             <div class="col col-md-2"><label for="dtsell">Data Fim</label><input type="text" name="dtsell" id="dtsell" class="form-control" onChange="replaceSlash(dtsell)"></div>
+            <div class="col col-md-1"><label for="limit">Data Fim</label>
+              <select name="limit" id="limit" class="form-control">
+                <option value="" selected></option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+              </select>
+            </div>
             <input type="submit" name="search" class="btn btn-primary" value="Search">
           </form>
         </div>

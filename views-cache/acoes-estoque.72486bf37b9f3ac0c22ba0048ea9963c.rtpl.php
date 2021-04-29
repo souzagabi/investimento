@@ -14,7 +14,7 @@
     <div class="box box-primary">
       <div class="col form-control top">
         <div class="row">
-          <div class="col col-md-5">
+          <div class="col col-md-4">
             <form action="/acoes/create" method="get">
               <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
               <input type="text" name="acoes" value="acoes" hidden>
@@ -24,8 +24,41 @@
             <div class="col col-md-2"><label for="sgcompany">Sigla</label><input type="text" name="sgcompany" id="sgcompany" class="form-control"></div>
             <div class="col col-md-2"><label for="dtbuy">Data Inicio</label><input type="text" name="dtbuy" id="dtbuy" class="form-control" onChange="replaceSlash(dtbuy)"></div>
             <div class="col col-md-2"><label for="dtsell">Data Fim</label><input type="text" name="dtsell" id="dtsell" class="form-control" onChange="replaceSlash(dtsell)"></div>
+            <div class="col col-md-1"><label for="limit">Limite</label>
+              <select name="limit" id="limit" class="form-control">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+              </select>
+            </div>  
             <input type="submit" name="search" class="btn btn-primary" value="Search">
           </form>
+        </div>
+      </div>
+    </div>
+    <div class="box box-primary">
+      <div class="row">
+        <div class="col col-md-12">
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              <li>
+                <a href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <?php $i = 1; ?>
+              <?php $counter1=-1;  if( isset($pgs) && ( is_array($pgs) || $pgs instanceof Traversable ) && sizeof($pgs) ) foreach( $pgs as $key1 => $value1 ){ $counter1++; ?>
+              <li><a href="acoes-estoque?pg=<?php echo htmlspecialchars( $i, ENT_COMPAT, 'UTF-8', FALSE ); ?><?php if( $pgs["list"]["listacoes"] ){ ?>&listacoes=<?php echo htmlspecialchars( $pgs["list"]["listacoes"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["dtbuy"] ){ ?>&dtbuy=<?php echo htmlspecialchars( $pgs["list"]["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["dtsell"] ){ ?>&dtsell=<?php echo htmlspecialchars( $pgs["list"]["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["search"] ){ ?>&search=<?php echo htmlspecialchars( $pgs["list"]["search"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?>"><?php echo htmlspecialchars( $i++, ENT_COMPAT, 'UTF-8', FALSE ); ?></a></li>
+              <?php } ?>
+              <li>
+                <a href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
