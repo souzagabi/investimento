@@ -77,7 +77,18 @@
 			$company[$key] = $value;
 		}
 		
+<<<<<<< HEAD
 		$company["listacoes"] 	= "listacoes";
+=======
+		$page = new PageAcoes();
+
+		$company["company"] = "sgcompany";
+		$company["limit"] = "10";
+		$company["listacoes"] = "listacoes";
+		$company["notas"] = "";
+
+		$acoes = Acao::listAll($company);
+>>>>>>> 2ab6d4e8168744da3562ebd9ae6afd99d9fce723
 		
 		$action 	= Acao::selectRegister($company);
 	
@@ -170,6 +181,7 @@
 	$app->get('/notas', function() {
 		User::verifyLogin();
 		$page = new PageAcoes();
+<<<<<<< HEAD
 		$company["sgcompany"]	= NULL;
 		$company["dtbuy"] 		= NULL;
 		$company["dtsell"] 		= NULL;
@@ -197,6 +209,51 @@
 		{
 			$company["notas"]	= "notas";
 			$action 	= Acao::selectRegister($company);
+=======
+		$company["company"] 	= NULL;
+		$company["sgcompany"]	= NULL;
+		$company["dtbuy"] 		= NULL;
+		$company["dtsell"] 		= NULL;
+		$company["limit"] 		= 10;
+		$company["listacoes"] 	= NULL;
+		$company["notas"] 		= NULL;
+		$company["search"] 		= NULL;
+
+		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
+			$_GET = Acao::convertDateToDataBase($_GET);
+			print_r($_GET);
+		}
+		foreach ($_GET as $key => $value) {
+			$company[$key] = $value;
+		}
+		
+		if (isset($_GET["search"])) {
+			
+
+			echo 'Sem datas Com company Index 000.';
+				
+			$acoes = Acao::listAll($company);
+			
+			$acoes 	= Acao::convertDateToView($acoes);
+			$acoes 	= Acao::convertToInt($acoes);
+			
+			$pgs 	= Acao::countRegister($acoes[0]["pgs"], $company);
+			
+			$page->setTpl("/notas", array(
+				"acoes"=>$acoes,
+				"pgs"=>$pgs
+			));
+		} else // Fim do Search
+		{
+			echo 'Sem datas com company Index6.';
+			$company["notas"] 		= "notas";
+			$acoes = Acao::listAll($company);
+
+			$acoes 	= Acao::convertDateToView($acoes);
+			$acoes 	= Acao::convertToInt($acoes);
+			
+			$pgs 	= Acao::countRegister($acoes[0]["pgs"], $company);
+>>>>>>> 2ab6d4e8168744da3562ebd9ae6afd99d9fce723
 			
 			$page->setTpl("notas", array(
 				"acoes"=> $action[0],

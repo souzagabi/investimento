@@ -8,6 +8,7 @@
         public static function listAllAction($list)
         {
             $sql = new Sql();
+<<<<<<< HEAD
             $list["start"] = 1;
             $pg = isset($_GET["pg"]) ? $_GET["pg"] : 1;
             
@@ -17,11 +18,22 @@
            
             foreach ($list as $key => $value) 
             {
+=======
+            $start = '';
+           
+            $pg = isset($_GET["pg"]) ? $_GET["pg"] : 1;
+            if ($list["limit"] > 1) {
+                $start = ($pg - 1) * $list["limit"] + 1;
+                $list["start"] = $start;
+            }
+            foreach ($list as $key => $value) {
+>>>>>>> 2ab6d4e8168744da3562ebd9ae6afd99d9fce723
                 if ($value != '') {
                     $l[$key] = $value;
                 }else {
                     $l[$key] = '';
                 }
+<<<<<<< HEAD
             }
             
             if(isset($list["listacoes"]) && $list["listacoes"] === "listacoes")
@@ -56,6 +68,39 @@
                 ":start"     => $l["start"],
                 ":limit"     => $l["limit"]
             ));
+=======
+            }
+         
+            if($list["listacoes"] === "listacoes"){
+                
+                return $sql->select("CALL sp_acoes_list()");
+            }
+            
+            if($list["notas"] === "notas"){
+                print_r($list);
+                print_r("notas");
+                
+                return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
+                    ":sgcompany"    => $l["sgcompany"],
+                    ":dtbuy"        => $l["dtbuy"],
+                    ":dtsell"       => $l["dtsell"],
+                    ":start"        => $l["start"],
+                    ":limit"        => $l["limit"]
+                ));
+            } else 
+            {
+                
+                print_r($l);
+                print_r("list3");
+                return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
+                    ":sgcompany" => $l["sgcompany"],   
+                    ":dtbuy"     => $l["dtbuy"],
+                    ":dtsell"    => $l["dtsell"],
+                    ":start"     => $l["start"],
+                    ":limit"     => $l["limit"]
+                ));
+            }
+>>>>>>> 2ab6d4e8168744da3562ebd9ae6afd99d9fce723
         }
 
         public static function listAllEstoque($list)
@@ -295,6 +340,7 @@
             }
             foreach ($company as $key => $value) {
                 $pgs["list"][$key] = $value;
+<<<<<<< HEAD
             }
             return $pgs;
         }
@@ -312,6 +358,21 @@
             }
           
             $pgs = [];
+=======
+            }
+            print_r($pgs);
+           /* if (isset($company) || ($company != NULL && $company != '')) {
+                $pgs["list"]    = $pgs["list"]+["sgcompany"  => $company];
+                $pgs["list"]    = $pgs["list"]+["search"     => "Search"];
+                //var_dump($pgs); exit;
+            }
+            if ($dt != '' && $dt != NULL) 
+            {
+                $d = explode("_", $dt);
+                $pgs["list"]    = $pgs["list"]+["dtbuy"=> $d[0]];
+                $pgs["list"]    = $pgs["list"]+["dtsell"=> $d[1]];
+            }*/
+>>>>>>> 2ab6d4e8168744da3562ebd9ae6afd99d9fce723
             
             if (isset($acoes[0]["pgs"]) && count($acoes) > 0 && $acoes != '') {
                 $pgs 	= Acao::countRegister($acoes[0]["pgs"], $act);
