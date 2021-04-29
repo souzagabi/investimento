@@ -85,7 +85,12 @@
 		
 		$page = new PageAcoes();
 
-		$acoes = Acao::listAll("listacoes", "10");
+		$company["company"] = "sgcompany";
+		$company["limit"] = "10";
+		$company["listacoes"] = "listacoes";
+		$company["notas"] = "";
+
+		$acoes = Acao::listAll($company);
 		
 		$acoes = Acao::convertDateToView($acoes);
 
@@ -176,126 +181,49 @@
 	$app->get('/notas', function() {
 		User::verifyLogin();
 		$page = new PageAcoes();
+		$company["company"] 	= NULL;
+		$company["sgcompany"]	= NULL;
+		$company["dtbuy"] 		= NULL;
+		$company["dtsell"] 		= NULL;
+		$company["limit"] 		= 10;
+		$company["listacoes"] 	= NULL;
+		$company["notas"] 		= NULL;
+		$company["search"] 		= NULL;
+
+		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
+			$_GET = Acao::convertDateToDataBase($_GET);
+			print_r($_GET);
+		}
+		foreach ($_GET as $key => $value) {
+			$company[$key] = $value;
+		}
 		
 		if (isset($_GET["search"])) {
-			$dtBuySell = ""."_"."";
-			if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
-				$_GET = Acao::convertDateToDataBase($_GET);
-				$dtBuySell = $_GET["dtbuy"]."_".$_GET["dtsell"];
-			}
-
-			if ((!isset($_GET["sgcompany"]) || ($_GET["sgcompany"] == '' || $_GET["sgcompany"] == NULL) && (isset($_GET["dtbuy"]) || $_GET["dtbuy"] != '') && (isset($_GET["dtsell"]) || $_GET["dtsell"] != ''))) {
-				echo 'Com datas sem company Index1.';
-				$acoes = Acao::listAll($dtBuySell, "10");
-				$acoes = Acao::convertDateToView($acoes);
-				
-				$acoes 	= Acao::convertToInt($acoes);
-				
-				$pgs 	= Acao::countRegister($acoes[0]["pgs"], "" , $dtBuySell );
-
-				$page->setTpl("/notas", array(
-					"acoes"=>$acoes,
-					"pgs"=>$pgs
-				));
-				
-			} else if (isset($_GET["sgcompany"]) && ($_GET["sgcompany"] != '' && $_GET["sgcompany"] != NULL) && (!isset($_GET["dtbuy"]) || $_GET["dtbuy"] == '') && (!isset($_GET["dtsell"]) || $_GET["dtsell"] == '') )
-			{
-				/*======================================================================*/
-				/*								Sem datas com company					*/
-				/*======================================================================*/
-				echo 'Sem datas Com company Index2.';
-				foreach ($_GET as $key => $value) {
-					$company[$key] = $value;
-				}
-				$company["company"] = "sgcompany";
-				$company["limit"] = "10";
-				$company["listacoes"] = "";
-				$company["notas"] = "";
-				//print_r($company);exit;
-				//$company = "sgcompany"."_".$_GET["sgcompany"];
-				$acoes = Acao::listAll($company);
-				
-				echo '<pre>';						
-				print_r($acoes);
-				echo '</pre>';
-				exit;
-				$acoes 	= Acao::convertDateToView($acoes);
-				$acoes 	= Acao::convertToInt($acoes);
-				
-				$pgs 	= Acao::countRegister($acoes[0]["pgs"], $_GET["sgcompany"], "");
-				print_r($pgs);
-				$page->setTpl("/notas", array(
-					"acoes"=>$acoes,
-					"pgs"=>$pgs
-				));
-			} else if ((!isset($_GET["dtbuy"]) || $_GET["dtbuy"] == '') || (!isset($_GET["dtsell"]) || $_GET["dtsell"] == '') && $_GET["sgcompany"] == '') 
-			{
-				echo 'Sem datas sem company Index3.';
-				$acoes = Acao::listAll("notas", "10");
-
-				$acoes 	= Acao::convertDateToView($acoes);
-				$acoes 	= Acao::convertToInt($acoes);
 			
-				$pgs 	= Acao::countRegister($acoes[0]["pgs"], "", "" );
-				$page->setTpl("notas", array(
-					"acoes"=> $acoes,
-					"pgs"=> $pgs
-				));	
-			} else if (isset($_GET["sgcompany"]) && ($_GET["sgcompany"] != '' && $_GET["sgcompany"] != NULL) && (isset($_GET["dtbuy"]) || $_GET["dtbuy"] != '') && (isset($_GET["dtsell"]) || $_GET["dtsell"] != '') )
-			{
-				/*======================================================================*/
-				/*								Sem datas com company					*/
-				/*======================================================================*/
-				echo 'Com datas Com company Index41.';
-				$company = "sgcompany"."_".$_GET["sgcompany"]."_".$dtBuySell;
-				$acoes = Acao::listAll($company, "10");
+
+			echo 'Sem datas Com company Index 000.';
 				
-				$acoes 	= Acao::convertDateToView($acoes);
-				$acoes 	= Acao::convertToInt($acoes);
-				
-				$pgs 	= Acao::countRegister($acoes[0]["pgs"], $_GET["sgcompany"], $dtBuySell);
-				// print_r($_GET);
-				// print_r($pgs);
-				// echo '<pre>';						
-				// print_r($acoes);
-				// echo '</pre>';
-				//exit;
-				$page->setTpl("/notas", array(
-					"acoes"=>$acoes,
-					"pgs"=>$pgs
-				));
-			} else {
-				echo 'Com datas com company Index5.';
-				$acoes = Acao::listAll("notas", "10");
-				
-				$acoes = Acao::convertDateToView($acoes);
-				$acoes 	= Acao::convertToInt($acoes);
-				$pgs 	= Acao::countRegister($acoes[0]["pgs"], $_GET["sgcompany"], $dtBuySell );
-				// print_r($pgs);
-				// echo '<pre>';						
-				// print_r($acoes);
-				// echo '</pre>';
-				exit;
-				$page->setTpl("notas", array(
-					"acoes"=> $acoes,
-					"pgs"=> $pgs
-				));	
-			}
+			$acoes = Acao::listAll($company);
 			
+			$acoes 	= Acao::convertDateToView($acoes);
+			$acoes 	= Acao::convertToInt($acoes);
 			
+			$pgs 	= Acao::countRegister($acoes[0]["pgs"], $company);
+			
+			$page->setTpl("/notas", array(
+				"acoes"=>$acoes,
+				"pgs"=>$pgs
+			));
 		} else // Fim do Search
 		{
 			echo 'Sem datas com company Index6.';
-			$acoes = Acao::listAll("notas", "10");
+			$company["notas"] 		= "notas";
+			$acoes = Acao::listAll($company);
 
 			$acoes 	= Acao::convertDateToView($acoes);
 			$acoes 	= Acao::convertToInt($acoes);
-			$pgs 	= Acao::countRegister($acoes[0]["pgs"], "", "" );
-			echo 'Sem search';
-			// echo '<pre>';
-			// print_r($pgs);
-			// echo '</pre>';
-			exit;
+			
+			$pgs 	= Acao::countRegister($acoes[0]["pgs"], $company);
 			
 			$page->setTpl("notas", array(
 				"acoes"=> $acoes,

@@ -266,266 +266,121 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_select`(
 	pdtbuy DATE,
 	pdtsell DATE,
     pstart INT(10),
-	plimit INT(10)
+    plimit INT(10)
 )
 BEGIN
-	
+	/*==========================================================================================*/
+    /*					Filtra os registros usando os nenhum parâmetros							*/
     /*==========================================================================================*/
-    /*						Filtra os registros usando nenhum parâmetros						*/
-    /*==========================================================================================*/
-    IF ((pdtbuy = '') AND (pdtsell = '')) AND (psgcompany = '') THEN
+    IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany = '' OR psgcompany IS NULL) THEN
     BEGIN
-		IF pstart != '' AND plimit != '' THEN
-        BEGIN
-			SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pgs FROM tb_persons p 
-            INNER JOIN (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i USING(idperson) 
-            INNER JOIN tb_estoques e USING(idperson) ORDER BY i.idinvestiment;
-		END;
-        ELSE
-        BEGIN
-			SELECT i.idinvestiment FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) INNER JOIN tb_estoques e USING(idperson) ORDER BY i.idinvestiment;	
-        END;
-        END IF;
-    END;
-    END IF;
-    
-    /*==========================================================================================*/
-    /*				Filtra os registros usando os 3 parâmetros - sigla e data					*/
-    /*==========================================================================================*/
-    IF (pdtbuy != '' AND pdtsell != '') AND (psgcompany != '') THEN
-    BEGIN
-		IF pstart != '' AND plimit != '' THEN
-        BEGIN
-			SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pages, 
-				sum(i.qtdebuy) AS buyTotal, 
-				sum(i.qtdesell) AS sellTotal, 
-				sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage AS average,
-				sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
-			FROM tb_persons p INNER JOIN (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.sgcompany = psgcompany
-				AND i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell
-			GROUP BY p.sgcompany;
-		END;
-        ELSE
-        BEGIN
-			SELECT *, 
-				sum(i.qtdebuy) AS buyTotal, 
-				sum(i.qtdesell) AS sellTotal, 
-				sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage AS average,
-				sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
-			FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.sgcompany = psgcompany
-				AND i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell
-			GROUP BY p.sgcompany;
-        END;
-        END IF;
+		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pgs
+		FROM tb_persons p 
+		INNER JOIN (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		ORDER BY i.idinvestiment;
     END;
     END IF;
     
     /*==========================================================================================*/
     /*					Filtra os registros usando os 1 parâmetros - sigla						*/
     /*==========================================================================================*/
-    IF ((pdtbuy = '' OR pdtbuy IS NOT NULL ) AND (pdtsell = ''  OR pdtsell IS NOT NULL)) AND (psgcompany != '' OR psgcompany IS NOT NULL) THEN
+    IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
     BEGIN
-		IF (pstart != '' OR pdtbuy IS NOT NULL) AND (plimit != '' OR pdtsell IS NOT NULL) THEN
-        BEGIN
-			SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pages 
-			FROM tb_persons p 
-			INNER JOIN (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.sgcompany = psgcompany
-			ORDER BY i.idinvestiment;
-		END;
-        BEGIN
-			SELECT *
-			FROM tb_persons p 
-			INNER JOIN tb_investiments i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.sgcompany = 'BBSE3'
-			ORDER BY i.idinvestiment;
-        END;
-        END IF;
+		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments WHERE sgcompany = psgcompany) / plimit AS pgs
+		FROM tb_persons p 
+		INNER JOIN (SELECT * FROM tb_investiments i WHERE i.sgcompany = psgcompany LIMIT pstart, plimit) AS i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany
+		ORDER BY i.idinvestiment;
     END;
     END IF;
     
     /*==========================================================================================*/
     /*				Filtra os registros usando os 2 parâmetros - sigla e data sell				*/
     /*==========================================================================================*/
-    IF ((pdtbuy = '') AND pdtsell != '') AND (psgcompany != '') THEN
+    IF ((pdtbuy = '' OR pdtbuy IS NULL) AND pdtsell != '' AND pdtsell IS NOT NULL) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
     BEGIN
-		IF pstart != '' AND plimit != '' THEN
-        BEGIN
-			SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pages, 
-				sum(i.qtdebuy) AS buyTotal, 
-				sum(i.qtdesell) AS sellTotal, 
-				sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage AS average,
-				sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
-			FROM tb_persons p INNER JOIN (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.sgcompany = psgcompany AND i.dtsell <= pdtsell 
-			GROUP BY p.sgcompany;
-		END;
-        ELSE
-        BEGIN
-			SELECT *, 
-				sum(i.qtdebuy) AS buyTotal, 
-				sum(i.qtdesell) AS sellTotal, 
-				sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage AS average,
-				sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
-			FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.sgcompany = psgcompany AND i.dtsell <= pdtsell 
-			GROUP BY p.sgcompany;
-        END;
-        END IF;
+		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments WHERE sgcompany = psgcompany AND dtsell <= pdtsell) / plimit AS pgs
+		FROM tb_persons p 
+		INNER JOIN (SELECT * FROM tb_investiments i WHERE i.sgcompany = psgcompany AND i.dtsell <= pdtsell LIMIT pstart, plimit) AS i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND i.dtsell <= pdtsell 
+		ORDER BY p.sgcompany;
     END;
     END IF;
     
     /*==========================================================================================*/
     /*				Filtra os registros usando os 2 parâmetros - sigla e data buy				*/
     /*==========================================================================================*/
-    IF (pdtbuy != '' AND (pdtsell = '')) AND (psgcompany != '') THEN
+    IF (pdtbuy != '' AND pdtbuy IS NOT NULL) AND (pdtsell = '' OR pdtsell IS NULL) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
     BEGIN
-		IF pstart != '' AND plimit != '' THEN
-        BEGIN
-			SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pages, 
-				sum(i.qtdebuy) AS buyTotal, 
-				sum(i.qtdesell) AS sellTotal, 
-				sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage AS average,
-				sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
-			FROM tb_persons p INNER JOIN (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.sgcompany = psgcompany AND i.dtbuy >= pdtbuy 
-			GROUP BY p.sgcompany;
-		END;
-        ELSE
-        BEGIN
-			SELECT *, 
-				sum(i.qtdebuy) AS buyTotal, 
-				sum(i.qtdesell) AS sellTotal, 
-				sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage AS average,
-				sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
-			FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.sgcompany = psgcompany AND i.dtbuy >= pdtbuy 
-			GROUP BY p.sgcompany;
-        END;
-        END IF;
+		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments WHERE sgcompany = psgcompany AND dtbuy >= pdtbuy) / plimit AS pgs
+		FROM tb_persons p 
+		INNER JOIN (SELECT * FROM tb_investiments i WHERE i.sgcompany = psgcompany AND i.dtbuy >= pdtbuy LIMIT pstart, plimit) AS i USING(idperson)  
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany AND i.dtbuy >= pdtbuy 
+		ORDER BY p.sgcompany;
     END;
     END IF;
     
     /*==========================================================================================*/
     /*						Filtra os registros usando os 2 parâmetros - data					*/
     /*==========================================================================================*/
-    IF (pdtbuy != '' AND pdtsell != '') AND (psgcompany = '') THEN
+    IF (pdtbuy != '' AND pdtbuy IS NOT NULL) AND (pdtsell != '' AND pdtsell IS NOT NULL) AND (psgcompany = '' OR psgcompany IS NULL) THEN
     BEGIN
-		IF pstart != '' AND plimit != '' THEN
-        BEGIN
-			SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pages, 
-				sum(i.qtdebuy) AS buyTotal, 
-				sum(i.qtdesell) AS sellTotal, 
-				sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage AS average,
-				sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
-			FROM tb_persons p INNER JOIN (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell 
-			GROUP BY p.sgcompany;
-		END;
-        ELSE
-        BEGIN
-			SELECT *, 
-				sum(i.qtdebuy) AS buyTotal, 
-				sum(i.qtdesell) AS sellTotal, 
-				sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage AS average,
-				sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
-			FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell 
-			GROUP BY p.sgcompany;
-        END;
-        END IF;
+		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments WHERE dtbuy >= pdtbuy AND dtsell <= pdtsell) / plimit AS pgs
+		FROM tb_persons p 
+		INNER JOIN (SELECT * FROM tb_investiments i WHERE i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell LIMIT pstart, plimit) AS i USING(idperson)  
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell 
+		ORDER BY p.sgcompany;
     END;
     END IF;
     
     /*==========================================================================================*/
     /*					Filtra os registros usando os 1 parâmetros - data buy					*/
     /*==========================================================================================*/
-    IF ((pdtbuy != '') AND (pdtsell = '')) AND (psgcompany = '') THEN
+    IF ((pdtbuy != '' AND pdtbuy IS NOT NULL) AND (pdtsell = '' OR pdtsell IS NULL)) AND (psgcompany = '' OR psgcompany IS NULL) THEN
     BEGIN
-		IF pstart != '' AND plimit != '' THEN
-        BEGIN
-			SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pages, 
-				sum(i.qtdebuy) AS buyTotal, 
-				sum(i.qtdesell) AS sellTotal, 
-				sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage AS average,
-				sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
-			FROM tb_persons p INNER JOIN (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.dtbuy >= pdtbuy
-			GROUP BY p.sgcompany;
-		END;
-        ELSE
-        BEGIN
-			SELECT *, 
-				sum(i.qtdebuy) AS buyTotal, 
-				sum(i.qtdesell) AS sellTotal, 
-				sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage AS average,
-				sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
-			FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.dtbuy >= pdtbuy
-			GROUP BY p.sgcompany;
-        END;
-        END IF;
+		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments WHERE dtbuy >= pdtbuy) / plimit AS pgs
+		FROM tb_persons p 
+		INNER JOIN (SELECT * FROM tb_investiments i WHERE i.dtbuy >= pdtbuy LIMIT pstart, plimit) AS i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtbuy >= pdtbuy
+		ORDER BY p.sgcompany;
     END;
     END IF;
     
     /*==========================================================================================*/
     /*					Filtra os registros usando os 1 parâmetros - data sell					*/
     /*==========================================================================================*/
-    IF ((pdtbuy = '') AND pdtsell != '') AND (psgcompany = '') THEN
+    IF ((pdtbuy = '' OR pdtbuy IS NULL) AND pdtsell != '' AND pdtsell IS NOT NULL) AND (psgcompany = '' OR psgcompany IS NULL) THEN
     BEGIN
-		IF pstart != '' AND plimit != '' THEN
-        BEGIN
-			SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pages, 
-				sum(i.qtdebuy) AS buyTotal, 
-				sum(i.qtdesell) AS sellTotal, 
-				sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage AS average,
-				sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
-			FROM tb_persons p INNER JOIN (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.dtsell <= pdtsell
-			GROUP BY p.sgcompany;
-		END;
-        ELSE
-        BEGIN
-			SELECT *, 
-				sum(i.qtdebuy) AS buyTotal, 
-				sum(i.qtdesell) AS sellTotal, 
-				sum(i.qtdebuy) - sum(i.qtdesell) AS finalTotal,
-				e.prcaverage AS average,
-				sum(e.prcaverage * e.qtdeestoque) AS vlrtotal
-			FROM tb_persons p INNER JOIN tb_investiments i USING(idperson) 
-			INNER JOIN tb_estoques e USING(idperson) 
-			WHERE i.dtsell <= pdtsell
-			GROUP BY p.sgcompany;
-        END;
-        END IF;
+		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments WHERE dtsell <= pdtsell) / plimit AS pgs
+		FROM tb_persons p 
+		INNER JOIN (SELECT * FROM tb_investiments i WHERE i.dtsell <= pdtsell LIMIT pstart, plimit) AS i USING(idperson) 
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.dtsell <= pdtsell
+		ORDER BY p.sgcompany;
     END;
     END IF;
+    
+    /*==========================================================================================*/
+    /*				Filtra os registros usando os 3 parâmetros - sigla e data					*/
+    /*==========================================================================================*/
+    IF (pdtbuy != '' AND pdtbuy IS NOT NULL) AND (pdtsell != '' AND pdtsell IS NOT NULL) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
+    BEGIN
+		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments WHERE sgcompany = psgcompany AND dtbuy >= pdtbuy AND dtsell <= pdtsell) / plimit AS pgs
+		FROM tb_persons p 
+		INNER JOIN (SELECT * FROM tb_investiments i WHERE i.sgcompany = psgcompany AND i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell LIMIT pstart, plimit) AS i USING(idperson)
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.sgcompany = psgcompany
+			AND i.dtbuy >= pdtbuy AND i.dtsell <= pdtsell
+		ORDER BY p.sgcompany;
+    END;
+    END IF;
+    
     
 END ;;
 DELIMITER ;
@@ -1277,4 +1132,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-28  6:23:14
+-- Dump completed on 2021-04-29  6:21:02
