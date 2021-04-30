@@ -2,13 +2,15 @@
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
 <section class="content-header">
-  <h1>
-    Lista de Açoes
-  </h1>
+  <div class="box box-success title" style="background-color: #d5f8da;">
+    <h4>
+      Cadastro de Compra de Ações
+    </h4>
+  </div>
   <ol class="breadcrumb">
     <li><a href="/acoes"><i class="fa fa-dashboard"></i> Home</a></li>
     <li><a href="/acoes">Ação</a></li>
-    <li class="active"><a href="/acoes/create">Cadastrar</a></li>
+    <li class="active"><a href="/acoes/createC">Cadastrar</a></li>
   </ol>
 </section>
 
@@ -23,18 +25,19 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
+        
         <form role="form" action="/acoes/create" method="post">
           <div class="box-body">
             <div class="col col-md-2">
               <div class="form-group">
-                <label for="descompany">Empresa</label>
-                <input type="text" class="form-control" name="descompany" id="descompany">
+                <label for="desperson">Empresa</label>
+                <input type="text" class="form-control" name="desperson" id="desperson" onKeyUp="convertLowToUpper(desperson)" autofocus="autofocus">
               </div>
             </div>
             <div class="col col-md-2">
               <div class="form-group">
                 <label for="sgcompany">Sigla</label>
-                <input type="text" class="form-control" name="sgcompany" id="sgcompany" required>
+                <input type="text" class="form-control" name="sgcompany" id="sgcompany" onKeyUp="convertLowToUpper(sgcompany)" required>
               </div>
             </div>
             <div class="col col-md-2">
@@ -78,49 +81,20 @@
                 <input type="text" class="form-control" id="tlbuy" name="tlbuy" readonly>
               </div>
             </div>
-          </div>
-          <div class="box-body">
             <div class="col col-md-2">
               <div class="form-group">
-                <label for="dtsell">Data Venda</label>
-                <input type="text" class="form-control" name="dtsell" id="dtsell" onChange="replaceSlash(dtsell)">
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="qtdesell">Qtde</label>
-                <input type="text" class="form-control" name="qtdesell" id="qtdesell" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="prcsell">Valor Venda</label>
-                <input type="text" class="form-control" name="prcsell" id="prcsell" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="tlsell">Total Venda</label>
-                <input type="text" class="form-control" id="tlsell" name="tlsell" readonly>
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="lucre">Lucro</label>
-                <input type="text" class="form-control" id="lucre" name="lucre" readonly>
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="form-group">
-                <label for="tax">Taxa</label>
-                <input type="text" class="form-control" id="tax" name="tax" readonly>
+                <label for="prcaverage">Valor Médio</label>
+                <input type="text" class="form-control" id="prcaverage" name="prcaverage" readonly>
               </div>
             </div>
           </div>
+          
           <!-- /.box-body -->
           <div class="box-footer">
-            <button type="submit" class="btn btn-success">Cadastrar</button>
-            <a href="/acoes" class="btn btn-warning">Voltar</a>
+            <input type="submit"name="compra" class="btn btn-success" value="Cadastrar Compra">
+            <?php $counter1=-1;  if( isset($voltar) && ( is_array($voltar) || $voltar instanceof Traversable ) && sizeof($voltar) ) foreach( $voltar as $key1 => $value1 ){ $counter1++; ?>
+            <a href="/<?php echo htmlspecialchars( $voltar["voltar"], ENT_COMPAT, 'UTF-8', FALSE ); ?>?limit=10" class="btn btn-warning">Voltar</a>
+            <?php } ?>
           </div>
         </form>
       </div>

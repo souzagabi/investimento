@@ -130,6 +130,7 @@
 		$acao->setData($_POST);
 
 		$acao->save();
+		var_dump($acao);
 		$tipo = "compra";
 		
 		header("Location: /acoes/create?$tipo=$tipo");
@@ -176,6 +177,7 @@
 		$company["dtsell"] 		= NULL;
 		$company["search"] 		= NULL;
 
+		
 		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
 			$_GET = Acao::convertDateToDataBase($_GET);
 		}
@@ -186,7 +188,7 @@
 			$company["search"] 		= "Search";
 			
 			$action 	= Acao::selectRegister($company);
-
+			
 			if (isset($action) && $action != '') {
 				$page->setTpl("/notas", array(
 					"acoes"=>$action[0],

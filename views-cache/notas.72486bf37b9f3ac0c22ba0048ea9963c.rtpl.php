@@ -14,7 +14,7 @@
     <div class="box box-primary">
       <div class="col form-control top">
         <div class="row">
-          <div class="col col-md-3">
+          <div class="col col-md-4">
             <form action="/acoes/create" method="get">
               <input type="submit" name="compra" class="btn btn-success" value="Cadastrar Compra">
               <input type="text" name="notas" value="notas" hidden>
@@ -25,7 +25,7 @@
             <div class="col col-md-2"><label for="sgcompany">Sigla</label><input type="text" name="sgcompany" id="sgcompany" class="form-control"></div>
             <div class="col col-md-2"><label for="dtbuy">Data Inicio</label><input type="text" name="dtbuy" id="dtbuy" class="form-control" onChange="replaceSlash(dtbuy)"></div>
             <div class="col col-md-2"><label for="dtsell">Data Fim</label><input type="text" name="dtsell" id="dtsell" class="form-control" onChange="replaceSlash(dtsell)"></div>
-            <div class="col col-md-2"><label for="limit">Data Fim</label>
+            <div class="col col-md-1"><label for="limit">Data Fim</label>
               <select name="limit" id="limit" class="form-control">
                 <option value="" selected></option>
                 <option value="10">10</option>
@@ -52,7 +52,7 @@
               </li>
               <?php $i = 1; ?>
               <?php $counter1=-1;  if( isset($pgs) && ( is_array($pgs) || $pgs instanceof Traversable ) && sizeof($pgs) ) foreach( $pgs as $key1 => $value1 ){ $counter1++; ?>
-              <li><a href="notas?pg=<?php echo htmlspecialchars( $i, ENT_COMPAT, 'UTF-8', FALSE ); ?><?php if( $pgs["list"]["sgcompany"] ){ ?>&sgcompany=<?php echo htmlspecialchars( $pgs["list"]["sgcompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["dtbuy"] ){ ?>&dtbuy=<?php echo htmlspecialchars( $pgs["list"]["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["dtsell"] ){ ?>&dtsell=<?php echo htmlspecialchars( $pgs["list"]["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["search"] ){ ?>&search=<?php echo htmlspecialchars( $pgs["list"]["search"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?>"><?php echo htmlspecialchars( $i++, ENT_COMPAT, 'UTF-8', FALSE ); ?></a></li>
+              <li><a href="notas?pg=<?php echo htmlspecialchars( $i, ENT_COMPAT, 'UTF-8', FALSE ); ?><?php if( $pgs["list"]["sgcompany"] ){ ?>&sgcompany=<?php echo htmlspecialchars( $pgs["list"]["sgcompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["dtbuy"] ){ ?>&dtbuy=<?php echo htmlspecialchars( $pgs["list"]["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["dtsell"] ){ ?>&dtsell=<?php echo htmlspecialchars( $pgs["list"]["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["search"] ){ ?>&search=<?php echo htmlspecialchars( $pgs["list"]["search"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["limit"] ){ ?>&limit=<?php echo htmlspecialchars( $pgs["list"]["limit"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?>"><?php echo htmlspecialchars( $i++, ENT_COMPAT, 'UTF-8', FALSE ); ?></a></li>
               <?php } ?>
               <li>
                 <a href="#" aria-label="Next">
@@ -115,7 +115,7 @@
               </li>
               <?php $i = 1; ?>
               <?php $counter1=-1;  if( isset($pgs) && ( is_array($pgs) || $pgs instanceof Traversable ) && sizeof($pgs) ) foreach( $pgs as $key1 => $value1 ){ $counter1++; ?>
-              <li><a href="notas?pg=<?php echo htmlspecialchars( $i, ENT_COMPAT, 'UTF-8', FALSE ); ?><?php if( $pgs["list"]["sgcompany"] ){ ?>&sgcompany=<?php echo htmlspecialchars( $pgs["list"]["sgcompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["dtbuy"] ){ ?>&dtbuy=<?php echo htmlspecialchars( $pgs["list"]["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["dtsell"] ){ ?>&dtsell=<?php echo htmlspecialchars( $pgs["list"]["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["search"] ){ ?>&search=<?php echo htmlspecialchars( $pgs["list"]["search"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?>"><?php echo htmlspecialchars( $i++, ENT_COMPAT, 'UTF-8', FALSE ); ?></a></li>
+              <li><a href="notas?pg=<?php echo htmlspecialchars( $i, ENT_COMPAT, 'UTF-8', FALSE ); ?><?php if( $pgs["list"]["sgcompany"] ){ ?>&sgcompany=<?php echo htmlspecialchars( $pgs["list"]["sgcompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["dtbuy"] ){ ?>&dtbuy=<?php echo htmlspecialchars( $pgs["list"]["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["dtsell"] ){ ?>&dtsell=<?php echo htmlspecialchars( $pgs["list"]["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["search"] ){ ?>&search=<?php echo htmlspecialchars( $pgs["list"]["search"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?><?php if( $pgs["list"]["limit"] ){ ?>&limit=<?php echo htmlspecialchars( $pgs["list"]["limit"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?>"><?php echo htmlspecialchars( $i++, ENT_COMPAT, 'UTF-8', FALSE ); ?></a></li>
               <?php } ?>
               <li>
                 <a href="#" aria-label="Next">

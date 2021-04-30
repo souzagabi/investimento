@@ -16,33 +16,42 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `tb_users`
+-- Table structure for table `tb_sells`
 --
 
-DROP TABLE IF EXISTS `tb_users`;
+DROP TABLE IF EXISTS `tb_sells`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tb_users` (
-  `iduser` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tb_sells` (
+  `idsell` int(11) NOT NULL AUTO_INCREMENT,
+  `idinvestiment` int(11) DEFAULT NULL,
   `idperson` int(11) NOT NULL,
-  `deslogin` varchar(64) NOT NULL,
-  `despassword` varchar(256) NOT NULL,
-  `inadmin` tinyint(1) NOT NULL DEFAULT 0,
+  `sgcompany` varchar(20) NOT NULL,
+  `qtdesell` int(11) DEFAULT 0,
+  `dtsell` date DEFAULT NULL,
+  `prcsell` decimal(10,2) DEFAULT 0.00,
+  `tlsell` decimal(10,2) DEFAULT 0.00,
+  `bprcaverage` decimal(10,2) DEFAULT 0.00,
+  `tax` decimal(10,2) DEFAULT 0.00,
+  `lucre` decimal(10,2) DEFAULT 0.00,
+  `tptransaction` char(1) DEFAULT NULL,
+  `tipe` char(1) DEFAULT NULL,
   `dtregister` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`iduser`),
-  KEY `FK_users_persons_idx` (`idperson`),
-  CONSTRAINT `fk_users_persons` FOREIGN KEY (`idperson`) REFERENCES `tb_persons` (`idperson`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`idsell`),
+  KEY `FK_sells_investiments_idx` (`idinvestiment`),
+  KEY `fk_sells_persons` (`idperson`),
+  CONSTRAINT `FK_sells_investiments_idx` FOREIGN KEY (`idinvestiment`) REFERENCES `tb_investiments` (`idinvestiment`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_sells_persons` FOREIGN KEY (`idperson`) REFERENCES `tb_persons` (`idperson`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_users`
+-- Dumping data for table `tb_sells`
 --
 
-LOCK TABLES `tb_users` WRITE;
-/*!40000 ALTER TABLE `tb_users` DISABLE KEYS */;
-INSERT INTO `tb_users` VALUES (1,1,'admin','$2y$12$YlooCyNvyTji8bPRcrfNfOKnVMmZA9ViM2A3IpFjmrpIbp5ovNmga',1,'2021-03-13 06:00:00'),(2,2,'suporte','$2y$12$HFjgUm/mk1RzTy4ZkJaZBe0Mc/BA2hQyoUckvm.lFa6TesjtNpiMe',1,'2021-03-15 19:10:27');
-/*!40000 ALTER TABLE `tb_users` ENABLE KEYS */;
+LOCK TABLES `tb_sells` WRITE;
+/*!40000 ALTER TABLE `tb_sells` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_sells` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +63,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-30 17:33:53
+-- Dump completed on 2021-04-30  6:09:44

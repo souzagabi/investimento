@@ -25,6 +25,7 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
+        
         <form role="form" action="/acoes/create" method="post">
           <div class="box-body">
             <div class="col col-md-2">
@@ -92,7 +93,7 @@
           <div class="box-footer">
             <input type="submit"name="compra" class="btn btn-success" value="Cadastrar Compra">
             {loop="$voltar"}
-            <a href="/{$voltar.voltar}" class="btn btn-warning">Voltar</a>
+            <a href="/{$voltar.voltar}?limit=10" class="btn btn-warning">Voltar</a>
             {/loop}
           </div>
         </form>
