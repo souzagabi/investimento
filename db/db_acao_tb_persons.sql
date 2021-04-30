@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 -- MariaDB dump 10.19  Distrib 10.4.18-MariaDB, for Win64 (AMD64)
 --
 -- Host: 127.0.0.1    Database: db_acao
@@ -53,5 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-29  6:21:02
->>>>>>> 2ab6d4e8168744da3562ebd9ae6afd99d9fce723
+-- Dump completed on 2021-04-30  6:09:44

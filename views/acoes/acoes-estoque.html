@@ -50,7 +50,7 @@
               </li>
               {$i = 1}
               {loop="$pgs"}
-              <li><a href="acoes-estoque?pg={$i}{if="$pgs.list.listacoes"}&listacoes={$pgs.list.listacoes}{/if}{if="$pgs.list.dtbuy"}&dtbuy={$pgs.list.dtbuy}{/if}{if="$pgs.list.dtsell"}&dtsell={$pgs.list.dtsell}{/if}{if="$pgs.list.search"}&search={$pgs.list.search}{/if}">{$i++}</a></li>
+              <li><a href="acoes-estoque?pg={$i}{if="$pgs.list.listestoque "}&listestoque ={$pgs.list.listestoque }{/if}{if="$pgs.list.dtbuy"}&dtbuy={$pgs.list.dtbuy}{/if}{if="$pgs.list.dtsell"}&dtsell={$pgs.list.dtsell}{/if}{if="$pgs.list.search"}&search={$pgs.list.search}{/if}">{$i++}</a></li>
               {/loop}
               <li>
                 <a href="#" aria-label="Next">
