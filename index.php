@@ -113,7 +113,7 @@
 
 	$app->post("/acoes/create", function (){
 		User::verifyLogin();
-
+		
 		$acao = new Acao();
 		if (isset($_POST["tax"])) {
 			$tax = explode(" ",$_POST["tax"]);
@@ -130,7 +130,7 @@
 		$acao->setData($_POST);
 
 		$acao->save();
-		var_dump($acao);
+		//var_dump($acao);exit;
 		$tipo = "compra";
 		
 		header("Location: /acoes/create?$tipo=$tipo");

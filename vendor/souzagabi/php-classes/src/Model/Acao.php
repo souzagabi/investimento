@@ -74,8 +74,6 @@
                     $l[$key] = '';
                 }
             }
-            echo '<pre>';
-            echo '</pre>';
             
             if (isset($list) && $list != '') {
                 
@@ -188,10 +186,10 @@
            
             $this->setData($qtdeTotal);
 
-            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson, :iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :idestoque, :sgecompany, :qtdeestoque, :tptransaction, :iprcaverage)", array(
+            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment, :iduser, :idperson, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :dtsell, :qtdebuy, :qtdesell, :prcbuy, :prcsell, :tlbuy, :tlsell, :tax, :lucre, :tipe, :idestoque, :sgecompany, :qtdeestoque, :tptransaction, :iprcaverage)", array(
                     ":idinvestiment"    => $this->getidinvestiment(),
-                    ":idperson"         => $this->getidperson(),
                     ":iduser"           => $this->getiduser(),   
+                    ":idperson"         => $this->getidperson(),
                     ":desperson"        => $this->getdesperson(),    
                     ":sgcompany"        => $this->getsgcompany(),    
                     ":descpfcnpj"       => $this->getdescpfcnpj(),    

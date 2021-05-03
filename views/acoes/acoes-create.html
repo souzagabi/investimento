@@ -10,7 +10,7 @@
   <ol class="breadcrumb">
     <li><a href="/acoes"><i class="fa fa-dashboard"></i> Home</a></li>
     <li><a href="/acoes">Ação</a></li>
-    <li class="active"><a href="/acoes/createC">Cadastrar</a></li>
+    <li class="active"><a href="/acoes/create">Cadastrar</a></li>
   </ol>
 </section>
 

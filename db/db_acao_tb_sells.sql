@@ -31,10 +31,10 @@ CREATE TABLE `tb_sells` (
   `dtsell` date DEFAULT NULL,
   `prcsell` decimal(10,2) DEFAULT 0.00,
   `tlsell` decimal(10,2) DEFAULT 0.00,
-  `bprcaverage` decimal(10,2) DEFAULT 0.00,
+  `sprcaverage` decimal(10,2) DEFAULT 0.00,
   `tax` decimal(10,2) DEFAULT 0.00,
   `lucre` decimal(10,2) DEFAULT 0.00,
-  `tptransaction` char(1) DEFAULT NULL,
+  `stptransaction` char(1) DEFAULT NULL,
   `tipe` char(1) DEFAULT NULL,
   `dtregister` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`idsell`),
@@ -63,4 +63,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-30 17:33:52
+-- Dump completed on 2021-05-03  6:19:40

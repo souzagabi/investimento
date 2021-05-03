@@ -26,7 +26,7 @@
             <div class="col col-md-2"><label for="dtsell">Data Fim</label><input type="text" name="dtsell" id="dtsell" class="form-control" onChange="replaceSlash(dtsell)"></div>
             <div class="col col-md-1"><label for="limit">Limite</label>
               <select name="limit" id="limit" class="form-control">
-                <option value="10">10</option>
+                <option value="10" selected>10</option>
                 <option value="15">15</option>
                 <option value="20">20</option>
                 <option value="25">25</option>
