@@ -34,15 +34,15 @@ CREATE TABLE `tb_buys` (
   `bprcaverage` decimal(10,2) DEFAULT 0.00,
   `tax` decimal(10,2) DEFAULT 0.00,
   `lucre` decimal(10,2) DEFAULT 0.00,
-  `tptransaction` char(1) DEFAULT NULL,
-  `tipe` char(1) DEFAULT NULL,
+  `btptransaction` char(1) DEFAULT NULL,
+  `btipe` char(1) DEFAULT NULL,
   `dtregister` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`idbuy`),
   KEY `FK_buys_investiments_idx` (`idinvestiment`),
   KEY `fk_buys_persons` (`idperson`),
   CONSTRAINT `FK_buys_investiments_idx` FOREIGN KEY (`idinvestiment`) REFERENCES `tb_investiments` (`idinvestiment`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_buys_persons` FOREIGN KEY (`idperson`) REFERENCES `tb_persons` (`idperson`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,7 +51,7 @@ CREATE TABLE `tb_buys` (
 
 LOCK TABLES `tb_buys` WRITE;
 /*!40000 ALTER TABLE `tb_buys` DISABLE KEYS */;
-INSERT INTO `tb_buys` VALUES (1,370,4,'MGLU3',10,'2021-04-24',47.14,417.14,0.00,0.00,0.00,'C','1','2021-04-30 18:23:02');
+INSERT INTO `tb_buys` VALUES (29,NULL,4,'MGLU3',2,'2020-04-24',47.14,94.28,47.14,0.00,0.00,'C','1','2021-05-03 09:18:02');
 /*!40000 ALTER TABLE `tb_buys` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -64,4 +64,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-30 17:33:53
+-- Dump completed on 2021-05-03  6:19:40
