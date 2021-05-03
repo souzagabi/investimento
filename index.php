@@ -213,7 +213,10 @@
 		User::verifyLogin();
 		$acoes = new Acao();
 		$acoes->getByBuy($idinvestiment);
-		
+		// echo '</pre>';
+		// print_r($acoes);
+		// echo '<pre>';
+		// exit;
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(
@@ -233,10 +236,13 @@
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		
 		$acoes->getByBuy($idinvestiment);
+		// echo '<pre>';
+		// print_r($acoes);
+		// echo '</pre>';
+		// exit;
 		$acoes->setData($_POST);
-		
 		$acoes->update();
-		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search");
+		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search&limit=10");
 		exit;
 	});
 	

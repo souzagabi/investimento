@@ -7,13 +7,16 @@ function sumTotal(qtde, elementValue, elementTotal)
         var total =  qtde * elementValue.value;
         var average = total / qtde;
         document.getElementById(elementTotal.name).value = total.toFixed(2);
-        if (elementTotal.name == "tlbuy") {
-            document.getElementById("prcaverage").value = average.toFixed(2);
-        }
         
-        if (elementTotal.name == "tlsell") {
+        if (elementTotal.name == "tlbuy") {
+            document.getElementById("bprcaverage").value = average.toFixed(2);
+        } else
+        {
+            document.getElementById("sprcaverage").value = average.toFixed(2);
             var vlbuy = document.getElementById("prcbuy").value * qtde;
             var vlsell = elementTotal.value;
+            
+    
             if (vlbuy && vlsell) {
                 var lucre = vlsell - vlbuy;
                 if (lucre < 0 || lucre > 0) {
@@ -23,6 +26,7 @@ function sumTotal(qtde, elementValue, elementTotal)
             }
             document.getElementById("lucre").value = lucre.toFixed(2);
         }
+      
     }
 
     return total;

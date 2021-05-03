@@ -44,8 +44,8 @@
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
-                  <label for="tipe">Tipo</label>
-                  <select class="form-control" name="tipe" id="tipe">
+                  <label for="btipe">Tipo</label>
+                  <select class="form-control" name="btipe" id="btipe">
                     <option value="1" {if="$acoes.tipe == 1"}selected{/if}>Swing Trade</option>
                     <option value="2" {if="$acoes.tipe == 2"}selected{/if}>Day Trade</option>
                   </select>
@@ -79,11 +79,17 @@
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
-                  <label for="iprcaverage">Valor Médio</label>
-                  <input type="text" class="form-control" id="iprcaverage" name="iprcaverage" value="{$acoes.iprcaverage}" readonly>
+                  <label for="bprcaverage">Valor Médio</label>
+                  <input type="text" class="form-control" id="bprcaverage" name="bprcaverage" value="{$acoes.iprcaverage}" readonly>
                 </div>
               </div>
             </div>
+            <div class="col col-md-2" hidden>
+              <div class="form-group">
+                <label for="btptransaction">Transação</label>
+                <input type="text" class="form-control" id="btptransaction" name="btptransaction" value="C" readonly>
+              </div>
+            </div
             <div class="box-body">
               <div class="col col-md-2">
                 <div class="form-group">
@@ -122,6 +128,30 @@
                 </div>
               </div>
             </div>
+            <div class="box-body">
+              <div class="col col-md-2">
+                <div class="form-group">
+                  <label for="sprcaverage">Valor Médio</label>
+                  <input type="text" class="form-control" id="sprcaverage" name="sprcaverage" value="{$acoes.iprcaverage}" readonly>
+                </div>
+              </div>
+              <div class="col col-md-2">
+                <div class="form-group">
+                  <label for="stipe">Tipo</label>
+                  <select class="form-control" name="stipe" id="stipe">
+                    <option value="1" {if="$acoes.tipe == 1"}selected{/if}>Swing Trade</option>
+                    <option value="2" {if="$acoes.tipe == 2"}selected{/if}>Day Trade</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col col-md-2" hidden>
+                <div class="form-group">
+                  <label for="stptransaction">Transação</label>
+                  <input type="text" class="form-control" id="stptransaction" name="stptransaction" value="V" readonly>
+                </div>
+              </div>
+            </div>
+            
             <!-- /.box-body -->
             <div class="box-footer">
               <button type="submit" class="btn btn-primary">Alualizar</button>
