@@ -46,8 +46,8 @@
                 <div class="form-group">
                   <label for="btipe">Tipo</label>
                   <select class="form-control" name="btipe" id="btipe">
-                    <option value="1" {if="$acoes.tipe == 1"}selected{/if}>Swing Trade</option>
-                    <option value="2" {if="$acoes.tipe == 2"}selected{/if}>Day Trade</option>
+                    <option value="1" {if="$acoes.btipe == 1"}selected{/if}>Swing Trade</option>
+                    <option value="2" {if="$acoes.btipe == 2"}selected{/if}>Day Trade</option>
                   </select>
                 </div>
               </div>
@@ -80,7 +80,7 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="bprcaverage">Valor Médio</label>
-                  <input type="text" class="form-control" id="bprcaverage" name="bprcaverage" value="{$acoes.iprcaverage}" readonly>
+                  <input type="text" class="form-control" id="bprcaverage" name="bprcaverage" value="{$acoes.bprcaverage}" readonly>
                 </div>
               </div>
             </div>
@@ -132,15 +132,15 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="sprcaverage">Valor Médio</label>
-                  <input type="text" class="form-control" id="sprcaverage" name="sprcaverage" value="{$acoes.iprcaverage}" readonly>
+                  <input type="text" class="form-control" id="sprcaverage" name="sprcaverage" value="{$acoes.sprcaverage}" readonly>
                 </div>
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="stipe">Tipo</label>
                   <select class="form-control" name="stipe" id="stipe">
-                    <option value="1" {if="$acoes.tipe == 1"}selected{/if}>Swing Trade</option>
-                    <option value="2" {if="$acoes.tipe == 2"}selected{/if}>Day Trade</option>
+                    <option value="1" {if="$acoes.stipe == 1"}selected{/if}>Swing Trade</option>
+                    <option value="2" {if="$acoes.stipe == 2"}selected{/if}>Day Trade</option>
                   </select>
                 </div>
               </div>

@@ -12,12 +12,9 @@
 	use \Acao\Model\Acao;
 	use \Acao\Model\Person;
 
-	
-
 	$app = new Slim();
 
 	$app->config('debug', true);
-
 	
 /*======================================================================================*/
 /*										Rotas das Ações									*/
@@ -43,6 +40,8 @@
 		$company["dtbuy"] 		= NULL;
 		$company["dtsell"] 		= NULL;
 		$company["listestoque"]	= NULL;
+		$company["search"]		= NULL;
+
 		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
 			$_GET = Acao::convertDateToDataBase($_GET);
 		}
@@ -213,10 +212,7 @@
 		User::verifyLogin();
 		$acoes = new Acao();
 		$acoes->getByBuy($idinvestiment);
-		// echo '</pre>';
-		// print_r($acoes);
-		// echo '<pre>';
-		// exit;
+		
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(
@@ -236,10 +232,21 @@
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		
 		$acoes->getByBuy($idinvestiment);
+		
+		// $action = new Acao();
+		// $act = new Acao();
+		// $action = Acao::listAllId();
+
+		// for ($i=0; $i < count($action); $i++) { 
+		// 	$act->getByBuy($action[$i]["idinvestiment"]);
+		// 	$act->update();
+		// }
+		
 		// echo '<pre>';
-		// print_r($acoes);
+		// print_r($act);
 		// echo '</pre>';
 		// exit;
+		$acoes->getByBuy($idinvestiment);
 		$acoes->setData($_POST);
 		$acoes->update();
 		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search&limit=10");

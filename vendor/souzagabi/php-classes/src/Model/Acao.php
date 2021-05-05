@@ -5,6 +5,12 @@
     
     class Acao extends Model {
 
+        public static function listAllId()
+        {
+            $sql = new Sql();
+            return $sql->select("CALL sp_acoes_list_all_id()");
+        }
+
         public static function listAllAction($list)
         {
             $sql = new Sql();
@@ -151,10 +157,9 @@
             }
             $results[0]["unit"] = "unit";
                  
-            $results[0] = Acao::convertDateToView($results[0]);
-            $data = $results[0];
+           // $results[0] = Acao::convertDateToView($results[0]);
             
-            $this->setData($data);
+            $this->setData($results[0]);
         }
 
         public function save()
@@ -184,10 +189,7 @@
             $qtdeTotal = ["qtdetotal"=>$this->getqtdetotal() + $this->getqtdebuy() - $this->getqtdesell()];
            
             $this->setData($qtdeTotal);
-            // echo '<pre>';
-            // print_r($this);
-            // echo '</pre>';
-            // exit;
+            
             $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment, :iduser, :idperson, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :bprcaverage, :btptransaction, :btipe, :dtsell, :qtdesell, :prcsell, :tlsell, :sprcaverage, :stptransaction, :btipe, :tax, :lucre, :idestoque, :sgecompany, :qtdeestoque)", array(
                                 ":idinvestiment"    => $this->getidinvestiment(),
                                 ":iduser"           => $this->getiduser(),   
@@ -199,7 +201,7 @@
                                 ":qtdebuy"          => $this->getqtdebuy(),
                                 ":prcbuy"           => $this->getprcbuy(),
                                 ":tlbuy"            => $this->gettlbuy(),
-                                ":bprcaverage"      => $this->getiprcaverage(),
+                                ":bprcaverage"      => $this->getbprcaverage(),
                                 ":btptransaction"   => "C",
                                 ":btipe"            => $this->getbtipe(),
                                 ":dtsell"           => $this->getdtsell(),
@@ -208,7 +210,7 @@
                                 ":tlsell"           => $this->gettlsell(),
                                 ":sprcaverage"      => $this->getsprcaverage(),
                                 ":stptransaction"   => "V",
-                                ":stipe"            => $this->gettipe(),
+                                ":stipe"            => $this->getstipe(),
                                 ":tax"              => $this->gettax(),
                                 ":lucre"            => $this->getlucre(),
                                 ":idestoque"        => $this->getidestoque(),
