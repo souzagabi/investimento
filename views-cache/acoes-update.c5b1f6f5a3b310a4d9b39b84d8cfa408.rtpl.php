@@ -19,7 +19,7 @@
   		<div class="box box-primary">
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/acoes/<?php echo htmlspecialchars( $acoes["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>_<?php echo htmlspecialchars( $acoes["tptransaction"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" method="post">
+        <form role="form" action="/notas/<?php echo htmlspecialchars( $acoes["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" method="post">
           <input type="text" name="idinvestiment" value="<?php echo htmlspecialchars( $acoes["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" hidden>
           <input type="text" name="idperson" value="<?php echo htmlspecialchars( $acoes["idperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" hidden>
           <div class="box-body">
@@ -44,10 +44,10 @@
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
-                  <label for="tipe">Tipo</label>
-                  <select class="form-control" name="tipe" id="tipe">
-                    <option value="1" <?php if( $acoes["tipe"] == 1 ){ ?>selected<?php } ?>>Swing Trade</option>
-                    <option value="2" <?php if( $acoes["tipe"] == 2 ){ ?>selected<?php } ?>>Day Trade</option>
+                  <label for="btipe">Tipo</label>
+                  <select class="form-control" name="btipe" id="btipe">
+                    <option value="1" <?php if( $acoes["btipe"] == 1 ){ ?>selected<?php } ?>>Swing Trade</option>
+                    <option value="2" <?php if( $acoes["btipe"] == 2 ){ ?>selected<?php } ?>>Day Trade</option>
                   </select>
                 </div>
               </div>
@@ -79,11 +79,17 @@
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
-                  <label for="iprcaverage">Valor Médio</label>
-                  <input type="text" class="form-control" id="iprcaverage" name="iprcaverage" value="<?php echo htmlspecialchars( $acoes["iprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
+                  <label for="bprcaverage">Valor Médio</label>
+                  <input type="text" class="form-control" id="bprcaverage" name="bprcaverage" value="<?php echo htmlspecialchars( $acoes["bprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
                 </div>
               </div>
             </div>
+            <div class="col col-md-2" hidden>
+              <div class="form-group">
+                <label for="btptransaction">Transação</label>
+                <input type="text" class="form-control" id="btptransaction" name="btptransaction" value="C" readonly>
+              </div>
+            </div
             <div class="box-body">
               <div class="col col-md-2">
                 <div class="form-group">
@@ -122,10 +128,34 @@
                 </div>
               </div>
             </div>
+            <div class="box-body">
+              <div class="col col-md-2">
+                <div class="form-group">
+                  <label for="sprcaverage">Valor Médio</label>
+                  <input type="text" class="form-control" id="sprcaverage" name="sprcaverage" value="<?php echo htmlspecialchars( $acoes["sprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
+                </div>
+              </div>
+              <div class="col col-md-2">
+                <div class="form-group">
+                  <label for="stipe">Tipo</label>
+                  <select class="form-control" name="stipe" id="stipe">
+                    <option value="1" <?php if( $acoes["stipe"] == 1 ){ ?>selected<?php } ?>>Swing Trade</option>
+                    <option value="2" <?php if( $acoes["stipe"] == 2 ){ ?>selected<?php } ?>>Day Trade</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col col-md-2" hidden>
+                <div class="form-group">
+                  <label for="stptransaction">Transação</label>
+                  <input type="text" class="form-control" id="stptransaction" name="stptransaction" value="V" readonly>
+                </div>
+              </div>
+            </div>
+            
             <!-- /.box-body -->
             <div class="box-footer">
               <button type="submit" class="btn btn-primary">Alualizar</button>
-              <a href="/notasC" class="btn btn-warning">Voltar</a>
+              <a href="/notas?limit=10" class="btn btn-warning">Voltar</a>
             </div>
         </form>
       </div>

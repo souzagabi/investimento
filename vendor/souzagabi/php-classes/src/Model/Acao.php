@@ -5,11 +5,19 @@
     
     class Acao extends Model {
 
+<<<<<<< HEAD
         public static function listAllIds()
+=======
+        public static function listAllId()
+>>>>>>> cc098097fc65156ddc9516c15a9728e2d928d8fc
         {
             $sql = new Sql();
             return $sql->select("CALL sp_acoes_list_all_id()");
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> cc098097fc65156ddc9516c15a9728e2d928d8fc
         public static function listAllAction($list)
         {
             $sql = new Sql();
@@ -167,7 +175,11 @@
             }
             $results[0]["unit"] = "unit";
                  
+<<<<<<< HEAD
             $results[0] = Acao::convertDateToView($results[0]);
+=======
+           // $results[0] = Acao::convertDateToView($results[0]);
+>>>>>>> cc098097fc65156ddc9516c15a9728e2d928d8fc
             
             $this->setData($results[0]);
         }
@@ -220,7 +232,11 @@
                                 ":tlsell"           => $this->gettlsell(),
                                 ":sprcaverage"      => $this->getsprcaverage(),
                                 ":stptransaction"   => "V",
+<<<<<<< HEAD
                                 ":stipe"            => $this->getbtipe(),
+=======
+                                ":stipe"            => $this->getstipe(),
+>>>>>>> cc098097fc65156ddc9516c15a9728e2d928d8fc
                                 ":tax"              => $this->gettax(),
                                 ":lucre"            => $this->getlucre(),
                                 ":idestoque"        => $this->getidestoque(),
