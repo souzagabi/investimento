@@ -77,10 +77,29 @@ BEGIN
     SELECT distinct(p.idperson), p.*, i.*, e.*, (SELECT count(idperson) FROM tb_persons) / plimit AS pgs 
 	FROM (SELECT * FROM tb_persons p  LIMIT pstart, plimit) AS p 
 	INNER JOIN tb_investiments i USING(idperson) 
-    INNER JOIN tb_estoques e USING(idperson)
+    INNER JOIN tb_estoques e WHERE e.idperson = i.idperson
 	GROUP BY p.idperson
     ORDER BY e.sgecompany;
 
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_list_all_id` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_list_all_id`()
+BEGIN
+	SELECT idinvestiment FROM tb_investiments;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -437,6 +456,43 @@ BEGIN
     END IF;
     
     
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_select_buy` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_select_buy`(
+	pidinvestiment INT(10)
+)
+BEGIN
+		SELECT *, sum(e.qtdeestoque - i.qtdebuy + i.qtdesell) AS qtdetotal 
+        FROM tb_persons p 
+        INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+        WHERE i.idinvestiment = pidinvestiment;
+        
+       /* SELECT p.idperson, p.desperson, p.descpfcnpj , i.idinvestiment, i.sgcompany, 
+			b.dtbuy, b.qtdebuy, b.prcbuy, b.tlbuy, b.bprcaverage, b.btptransaction, b.btipe,
+            s.dtsell, s.qtdesell, s.prcsell, s.tlsell, s.sprcaverage, s.stptransaction, s.stipe, 
+            s.lucre, s.tax, e.idestoque, e.sgecompany,
+			sum(e.qtdeestoque + i.qtdesell - i.qtdebuy) AS qtdetotal
+		FROM tb_persons p 
+		INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_buys b USING(idperson)
+        INNER JOIN tb_sells s USING(idperson)
+		INNER JOIN tb_estoques e USING(idperson) 
+		WHERE i.idinvestiment = pidinvestiment;*/
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -964,6 +1020,51 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_select_inv_buy_sell` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_select_inv_buy_sell`(
+	psgcompany VARCHAR(20) ,
+	pdtbuy DATE,
+	pdtsell DATE,
+    pstart INT(10),
+    plimit INT(10)
+    )
+BEGIN
+	/*==========================================================================================*/
+	/*					Filtra os registros usando os nenhum parâmetros							*/
+    /*==========================================================================================*/
+    IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany = '' OR psgcompany IS NULL) THEN
+    BEGIN
+		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pgs
+		FROM (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i 
+        INNER JOIN tb_buys b USING(idinvestiment) 
+		INNER JOIN tb_sells s USING(idinvestiment)
+		INNER JOIN tb_estoques e USING(idperson) 
+		ORDER BY i.idinvestiment;
+    END;
+    END IF;
+    
+	/*SELECT *
+    FROM tb_investiments i
+    
+    INNER JOIN tb_buys b USING(idinvestiment) 
+    INNER JOIN tb_sells s USING(idinvestiment)
+    ORDER BY i.idinvestiment;*/
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_select_teste` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1130,10 +1231,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_update_save`(
 	pprcsell DECIMAL(10,2), 
 	ptlsell DECIMAL(10,2),
 	psprcaverage DECIMAL(10,2),
-	ptax DECIMAL(10,2),     
-	plucre DECIMAL(10,2),   
 	pstptransaction CHAR(1),
 	pstipe CHAR(1),
+	ptax DECIMAL(10,2),     
+	plucre DECIMAL(10,2),   
 	pidestoque INT(11),     
 	psgecompany VARCHAR(20),
 	pqtdeestoque INT(11)
@@ -1169,8 +1270,8 @@ BEGIN
     
     IF IDI IS NULL THEN
     BEGIN
-		INSERT INTO tb_buys (idperson,sgcompany,dtbuy,qtdebuy,prcbuy,tlbuy,bprcaverage,btptransaction,btipe) 
-        VALUES (pidperson,psgcompany,pdtbuy,pqtdebuy,pprcbuy,ptlbuy,pbprcaverage,pbtptransaction,pbtipe);
+		INSERT INTO tb_buys (idinvestiment, idperson,sgcompany,dtbuy,qtdebuy,prcbuy,tlbuy,bprcaverage,btptransaction,btipe) 
+        VALUES (pidinvestiment, pidperson,psgcompany,pdtbuy,pqtdebuy,pprcbuy,ptlbuy,pbprcaverage,pbtptransaction,pbtipe);
     END;
     else
     BEGIN
@@ -1196,8 +1297,8 @@ BEGIN
     
     IF IDI IS NULL THEN
     BEGIN
-		INSERT INTO tb_sells (idinvestiment, idperson, sgcompany, dtsell, qtdesell, prcsell, tlsell, sprcaverage, tx, lucre, stptransaction, stipe) 
-		VALUES (pidinvestiment, pidperson, psgcompany, pdtsell, pqtdesell, pprcsell, ptlsell, psprcaverage, ptx, plucre, pstptransaction, pstipe);
+		INSERT INTO tb_sells (idinvestiment, idperson, sgcompany, dtsell, qtdesell, prcsell, tlsell, sprcaverage, stptransaction, stipe, tax, lucre) 
+		VALUES (pidinvestiment, pidperson, psgcompany, pdtsell, pqtdesell, pprcsell, ptlsell, psprcaverage, pstptransaction, pstipe, ptax, plucre);
     END;
     ELSE
     BEGIN
@@ -1210,10 +1311,10 @@ BEGIN
 			prcsell         = pprcsell, 
 			tlsell          = ptlsell, 
 			sprcaverage     = psprcaverage, 
-			tx              = tx, 
-			lucre           = plucre, 
 			stptransaction  = pstptransaction, 
-			stipe           = pstipe 
+			stipe           = pstipe , 
+			tax             = ptax, 
+			lucre           = plucre
 		WHERE idinvestiment = IDI;
     END;
     END IF;
@@ -1233,6 +1334,7 @@ BEGIN
     IF EX = 1 THEN
 		ROLLBACK;
 	ELSE
+		SELECT "Registro salvo com sucesso!" AS MESSAGE;
         COMMIT;
 	END IF; #Fim do if EX = 1 THEN
     
@@ -1452,4 +1554,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-03  6:19:41
+-- Dump completed on 2021-05-05  6:07:49

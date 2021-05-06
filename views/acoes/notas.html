@@ -75,6 +75,7 @@
               <th class="buy">Valor Médio</th>
               <th class="sell">DtVenda</th>
               <th class="sell">Qtde</th>
+              <th class="sell">Valor Médio</th>
               <th class="sell">Valor Venda</th>
               <th>Tipo</th>
               <th>Ação</th>
@@ -87,11 +88,12 @@
               <td class="buy">{$value.dtbuy}</td>
               <td class="buy">{$value.qtdebuy}</td>
               <td class="buy">{$value.prcbuy}</td>
-              <td class="buy">{$value.iprcaverage}</td>
+              <td class="buy">{$value.bprcaverage}</td>
               <td class="sell">{$value.dtsell}</td>
               <td class="sell">{$value.qtdesell}</td>
               <td class="sell">{$value.prcsell}</td>
-              <td>{if="$value.tipe == 1"}Swing Trade{else}Day Trade{/if}</td>
+              <td class="sell">{$value.sprcaverage}</td>
+              <td>{if="$value.btipe == 1"}Swing Trade{else}Day Trade{/if}</td>
               <td>
                 <a href="/notas/{$value.idinvestiment}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
                 <a href="/notas/{$value.idinvestiment}/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>

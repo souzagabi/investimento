@@ -48,8 +48,8 @@
             </div>
             <div class="col col-md-2">
               <div class="form-group">
-                <label for="tipe">Tipo</label>
-                <select class="form-control" name="tipe" id="tipe">
+                <label for="btipe">Tipo</label>
+                <select class="form-control" name="btipe" id="btipe">
                   <option value="1" selected>Swing Trade</option>
                   <option value="2">Day Trade</option>
                 </select>
@@ -83,8 +83,8 @@
             </div>
             <div class="col col-md-2">
               <div class="form-group">
-                <label for="prcaverage">Valor Médio</label>
-                <input type="text" class="form-control" id="prcaverage" name="prcaverage" readonly>
+                <label for="bprcaverage">Valor Médio</label>
+                <input type="text" class="form-control" id="bprcaverage" name="bprcaverage" readonly>
               </div>
             </div>
           </div>

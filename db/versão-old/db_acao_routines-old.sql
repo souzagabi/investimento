@@ -87,25 +87,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_list_all_id` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_list_all_id`()
-BEGIN
-	SELECT idinvestiment FROM tb_investiments;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_list_test` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -447,26 +428,23 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_select_buy`(
 	pidinvestiment INT(10)
 )
 BEGIN
-		/*SELECT * 
+		SELECT *, sum(e.qtdeestoque - i.qtdebuy + i.qtdesell) AS qtdetotal 
         FROM tb_persons p 
-        INNER JOIN tb_investiments i USING(sgcompany)
-        INNER JOIN tb_buys b USING(sgcompany)
-        INNER JOIN tb_sells s USING(sgcompany)
-        INNER JOIN tb_estoques e USING(sgcompany)  
-        WHERE i.idinvestiment = pidinvestiment;*/
+        INNER JOIN tb_investiments i USING(idperson) 
+        INNER JOIN tb_estoques e USING(idperson) 
+        WHERE i.idinvestiment = pidinvestiment;
         
-        SELECT DISTINCT(i.idinvestiment), p.idperson, p.desperson, p.descpfcnpj , i.sgcompany, 
+       /* SELECT p.idperson, p.desperson, p.descpfcnpj , i.idinvestiment, i.sgcompany, 
 			b.dtbuy, b.qtdebuy, b.prcbuy, b.tlbuy, b.bprcaverage, b.btptransaction, b.btipe,
             s.dtsell, s.qtdesell, s.prcsell, s.tlsell, s.sprcaverage, s.stptransaction, s.stipe, 
-            s.lucre, s.tax, e.idestoque, e.sgcompany AS sgecompany,
-			e.qtdeestoque AS qtdetotal, s.qtdesell, b.qtdebuy
+            s.lucre, s.tax, e.idestoque, e.sgecompany,
+			sum(e.qtdeestoque + i.qtdesell - i.qtdebuy) AS qtdetotal
 		FROM tb_persons p 
 		INNER JOIN tb_investiments i USING(idperson) 
         INNER JOIN tb_buys b USING(idperson)
         INNER JOIN tb_sells s USING(idperson)
 		INNER JOIN tb_estoques e USING(idperson) 
-		WHERE i.idinvestiment = pidinvestiment
-        GROUP BY i.sgcompany;
+		WHERE i.idinvestiment = pidinvestiment;*/
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -992,177 +970,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_select_inv_buy_sell` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_select_inv_buy_sell`(
-	psgcompany VARCHAR(20) ,
-	pdtbuy DATE,
-	pdtsell DATE,
-    pstart INT(10),
-    plimit INT(10)
-    )
-BEGIN
-	DECLARE EX SMALLINT DEFAULT 0;
-	DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET EX = 1;
-    DECLARE EXIT HANDLER FOR 1062 SELECT  "ERRO de duplicidade do ID." AS MESSAGE;
-	DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SELECT 'Erro no código SQL.' AS MESSAGE;
-    START TRANSACTION;
-
-	/*==========================================================================================*/
-	/*					Filtra os registros usando os nenhum parâmetros							*/
-    /*==========================================================================================*/
-  /*  IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany = '' OR psgcompany IS NULL) THEN
-    BEGIN
-		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pgs
-		FROM (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i 
-        INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment)
-		ORDER BY i.idinvestiment;
-    END;
-    END IF;
-    IF EX = 1 THEN
-		SELECT "Erro ao filtrar registro na tabela Invesciments com parêmetros vazio." AS MESSAGE;
-	END IF;*/
-    /*==========================================================================================*/
-    /*					Filtra os registros usando os 1 parâmetros - sigla						*/
-    /*==========================================================================================*/
-    /*IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
-    BEGIN
-		SELECT i.idperson, i.sgcompany, 
-        b.idbuy, b.idinvestiment AS idbuyInvest, b.dtbuy, b.qtdebuy, b.prcbuy, b.tlbuy, b.bprcavrage, b.btptransaction, b.btipe, 
-        s.idsell, s.idinvestiment AS idsellInvest, b.dtsell, b.qtdesell, b.prcsell, b.tlsell, s.bprcavrage, s.btptransaction, s.btipe, s.lucre, stax,
-        (SELECT count(idinvestiment)FROM tb_investiments WHERE sgcompany = psgcompany) / plimit AS pgs
-		FROM (SELECT * FROM tb_investiments i WHERE i.sgcompany = psgcompany LIMIT pstart, plimit) AS i  
-		INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment)
-		WHERE i.sgcompany = psgcompany
-		ORDER BY i.idinvestiment;
-    END;
-    END IF;
-    IF EX = 1 THEN
-		SELECT "Erro ao filtrar registro na tabela Invesciments com parêmetros "+psgcompany AS MESSAGE;
-	END IF;*/
-    /*==========================================================================================*/
-    /*				Filtra os registros usando os 2 parâmetros - sigla e data sell				*/
-    /*==========================================================================================*/
-    /*IF ((pdtbuy = '' OR pdtbuy IS NULL) AND pdtsell != '' AND pdtsell IS NOT NULL) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
-    BEGIN
-		SELECT *,
-        (SELECT count(idinvestiment)FROM tb_investiments ii INNER JOIN tb_sells ss USING(idinvestiment) WHERE ii.sgcompany = psgcompany AND ss.dtsell <= pdtsell) / plimit AS pgs
-		
-        FROM (SELECT * FROM tb_investiments i WHERE i.sgcompany = psgcompany LIMIT pstart, plimit) AS i
-		INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment) 
-		WHERE i.sgcompany = psgcompany AND s.dtsell <= pdtsell
-        ORDER BY i.sgcompany;
-    END;
-    END IF;
-    IF EX = 1 THEN
-		SELECT "Erro ao filtrar registro na tabela Invesciments com parêmetros "+pdtsell AS MESSAGE;
-	END IF;*/
-    /*==========================================================================================*/
-    /*				Filtra os registros usando os 2 parâmetros - sigla e data buy				*/
-    /*==========================================================================================*/
-  /*  IF (pdtbuy != '' AND pdtbuy IS NOT NULL) AND (pdtsell = '' OR pdtsell IS NULL) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
-    BEGIN
-		SELECT *,
-        (SELECT count(idinvestiment)FROM tb_investiments ii INNER JOIN tb_buys bb USING(idinvestiment) WHERE ii.sgcompany = psgcompany AND bb.dtbuy >= pdtbuy) / plimit AS pgs
-		
-        FROM (SELECT * FROM tb_investiments i WHERE i.sgcompany = psgcompany LIMIT pstart, plimit) AS i
-		INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment) 
-		WHERE i.sgcompany = psgcompany AND b.dtbuy >= pdtbuy
-        ORDER BY i.sgcompany;
-    END;
-    END IF;
-     IF EX = 1 THEN
-		SELECT "Erro ao filtrar registro na tabela Invesciments com parêmetros "+pdtbuy AS MESSAGE;
-	END IF;*/
-    /*==========================================================================================*/
-    /*						Filtra os registros usando os 2 parâmetros - data					*/
-    /*==========================================================================================*/
-    IF (pdtbuy != '' AND pdtbuy IS NOT NULL) AND (pdtsell != '' AND pdtsell IS NOT NULL) AND (psgcompany = '' OR psgcompany IS NULL) THEN
-    BEGIN
-		SELECT *, 
-        (SELECT count(idinvestiment)FROM tb_investiments ii 
-			INNER JOIN tb_buys bb USING(idinvestiment) 
-            INNER JOIN tb_sells ss USING(idinvestiment) 
-            WHERE bb.dtbuy >= pdtbuy AND ss.dtsell <= pdtsell) / plimit AS pgs
-            
-		FROM (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i
-        INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment) 
-		WHERE b.dtbuy >= pdtbuy AND s.dtsell <= pdtsell 
-        ORDER BY i.sgcompany;
-    END;
-    END IF;
-    
-    IF EX = 1 THEN
-		SELECT CONCAT("Erro ao filtrar registro na tabela Invesciments com parêmetros data ",pdtbuy," e data ",pdtsell,"." ,pstart, " ", plimit) AS MESSAGE;
-	END IF;
-    /*==========================================================================================*/
-    /*					Filtra os registros usando os 1 parâmetros - data buy					*/
-    /*==========================================================================================*/
-   /* IF ((pdtbuy != '' AND pdtbuy IS NOT NULL) AND (pdtsell = '' OR pdtsell IS NULL)) AND (psgcompany = '' OR psgcompany IS NULL) THEN
-    BEGIN
-		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments WHERE b.dtbuy >= pdtbuy) / plimit AS pgs
-		FROM (SELECT * FROM tb_investiments i WHERE b.dtbuy >= pdtbuy LIMIT pstart, plimit) AS i 
-		INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment)
-		WHERE b.dtbuy >= pdtbuy
-		ORDER BY p.sgcompany;
-    END;
-    END IF;*/
-    
-    /*==========================================================================================*/
-    /*					Filtra os registros usando os 1 parâmetros - data sell					*/
-    /*==========================================================================================*/
-  /*  IF ((pdtbuy = '' OR pdtbuy IS NULL) AND pdtsell != '' AND pdtsell IS NOT NULL) AND (psgcompany = '' OR psgcompany IS NULL) THEN
-    BEGIN
-		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments WHERE s.dtsell <= pdtsell) / plimit AS pgs
-		FROM (SELECT * FROM tb_investiments i WHERE s.dtsell <= pdtsell LIMIT pstart, plimit) AS i 
-		INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment) 
-		WHERE s.dtsell <= pdtsell
-		ORDER BY p.sgcompany;
-    END;
-    END IF;
-    */
-    /*==========================================================================================*/
-    /*				Filtra os registros usando os 3 parâmetros - sigla e data					*/
-    /*==========================================================================================*/
-    /*IF (pdtbuy != '' AND pdtbuy IS NOT NULL) AND (pdtsell != '' AND pdtsell IS NOT NULL) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
-    BEGIN
-		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments WHERE sgcompany = psgcompany AND b.dtbuy >= pdtbuy AND s.dtsell <= pdtsell) / plimit AS pgs
-		FROM (SELECT * FROM tb_investiments i WHERE i.sgcompany = psgcompany AND b.dtbuy >= pdtbuy AND s.dtsell <= pdtsell LIMIT pstart, plimit) AS i
-		INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment) 
-		WHERE i.sgcompany = psgcompany
-			AND b.dtbuy >= pdtbuy AND s.dtsell <= pdtsell
-		ORDER BY p.sgcompany;
-    END;
-    END IF;*/
-	/*SELECT *
-    FROM tb_investiments i
-    
-    INNER JOIN tb_buys b USING(idinvestiment) 
-    INNER JOIN tb_sells s USING(idinvestiment)
-    ORDER BY i.idinvestiment;*/
-    
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_select_teste` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1551,47 +1358,18 @@ BEGIN
     SELECT count(idinvestiment) INTO QTDEINV FROM tb_investiments;
     SET contador = 0;
     SET contador2 = 0;
-    WHILE contador < 2 DO
-		SET contador2 = contador2 + 1;
+    WHILE contador < 370 DO
 		SELECT idinvestiment INTO ID FROM tb_investiments WHERE idinvestiment = contador2;
         IF ID IS NOT NULL THEN
 			BEGIN
 				SET soma = ID;
                 SET contador = contador + 1;
-                SELECT * FROM tb_investiments WHERE idinvestiment = ID ;
-                #CALL sp_acoes_update_save(i.idinvestiment);
-					/*idinvestiment,  
-					iduser,         
-					idperson,       
-					desperson,      
-					sgcompany,      
-					descnpj,        
-					dtbuy,          
-					qtdebuy,        
-					prcbuy,         
-					tlbuy,          
-					prcaverage,    
-					'C', 
-					tipe,          
-					dtsell,         
-					qtdesell,       
-					prcsell,        
-					tlsell,         
-					prcsell,    
-					'V', 
-					tipe,          
-					tax,            
-					lucre,          
-					idestoque,      
-					sgecompany,
-					qtdeestoque
-                );*/
 			END;
         END IF;
-        
+        SET contador2 = contador2 + 1;
   END WHILE;
     #SET soma = contador;
-   
+    SELECT soma;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1718,4 +1496,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-06 17:31:53
+-- Dump completed on 2021-05-03 17:34:54
