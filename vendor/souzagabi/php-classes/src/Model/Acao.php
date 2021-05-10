@@ -333,12 +333,12 @@
                 $acoes 	= Acao::convertDateToView($acoes);
                 $acoes 	= Acao::convertToInt($acoes);
             }
-            
+            $pgs = [];
             if (isset($acoes[0]["pgs"]) && count($acoes) > 0 && $acoes != '') {
                 $pgs 	= Acao::countRegister($acoes[0]["pgs"], $act);
             }
             // echo '<pre>';
-            // print_r($act);
+            // print_r($acoes);
             // echo '</pre>';
             
             // exit;

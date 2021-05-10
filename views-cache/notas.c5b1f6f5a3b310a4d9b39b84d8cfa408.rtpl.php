@@ -32,6 +32,12 @@
                 <option value="20">20</option>
                 <option value="25">25</option>
                 <option value="30">30</option>
+                <option value="100">100</option>
+                <option value="150">150</option>
+                <option value="200">200</option>
+                <option value="250">250</option>
+                <option value="300">300</option>
+                <option value="400">400</option>
               </select>
             </div>
             <input type="submit" name="search" class="btn btn-primary" value="Search">
