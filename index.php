@@ -44,6 +44,8 @@
 		$company["dtsell"] 		= NULL;
 		$company["listestoque"]	= NULL;
 
+		$company["search"]		= NULL;
+
 		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
 			$_GET = Acao::convertDateToDataBase($_GET);
 		}
@@ -251,6 +253,8 @@
 		}
 		
 		$acoes->getByBuy($idinvestiment);
+		$acoes->setData($_POST);
+		$msg = $acoes->update();
 		$acoes->setData($_POST);
 		$msg = $acoes->update();
 		// echo '<pre>';
