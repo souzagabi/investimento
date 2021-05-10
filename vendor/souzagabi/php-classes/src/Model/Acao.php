@@ -5,12 +5,11 @@
     
     class Acao extends Model {
 
-        public static function listAllId()
+        public static function listAllIds()
         {
             $sql = new Sql();
             return $sql->select("CALL sp_acoes_list_all_id()");
         }
-
         public static function listAllAction($list)
         {
             $sql = new Sql();
@@ -41,27 +40,38 @@
         public static function listAll($list)
         {
             $sql = new Sql();
-            $list["start"] = 0;
+            $list["start"] = 1;
             $pg = isset($_GET["pg"]) ? $_GET["pg"] : 1;
-            
             $list["limit"] = (isset($list["limit"]) && $list["limit"] != '') ? $list["limit"] : 10;
-            $list["start"] = ($pg - 1) * $list["limit"];
+            if (($pg - 1) * $list["limit"] > 0) {
+                $list["start"] = ($pg - 1) * $list["limit"];
+            }
+            
             foreach ($list as $key => $value) 
             {
-                if ($value != '') {
+                if (isset($value) && ($value != '' || $value != NULL)) {
                     $l[$key] = $value;
-                }else {
+                }else if (!isset($value) || ($value == '' || $value == NULL)){
                     $l[$key] = '';
                 }
             }
-          
-            return $sql->select("CALL sp_acoes_select(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
-                ":sgcompany" => $l["sgcompany"],   
-                ":dtbuy"     => $l["dtbuy"],
-                ":dtsell"    => $l["dtsell"],
-                ":start"     => $l["start"],
-                ":limit"     => $l["limit"]
+            if ($l["start"] == 1) {
+                $l["start"] = 0;
+                // echo '</pre>';
+                // print_r($l);
+                // echo '<pre>';
+            }
+            
+            
+            // exit;
+            return $sql->select("CALL sp_acoes_select_inv_buy_sell(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
+                ":sgcompany" => $list["sgcompany"],   
+                ":dtbuy"     => $list["dtbuy"],
+                ":dtsell"    => $list["dtsell"],
+                ":start"     => $list["start"],
+                ":limit"     => $list["limit"]
             ));
+         
         }
 
         public static function listAllEstoque($list)
@@ -157,7 +167,7 @@
             }
             $results[0]["unit"] = "unit";
                  
-           // $results[0] = Acao::convertDateToView($results[0]);
+            $results[0] = Acao::convertDateToView($results[0]);
             
             $this->setData($results[0]);
         }
@@ -210,7 +220,7 @@
                                 ":tlsell"           => $this->gettlsell(),
                                 ":sprcaverage"      => $this->getsprcaverage(),
                                 ":stptransaction"   => "V",
-                                ":stipe"            => $this->getstipe(),
+                                ":stipe"            => $this->getbtipe(),
                                 ":tax"              => $this->gettax(),
                                 ":lucre"            => $this->getlucre(),
                                 ":idestoque"        => $this->getidestoque(),
@@ -220,6 +230,7 @@
             ));
            
             $this->setData($results);
+            return $results[0]["MESSAGE"];
         }
 
         public function delete()
@@ -298,12 +309,17 @@
 
         public function countRegister($qtdeRegister, $company)
         {
+            $pgs = [];
             for ($j=0; $j < $qtdeRegister - 1; $j++) { 
                 $pgs[$j]    = $j;
             }
+            $pgs["list"]["limit"] = '';
+            $pgs["list"]["dtbuy"] = '';
+            $pgs["list"]["dtsell"] = '';
             foreach ($company as $key => $value) {
                 $pgs["list"][$key] = $value;
             }
+            
             return $pgs;
         }
         public function selectRegister($act = array())
@@ -318,12 +334,15 @@
                 $acoes 	= Acao::convertDateToView($acoes);
                 $acoes 	= Acao::convertToInt($acoes);
             }
-          
-            $pgs = [];
             
             if (isset($acoes[0]["pgs"]) && count($acoes) > 0 && $acoes != '') {
                 $pgs 	= Acao::countRegister($acoes[0]["pgs"], $act);
             }
+            echo '<pre>';
+            print_r($act);
+            echo '</pre>';
+            
+            exit;
             return [$acoes, $pgs];
         }
     }

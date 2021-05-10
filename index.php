@@ -12,9 +12,12 @@
 	use \Acao\Model\Acao;
 	use \Acao\Model\Person;
 
+	
+
 	$app = new Slim();
 
 	$app->config('debug', true);
+
 	
 /*======================================================================================*/
 /*										Rotas das Ações									*/
@@ -40,7 +43,6 @@
 		$company["dtbuy"] 		= NULL;
 		$company["dtsell"] 		= NULL;
 		$company["listestoque"]	= NULL;
-		$company["search"]		= NULL;
 
 		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
 			$_GET = Acao::convertDateToDataBase($_GET);
@@ -170,12 +172,10 @@
 	
 	$app->get('/notas', function() {
 		User::verifyLogin();
-		$page = new PageAcoes();
 		$company["sgcompany"]	= NULL;
 		$company["dtbuy"] 		= NULL;
 		$company["dtsell"] 		= NULL;
 		$company["search"] 		= NULL;
-
 		
 		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
 			$_GET = Acao::convertDateToDataBase($_GET);
@@ -183,11 +183,17 @@
 		foreach ($_GET as $key => $value) {
 			$company[$key] = $value;
 		}
+		
+		$page = new PageAcoes();
 		if (isset($_GET["search"])) {
 			$company["search"] 		= "Search";
 			
 			$action 	= Acao::selectRegister($company);
-			
+			// echo '</pre>';
+            // print_r($action);
+            // echo '<pre>';
+            
+            // exit;
 			if (isset($action) && $action != '') {
 				$page->setTpl("/notas", array(
 					"acoes"=>$action[0],
@@ -223,33 +229,35 @@
 	$app->post("/notas/:idinvestiment", function ($idinvestiment){
 		User::verifyLogin();
 		$acoes = new Acao();
-		if ($_POST["tax"]) {
+		// $act = new Acao();
+		// $action 	= Acao::listAllIds();
+		
+		// for ($i=0; $i < COUNT($action); $i++) { 
+		// 	$act->getByBuy($action[$i]['idinvestiment']);
+		// 	$act->update();
+		// }
+		// echo '</pre>';
+		// print_r($act);
+		// echo '<pre>';
+		
+		// exit;
+		if (isset($_POST["tax"])) {
 			$tax = explode(" ",$_POST["tax"]);
 			$_POST["tax"] = $tax[0];
 		}
-		$_POST = Acao::convertDateToDataBase($_POST);
+		if (isset($_POST)) {
+			$_POST = Acao::convertDateToDataBase($_POST);
+			$_POST["iduser"] = $_SESSION["User"]["iduser"];
+		}
 		
-		$_POST["iduser"] = $_SESSION["User"]["iduser"];
-		
-		$acoes->getByBuy($idinvestiment);
-		
-		// $action = new Acao();
-		// $act = new Acao();
-		// $action = Acao::listAllId();
-
-		// for ($i=0; $i < count($action); $i++) { 
-		// 	$act->getByBuy($action[$i]["idinvestiment"]);
-		// 	$act->update();
-		// }
-		
-		// echo '<pre>';
-		// print_r($act);
-		// echo '</pre>';
-		// exit;
 		$acoes->getByBuy($idinvestiment);
 		$acoes->setData($_POST);
-		$acoes->update();
-		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search&limit=10");
+		$msg = $acoes->update();
+		// echo '<pre>';
+		// print_r($acoes);
+		// echo '</pre>';
+		// exit;
+		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search&limit=10&msg=".$msg);
 		exit;
 	});
 	
