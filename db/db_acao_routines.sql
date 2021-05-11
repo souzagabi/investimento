@@ -1042,10 +1042,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_select_inv_buy_sell`(
     )
 BEGIN
 	DECLARE _SQL VARCHAR(3000);
+    DECLARE MESSAGE, MSGID, MSGSQL VARCHAR(100);
 	DECLARE EX SMALLINT DEFAULT 0;
 	DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET EX = 1;
-    DECLARE EXIT HANDLER FOR 1062 SELECT  "ERRO de duplicidade do ID." AS MESSAGE;
-	DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SELECT 'Erro no código SQL.' AS MESSAGE;
+    DECLARE EXIT HANDLER FOR 1062 SELECT  "ERRO de duplicidade do ID."  MSGID;
+	DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SELECT 'Erro no código SQL.' MSGSQL;
     START TRANSACTION;
 
 	/*==========================================================================================*/
@@ -1056,7 +1057,7 @@ BEGIN
 		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pgs
 		FROM (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i 
         INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment)
+		LEFT JOIN tb_sells s USING(idinvestiment)
 		ORDER BY i.idinvestiment;
         SELECT CONCAT(_SQL, MESSAGE);
     END;
@@ -1067,22 +1068,22 @@ BEGIN
     /*==========================================================================================*/
     /*					Filtra os registros usando os 1 parâmetros - sigla						*/
     /*==========================================================================================*/
-    /*IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
+    IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
     BEGIN
 		SELECT i.idperson, i.sgcompany, 
-        b.idbuy, b.idinvestiment AS idbuyInvest, b.dtbuy, b.qtdebuy, b.prcbuy, b.tlbuy, b.bprcavrage, b.btptransaction, b.btipe, 
-        s.idsell, s.idinvestiment AS idsellInvest, b.dtsell, b.qtdesell, b.prcsell, b.tlsell, s.bprcavrage, s.btptransaction, s.btipe, s.lucre, stax,
+        b.idbuy, b.idinvestiment AS idbuyInvest, b.dtbuy, b.qtdebuy, b.prcbuy, b.tlbuy, b.bprcaverage, b.btptransaction, b.btipe, 
+        s.idsell, s.idinvestiment AS idsellInvest, s.dtsell, s.qtdesell, s.prcsell, s.tlsell, s.sprcaverage, s.stptransaction, s.stipe, s.lucre, tax,
         (SELECT count(idinvestiment)FROM tb_investiments WHERE sgcompany = psgcompany) / plimit AS pgs
 		FROM (SELECT * FROM tb_investiments i WHERE i.sgcompany = psgcompany LIMIT pstart, plimit) AS i  
 		INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment)
+		LEFT JOIN tb_sells s USING(idinvestiment)
 		WHERE i.sgcompany = psgcompany
 		ORDER BY i.idinvestiment;
     END;
     END IF;
     IF EX = 1 THEN
-		SELECT "Erro ao filtrar registro na tabela Invesciments com parêmetros "+psgcompany AS MESSAGE;
-	END IF;*/
+		SELECT CONCAT("Erro ao filtrar registro na tabela Invesciments com parêmetros ", psgcompany, MESSAGE) AS MESSAGE;
+	END IF;
     /*==========================================================================================*/
     /*				Filtra os registros usando os 2 parâmetros - sigla e data sell				*/
     /*==========================================================================================*/
@@ -1127,13 +1128,13 @@ BEGIN
 		SELECT *, 
         (SELECT count(idinvestiment)FROM tb_investiments ii 
 			INNER JOIN tb_buys bb USING(idinvestiment) 
-            INNER JOIN tb_sells ss USING(idinvestiment) 
-            WHERE bb.dtbuy >= pdtbuy AND ss.dtsell <= pdtsell) / plimit AS pgs
+            LEFT JOIN tb_sells ss USING(idinvestiment) 
+            WHERE (bb.dtbuy >= pdtbuy ) AND (ss.dtsell <= pdtsell OR ss.dtsell = "" OR ss.dtsell IS NULL)) / plimit AS pgs
             
-		FROM tb_investiments i
+		FROM (SELECT * FROM tb_investiments i WHERE (b.dtbuy >= pdtbuy) AND (s.dtsell <= pdtsell OR s.dtsell = "" OR s.dtsell IS NULL) LIMIT pstart, plimit) AS i
         INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment) 
-		WHERE b.dtbuy >= pdtbuy AND s.dtsell <= pdtsell 
+		LEFT JOIN tb_sells s USING(idinvestiment) 
+		WHERE (b.dtbuy >= pdtbuy) AND (s.dtsell <= pdtsell OR s.dtsell = "" OR s.dtsell IS NULL)
         ORDER BY i.sgcompany;
     END;
     END IF;
@@ -1190,7 +1191,6 @@ BEGIN
     INNER JOIN tb_sells s USING(idinvestiment)
     ORDER BY i.idinvestiment;*/
     IF EX = 1 THEN
-		SELECT MESSAGE;
 		ROLLBACK;
 	ELSE
 		#SELECT "Registros filtrado com sucesso!" AS MESSAGE;
@@ -1692,4 +1692,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-10  5:58:01
+-- Dump completed on 2021-05-11  6:23:59
