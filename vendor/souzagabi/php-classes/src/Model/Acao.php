@@ -168,7 +168,10 @@
             $results[0]["unit"] = "unit";
                  
             $results[0] = Acao::convertDateToView($results[0]);
+<<<<<<< HEAD
             
+=======
+>>>>>>> a76cdd639733b86ab146774536d77ee65f55ca0c
             $this->setData($results[0]);
         }
 
@@ -220,7 +223,11 @@
                                 ":tlsell"           => $this->gettlsell(),
                                 ":sprcaverage"      => $this->getsprcaverage(),
                                 ":stptransaction"   => "V",
+<<<<<<< HEAD
                                 ":stipe"            => $this->getbtipe(),
+=======
+                                ":stipe"            => $this->getstipe(),
+>>>>>>> a76cdd639733b86ab146774536d77ee65f55ca0c
                                 ":tax"              => $this->gettax(),
                                 ":lucre"            => $this->getlucre(),
                                 ":idestoque"        => $this->getidestoque(),
@@ -334,7 +341,7 @@
                 $acoes 	= Acao::convertDateToView($acoes);
                 $acoes 	= Acao::convertToInt($acoes);
             }
-            
+            $pgs = [];
             if (isset($acoes[0]["pgs"]) && count($acoes) > 0 && $acoes != '') {
                 $pgs 	= Acao::countRegister($acoes[0]["pgs"], $act);
             }

@@ -1,0 +1,10 @@
+git init
+git config --global user.name "souzagabi"
+git config --global user.email "email"
+
+git remote add origin git@github.com:souzagabi/investimento.git
+git pull origin master
+
+git add .
+git commit -m "inicio projeto"
+git push origin master

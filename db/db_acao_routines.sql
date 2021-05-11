@@ -88,28 +88,6 @@ DELIMITER ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_list_all_id` */;
-<<<<<<< HEAD
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_list_all_id`()
-BEGIN
-	SELECT idinvestiment FROM tb_investiments;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_list_test` */;
-=======
->>>>>>> cc098097fc65156ddc9516c15a9728e2d928d8fc
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -1063,6 +1041,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_select_inv_buy_sell`(
     plimit INT(10)
     )
 BEGIN
+	DECLARE _SQL VARCHAR(3000);
+    DECLARE MESSAGE, MSGID, MSGSQL VARCHAR(100);
+	DECLARE EX SMALLINT DEFAULT 0;
+	DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET EX = 1;
+    DECLARE EXIT HANDLER FOR 1062 SELECT  "ERRO de duplicidade do ID."  MSGID;
+	DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SELECT 'Erro no código SQL.' MSGSQL;
+    START TRANSACTION;
+
 	/*==========================================================================================*/
 	/*					Filtra os registros usando os nenhum parâmetros							*/
     /*==========================================================================================*/
@@ -1071,83 +1057,33 @@ BEGIN
 		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pgs
 		FROM (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i 
         INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment)
-		INNER JOIN tb_estoques e USING(idperson) 
+		LEFT JOIN tb_sells s USING(idinvestiment)
 		ORDER BY i.idinvestiment;
-    END;
-    END IF;
-    
-	/*SELECT *
-    FROM tb_investiments i
-    
-    INNER JOIN tb_buys b USING(idinvestiment) 
-    INNER JOIN tb_sells s USING(idinvestiment)
-    ORDER BY i.idinvestiment;*/
-    
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `sp_acoes_select_inv_buy_sell` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_select_inv_buy_sell`(
-	psgcompany VARCHAR(20) ,
-	pdtbuy DATE,
-	pdtsell DATE,
-    pstart INT(10),
-    plimit INT(10)
-    )
-BEGIN
-	DECLARE EX SMALLINT DEFAULT 0;
-	DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET EX = 1;
-    DECLARE EXIT HANDLER FOR 1062 SELECT  "ERRO de duplicidade do ID." AS MESSAGE;
-	DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SELECT 'Erro no código SQL.' AS MESSAGE;
-    START TRANSACTION;
-
-	/*==========================================================================================*/
-	/*					Filtra os registros usando os nenhum parâmetros							*/
-    /*==========================================================================================*/
-  /*  IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany = '' OR psgcompany IS NULL) THEN
-    BEGIN
-		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pgs
-		FROM (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i 
-        INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment)
-		ORDER BY i.idinvestiment;
+        SELECT CONCAT(_SQL, MESSAGE);
     END;
     END IF;
     IF EX = 1 THEN
 		SELECT "Erro ao filtrar registro na tabela Invesciments com parêmetros vazio." AS MESSAGE;
-	END IF;*/
+	END IF;
     /*==========================================================================================*/
     /*					Filtra os registros usando os 1 parâmetros - sigla						*/
     /*==========================================================================================*/
-    /*IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
+    IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
     BEGIN
 		SELECT i.idperson, i.sgcompany, 
-        b.idbuy, b.idinvestiment AS idbuyInvest, b.dtbuy, b.qtdebuy, b.prcbuy, b.tlbuy, b.bprcavrage, b.btptransaction, b.btipe, 
-        s.idsell, s.idinvestiment AS idsellInvest, b.dtsell, b.qtdesell, b.prcsell, b.tlsell, s.bprcavrage, s.btptransaction, s.btipe, s.lucre, stax,
+        b.idbuy, b.idinvestiment AS idbuyInvest, b.dtbuy, b.qtdebuy, b.prcbuy, b.tlbuy, b.bprcaverage, b.btptransaction, b.btipe, 
+        s.idsell, s.idinvestiment AS idsellInvest, s.dtsell, s.qtdesell, s.prcsell, s.tlsell, s.sprcaverage, s.stptransaction, s.stipe, s.lucre, tax,
         (SELECT count(idinvestiment)FROM tb_investiments WHERE sgcompany = psgcompany) / plimit AS pgs
 		FROM (SELECT * FROM tb_investiments i WHERE i.sgcompany = psgcompany LIMIT pstart, plimit) AS i  
 		INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment)
+		LEFT JOIN tb_sells s USING(idinvestiment)
 		WHERE i.sgcompany = psgcompany
 		ORDER BY i.idinvestiment;
     END;
     END IF;
     IF EX = 1 THEN
-		SELECT "Erro ao filtrar registro na tabela Invesciments com parêmetros "+psgcompany AS MESSAGE;
-	END IF;*/
+		SELECT CONCAT("Erro ao filtrar registro na tabela Invesciments com parêmetros ", psgcompany, MESSAGE) AS MESSAGE;
+	END IF;
     /*==========================================================================================*/
     /*				Filtra os registros usando os 2 parâmetros - sigla e data sell				*/
     /*==========================================================================================*/
@@ -1192,19 +1128,19 @@ BEGIN
 		SELECT *, 
         (SELECT count(idinvestiment)FROM tb_investiments ii 
 			INNER JOIN tb_buys bb USING(idinvestiment) 
-            INNER JOIN tb_sells ss USING(idinvestiment) 
-            WHERE bb.dtbuy >= pdtbuy AND ss.dtsell <= pdtsell) / plimit AS pgs
+            LEFT JOIN tb_sells ss USING(idinvestiment) 
+            WHERE (bb.dtbuy >= pdtbuy ) AND (ss.dtsell <= pdtsell OR ss.dtsell = "" OR ss.dtsell IS NULL)) / plimit AS pgs
             
-		FROM (SELECT * FROM tb_investiments i LIMIT pstart, plimit) AS i
+		FROM (SELECT * FROM tb_investiments i WHERE (b.dtbuy >= pdtbuy) AND (s.dtsell <= pdtsell OR s.dtsell = "" OR s.dtsell IS NULL) LIMIT pstart, plimit) AS i
         INNER JOIN tb_buys b USING(idinvestiment) 
-		INNER JOIN tb_sells s USING(idinvestiment) 
-		WHERE b.dtbuy >= pdtbuy AND s.dtsell <= pdtsell 
+		LEFT JOIN tb_sells s USING(idinvestiment) 
+		WHERE (b.dtbuy >= pdtbuy) AND (s.dtsell <= pdtsell OR s.dtsell = "" OR s.dtsell IS NULL)
         ORDER BY i.sgcompany;
     END;
     END IF;
     
     IF EX = 1 THEN
-		SELECT CONCAT("Erro ao filtrar registro na tabela Invesciments com parêmetros data ",pdtbuy," e data ",pdtsell,"." ,pstart, " ", plimit) AS MESSAGE;
+		SELECT CONCAT("Erro ao filtrar registro na tabela Invesciments com parêmetros data ",pdtbuy," e data ",pdtsell,". Começo " ,pstart, " e fim ", plimit, ".") AS MESSAGE;
 	END IF;
     /*==========================================================================================*/
     /*					Filtra os registros usando os 1 parâmetros - data buy					*/
@@ -1254,6 +1190,12 @@ BEGIN
     INNER JOIN tb_buys b USING(idinvestiment) 
     INNER JOIN tb_sells s USING(idinvestiment)
     ORDER BY i.idinvestiment;*/
+    IF EX = 1 THEN
+		ROLLBACK;
+	ELSE
+		#SELECT "Registros filtrado com sucesso!" AS MESSAGE;
+        COMMIT;
+	END IF; #Fim do if EX = 1 THEN
     
 END ;;
 DELIMITER ;
@@ -1630,75 +1572,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-<<<<<<< HEAD
-/*!50003 DROP PROCEDURE IF EXISTS `sp_update_inv_buy_sell` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_inv_buy_sell`()
-BEGIN
-	DECLARE QTDEINV INT;
-    DECLARE ID INT;
-    DECLARE contador, contador2 INT;
-	DECLARE soma INT;
-    SELECT count(idinvestiment) INTO QTDEINV FROM tb_investiments;
-    SET contador = 0;
-    SET contador2 = 0;
-    WHILE contador < 2 DO
-		SET contador2 = contador2 + 1;
-		SELECT idinvestiment INTO ID FROM tb_investiments WHERE idinvestiment = contador2;
-        IF ID IS NOT NULL THEN
-			BEGIN
-				SET soma = ID;
-                SET contador = contador + 1;
-                SELECT * FROM tb_investiments WHERE idinvestiment = ID ;
-                #CALL sp_acoes_update_save(i.idinvestiment);
-					/*idinvestiment,  
-					iduser,         
-					idperson,       
-					desperson,      
-					sgcompany,      
-					descnpj,        
-					dtbuy,          
-					qtdebuy,        
-					prcbuy,         
-					tlbuy,          
-					prcaverage,    
-					'C', 
-					tipe,          
-					dtsell,         
-					qtdesell,       
-					prcsell,        
-					tlsell,         
-					prcsell,    
-					'V', 
-					tipe,          
-					tax,            
-					lucre,          
-					idestoque,      
-					sgecompany,
-					qtdeestoque
-                );*/
-			END;
-        END IF;
-        
-  END WHILE;
-    #SET soma = contador;
-   
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-=======
->>>>>>> cc098097fc65156ddc9516c15a9728e2d928d8fc
 /*!50003 DROP PROCEDURE IF EXISTS `sp_users_delete` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1819,8 +1692,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-<<<<<<< HEAD
--- Dump completed on 2021-05-06 17:31:53
-=======
--- Dump completed on 2021-05-05  6:07:49
->>>>>>> cc098097fc65156ddc9516c15a9728e2d928d8fc
+-- Dump completed on 2021-05-11  6:23:59

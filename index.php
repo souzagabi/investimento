@@ -12,9 +12,12 @@
 	use \Acao\Model\Acao;
 	use \Acao\Model\Person;
 
+	
+
 	$app = new Slim();
 
 	$app->config('debug', true);
+
 	
 /*======================================================================================*/
 /*										Rotas das Ações									*/
@@ -40,6 +43,11 @@
 		$company["dtbuy"] 		= NULL;
 		$company["dtsell"] 		= NULL;
 		$company["listestoque"]	= NULL;
+<<<<<<< HEAD
+=======
+
+		$company["search"]		= NULL;
+>>>>>>> a76cdd639733b86ab146774536d77ee65f55ca0c
 
 		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
 			$_GET = Acao::convertDateToDataBase($_GET);
@@ -255,8 +263,13 @@
 		$acoes->getByBuy($idinvestiment);
 		$acoes->setData($_POST);
 		$msg = $acoes->update();
+<<<<<<< HEAD
+=======
+		$acoes->setData($_POST);
+		$msg = $acoes->update();
+>>>>>>> a76cdd639733b86ab146774536d77ee65f55ca0c
 		// echo '<pre>';
-		// print_r($act);
+		// print_r($acoes);
 		// echo '</pre>';
 		// exit;
 		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search&limit=10&msg=".$msg);

@@ -32,6 +32,12 @@
                 <option value="20">20</option>
                 <option value="25">25</option>
                 <option value="30">30</option>
+                <option value="100">100</option>
+                <option value="150">150</option>
+                <option value="200">200</option>
+                <option value="250">250</option>
+                <option value="300">300</option>
+                <option value="400">400</option>
               </select>
             </div>
             <input type="submit" name="search" class="btn btn-primary" value="Search">
@@ -75,6 +81,7 @@
               <th class="buy">Valor Médio</th>
               <th class="sell">DtVenda</th>
               <th class="sell">Qtde</th>
+              <th class="sell">Valor Médio</th>
               <th class="sell">Valor Venda</th>
               <th>Tipo</th>
               <th>Ação</th>
@@ -87,11 +94,12 @@
               <td class="buy"><?php echo htmlspecialchars( $value1["dtbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="buy"><?php echo htmlspecialchars( $value1["qtdebuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="buy"><?php echo htmlspecialchars( $value1["prcbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td class="buy"><?php echo htmlspecialchars( $value1["iprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <td class="buy"><?php echo htmlspecialchars( $value1["bprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="sell"><?php echo htmlspecialchars( $value1["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="sell"><?php echo htmlspecialchars( $value1["qtdesell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="sell"><?php echo htmlspecialchars( $value1["prcsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td><?php if( $value1["tipe"] == 1 ){ ?>Swing Trade<?php }else{ ?>Day Trade<?php } ?></td>
+              <td class="sell"><?php echo htmlspecialchars( $value1["sprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <td><?php if( $value1["btipe"] == 1 ){ ?>Swing Trade<?php }else{ ?>Day Trade<?php } ?></td>
               <td>
                 <a href="/notas/<?php echo htmlspecialchars( $value1["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
                 <a href="/notas/<?php echo htmlspecialchars( $value1["idinvestiment"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
