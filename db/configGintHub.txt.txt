@@ -1,0 +1,18 @@
+git init
+git config --global user.name "souzagabi"
+git config --global user.email "email"
+
+git remote add origin git@github.com:souzagabi/prjm010.git
+
+
+git add .
+git commit -m "inicio projeto"
+git push origin master
+
+git pull origin master
+
+ssh-kygen -t rsa -b 4096 -C "souza_gabi@yahoo.com.br"
+eval `ssh-agent -s`
+ssh-add ~/.ssh/id_rsa
+clip < ~/.ssh/id_rsa.pub
+ssh -T git@github.com
