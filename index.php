@@ -43,11 +43,6 @@
 		$company["dtbuy"] 		= NULL;
 		$company["dtsell"] 		= NULL;
 		$company["listestoque"]	= NULL;
-<<<<<<< HEAD
-=======
-
-		$company["search"]		= NULL;
->>>>>>> a76cdd639733b86ab146774536d77ee65f55ca0c
 
 		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
 			$_GET = Acao::convertDateToDataBase($_GET);
@@ -210,12 +205,7 @@
 		{
 			$company["notas"]	= "notas";
 			$action 	= Acao::selectRegister($company);
-			
-            // echo '<pre>';
-            // print_r($action);
-			// echo '</pre>';
             
-            // exit;
 			$page->setTpl("notas", array(
 				"acoes"=> $action[0],
 				"pgs"=> $action[1]
@@ -238,36 +228,31 @@
 	
 	$app->post("/notas/:idinvestiment", function ($idinvestiment){
 		User::verifyLogin();
-		$acoes = new Acao();
-		// $act = new Acao();
-		// $action 	= Acao::listAllIds();
-		
-		// for ($i=0; $i < COUNT($action); $i++) { 
-		// 	$act->getByBuy($action[$i]['idinvestiment']);
-		// 	$act->update();
+		//$acoes = new Acao();
+		$act = new Acao();
+		$action 	= Acao::listAllIds();
+		for ($i=0; $i < COUNT($action); $i++) { 
+			$act->getByBuy($action[$i]['idinvestiment']);
+			
+			echo '<pre>';
+			print_r($act);
+			echo '</pre>';
+			$act->update();
+		}
+		//exit;
+		$msg = '';
+		// if (isset($_POST["tax"])) {
+		// 	$tax = explode(" ",$_POST["tax"]);
+		// 	$_POST["tax"] = $tax[0];
 		// }
-		// echo '</pre>';
-		// print_r($act);
-		// echo '<pre>';
+		// if (isset($_POST)) {
+		// 	$_POST = Acao::convertDateToDataBase($_POST);
+		// 	$_POST["iduser"] = $_SESSION["User"]["iduser"];
+		// }
 		
-		// exit;
-		if (isset($_POST["tax"])) {
-			$tax = explode(" ",$_POST["tax"]);
-			$_POST["tax"] = $tax[0];
-		}
-		if (isset($_POST)) {
-			$_POST = Acao::convertDateToDataBase($_POST);
-			$_POST["iduser"] = $_SESSION["User"]["iduser"];
-		}
-		
-		$acoes->getByBuy($idinvestiment);
-		$acoes->setData($_POST);
-		$msg = $acoes->update();
-<<<<<<< HEAD
-=======
-		$acoes->setData($_POST);
-		$msg = $acoes->update();
->>>>>>> a76cdd639733b86ab146774536d77ee65f55ca0c
+		// $acoes->getByBuy($idinvestiment);
+		// $acoes->setData($_POST);
+		// $msg = $acoes->update();
 		// echo '<pre>';
 		// print_r($acoes);
 		// echo '</pre>';

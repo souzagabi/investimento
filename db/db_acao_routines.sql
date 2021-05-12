@@ -484,10 +484,10 @@ BEGIN
         INNER JOIN tb_estoques e USING(sgcompany)  
         WHERE i.idinvestiment = pidinvestiment;*/
         
-        SELECT DISTINCT(i.idinvestiment), p.idperson, p.desperson, p.descpfcnpj , i.sgcompany, 
+        SELECT DISTINCT(i.idinvestiment), p.idperson, p.desperson, p.descpfcnpj , i.iduser, i.sgcompany, 
 			b.dtbuy, b.qtdebuy, b.prcbuy, b.tlbuy, b.bprcaverage, b.btptransaction, b.btipe,
             s.dtsell, s.qtdesell, s.prcsell, s.tlsell, s.sprcaverage, s.stptransaction, s.stipe, 
-            s.lucre, s.tax, e.idestoque, e.sgcompany AS sgecompany,
+            s.lucre, s.tax, e.idestoque, e.sgecompany AS sgecompany,
 			e.qtdeestoque AS qtdetotal, s.qtdesell, b.qtdebuy
 		FROM tb_persons p 
 		INNER JOIN tb_investiments i USING(idperson) 
@@ -1070,7 +1070,7 @@ BEGIN
     /*==========================================================================================*/
     IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany != '' AND psgcompany IS NOT NULL) THEN
     BEGIN
-		SELECT i.idperson, i.sgcompany, 
+		SELECT i.idinvestiment, i.idperson, i.sgcompany, 
         b.idbuy, b.idinvestiment AS idbuyInvest, b.dtbuy, b.qtdebuy, b.prcbuy, b.tlbuy, b.bprcaverage, b.btptransaction, b.btipe, 
         s.idsell, s.idinvestiment AS idsellInvest, s.dtsell, s.qtdesell, s.prcsell, s.tlsell, s.sprcaverage, s.stptransaction, s.stipe, s.lucre, tax,
         (SELECT count(idinvestiment)FROM tb_investiments WHERE sgcompany = psgcompany) / plimit AS pgs
@@ -1394,16 +1394,6 @@ BEGIN
         SET IDP = LAST_INSERT_ID();
 	END IF;*/
     
-    UPDATE tb_investiments
-    SET
-		idperson	  = pidperson,      
-		iduser		  = piduser,
-		sgcompany	  = psgcompany
-    WHERE idinvestiment = pidinvestiment;
-    IF EX = 1 THEN
-		SELECT "Erro ao fazer update no registro na tabela Investiments" AS MESSAGE;
-    END IF;
-    
     SELECT idinvestiment INTO IDI FROM tb_buys WHERE idinvestiment = pidinvestiment;
     
     IF IDI IS NULL THEN
@@ -1458,6 +1448,22 @@ BEGIN
     END IF;
     IF EX = 1 THEN
 		SELECT "Erro ao fazer update no registro na tabela Sells" AS MESSAGE;
+    END IF;
+	
+    SELECT idinvestiment INTO IDI FROM tb_investiments WHERE idinvestiment = pidinvestiment;
+     
+    UPDATE tb_investiments
+    SET
+		iduser 		= piduser, 
+        idperson 	= pidperson, 
+        sgcompany 	= psgcompany,
+        dtbuy 		= pdtbuy,
+        dtsell 		= pdtsell
+        
+    WHERE idinvestiment = IDI;
+    
+    IF EX = 1 THEN
+		SELECT "Erro ao fazer update no registro na tabela Investiments" AS MESSAGE;
     END IF;
     
 	UPDATE tb_estoques
@@ -1692,4 +1698,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-11  6:23:59
+-- Dump completed on 2021-05-12  6:31:21
