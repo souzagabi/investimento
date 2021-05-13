@@ -1052,6 +1052,8 @@ BEGIN
 	/*==========================================================================================*/
 	/*					Filtra os registros usando os nenhum parâmetros							*/
     /*==========================================================================================*/
+    
+    
     IF ((pdtbuy = '' OR pdtbuy IS NULL ) AND (pdtsell = ''  OR pdtsell IS NULL)) AND (psgcompany = '' OR psgcompany IS NULL) THEN
     BEGIN
 		SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / plimit AS pgs
@@ -1059,7 +1061,7 @@ BEGIN
         INNER JOIN tb_buys b USING(idinvestiment) 
 		LEFT JOIN tb_sells s USING(idinvestiment)
 		ORDER BY i.idinvestiment;
-        SELECT CONCAT(_SQL, MESSAGE);
+        
     END;
     END IF;
     IF EX = 1 THEN
@@ -1190,6 +1192,10 @@ BEGIN
     INNER JOIN tb_buys b USING(idinvestiment) 
     INNER JOIN tb_sells s USING(idinvestiment)
     ORDER BY i.idinvestiment;*/
+    
+    PREPARE STMT FROM @sql;
+    EXECUTE STMT;
+    
     IF EX = 1 THEN
 		ROLLBACK;
 	ELSE
@@ -1689,6 +1695,57 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_w_all_tests` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_w_all_tests`(
+	psgcompany VARCHAR(20),
+    pdtbuy VARCHAR(20),
+    pdtsell VARCHAR(20),
+	pstart INT(11),
+    plimit INT(11)
+)
+BEGIN
+	DECLARE MESSAGE, MSGID, MSGSQL VARCHAR(100);
+	DECLARE EX SMALLINT DEFAULT 0;
+	DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET EX = 1;
+    DECLARE EXIT HANDLER FOR 1062 SELECT  "ERRO de duplicidade do ID."  MSGID;
+	DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SELECT 'Erro no código SQL.' MSGSQL;
+    START TRANSACTION;
+     
+	SET @sql = CONCAT('SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / ', plimit, ' AS pgs ');
+	SET @sql = CONCAT(@sql,' FROM (SELECT * FROM tb_investiments i LIMIT ', pstart,' , ', plimit, ' ) AS i ');
+	SET @sql = CONCAT(@sql,' INNER JOIN tb_buys b USING(idinvestiment) ');
+	SET @sql = CONCAT(@sql,' LEFT JOIN tb_sells s USING(idinvestiment) ');
+    SET @sql = CONCAT(@sql,' ORDER BY i.idinvestiment ;');
+       
+	/*IF EX = 1 THEN
+		SET MESSAGE = "Erro ao filtrar registro na tabela Invesciments com parêmetros vazio.";
+	END IF;*/
+    SELECT @sql;
+    PREPARE STMT FROM @sql;
+    EXECUTE STMT;
+    
+    IF EX = 1 THEN
+		ROLLBACK;
+	ELSE
+		#SELECT "Registros filtrado com sucesso!" AS MESSAGE;
+        COMMIT;
+	END IF; 
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1698,4 +1755,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-12  6:31:21
+-- Dump completed on 2021-05-13  6:15:54
