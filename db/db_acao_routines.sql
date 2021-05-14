@@ -1401,7 +1401,7 @@ BEGIN
 	END IF;*/
     
     SELECT idinvestiment INTO IDI FROM tb_buys WHERE idinvestiment = pidinvestiment;
-    
+    /*
     IF IDI IS NULL THEN
     BEGIN
 		INSERT INTO tb_buys (idinvestiment, idperson,sgcompany,dtbuy,qtdebuy,prcbuy,tlbuy,bprcaverage,btptransaction,btipe) 
@@ -1457,12 +1457,12 @@ BEGIN
     END IF;
 	
     SELECT idinvestiment INTO IDI FROM tb_investiments WHERE idinvestiment = pidinvestiment;
-     
+     */
     UPDATE tb_investiments
     SET
-		iduser 		= piduser, 
-        idperson 	= pidperson, 
-        sgcompany 	= psgcompany,
+		#iduser 		= piduser, 
+        #idperson 	= pidperson, 
+        #sgcompany 	= psgcompany,
         dtbuy 		= pdtbuy,
         dtsell 		= pdtsell
         
@@ -1719,19 +1719,45 @@ BEGIN
     DECLARE EXIT HANDLER FOR 1062 SELECT  "ERRO de duplicidade do ID."  MSGID;
 	DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SELECT 'Erro no código SQL.' MSGSQL;
     START TRANSACTION;
-     
+	
+    IF pdtbuy IS NULL OR pdtbuy = '' THEN
+    	SELECT dtbuy INTO pdtbuy FROM tb_buys LIMIT 1;
+    END IF;
+    
 	SET @sql = CONCAT('SELECT *, (SELECT count(idinvestiment)FROM tb_investiments) / ', plimit, ' AS pgs ');
-	SET @sql = CONCAT(@sql,' FROM (SELECT * FROM tb_investiments i LIMIT ', pstart,' , ', plimit, ' ) AS i ');
-	SET @sql = CONCAT(@sql,' INNER JOIN tb_buys b USING(idinvestiment) ');
+	
+    #SET @sql = CONCAT(@sql,' FROM (SELECT * FROM tb_investiments i LIMIT ', pstart,' , ', plimit, ' ) AS i ');
+	SET @sql = CONCAT(@sql,' FROM (SELECT * FROM tb_investiments i WHERE dtbuy >= "',pdtbuy,'" ');
+    
+    IF pdtsell IS NOT NULL AND pdtsell != '' THEN
+		SET @sql = CONCAT(@sql,' AND dtsell <= "', pdtsell, '" ');
+	END IF;
+    IF psgcompany IS NOT NULL AND psgcompany != '' THEN
+		SET @sql = CONCAT(@sql,' AND sgcompany LIKE "%', psgcompany, '%" ');
+	END IF;
+    
+    SET @sql = CONCAT(@sql,' LIMIT ', pstart,' , ', plimit, ' ) AS i ');
+    
+    SET @sql = CONCAT(@sql,' INNER JOIN tb_buys b USING(idinvestiment) ');
 	SET @sql = CONCAT(@sql,' LEFT JOIN tb_sells s USING(idinvestiment) ');
+    SET @sql = CONCAT(@sql,' WHERE b.dtbuy >= "', pdtbuy, '" ');
+    
+    IF pdtsell IS NOT NULL AND pdtsell != '' THEN
+		SET @sql = CONCAT(@sql,' AND s.dtsell <= "', pdtsell, '" ');
+	END IF;
+    
+    IF psgcompany IS NOT NULL AND psgcompany != '' THEN
+		SET @sql = CONCAT(@sql,' AND i.sgcompany LIKE "%', psgcompany, '%" ');
+	END IF;
+        
     SET @sql = CONCAT(@sql,' ORDER BY i.idinvestiment ;');
        
 	/*IF EX = 1 THEN
 		SET MESSAGE = "Erro ao filtrar registro na tabela Invesciments com parêmetros vazio.";
 	END IF;*/
     SELECT @sql;
-    PREPARE STMT FROM @sql;
-    EXECUTE STMT;
+    #PREPARE STMT FROM @sql;
+    #EXECUTE STMT;
     
     IF EX = 1 THEN
 		ROLLBACK;
@@ -1755,4 +1781,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-13  6:15:54
+-- Dump completed on 2021-05-14  6:23:12

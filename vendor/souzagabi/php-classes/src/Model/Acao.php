@@ -199,7 +199,10 @@
             $qtdeTotal = ["qtdetotal"=>$this->getqtdetotal() + $this->getqtdebuy() - $this->getqtdesell()];
            
             $this->setData($qtdeTotal);
-            
+            // echo '<pre>';
+			// print_r($this);
+			// echo '</pre>';
+            //exit;
             $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment, :iduser, :idperson, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :bprcaverage, :btptransaction, :btipe, :dtsell, :qtdesell, :prcsell, :tlsell, :sprcaverage, :stptransaction, :btipe, :tax, :lucre, :idestoque, :sgecompany, :qtdeestoque)", array(
                                 ":idinvestiment"    => $this->getidinvestiment(),
                                 ":iduser"           => $this->getiduser(),   

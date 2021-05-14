@@ -229,16 +229,19 @@
 	$app->post("/notas/:idinvestiment", function ($idinvestiment){
 		User::verifyLogin();
 		//$acoes = new Acao();
-		$act = new Acao();
+		//$act = new Acao();
 		$action 	= Acao::listAllIds();
-		for ($i=0; $i < COUNT($action); $i++) { 
-			$act->getByBuy($action[$i]['idinvestiment']);
-			
+
+		for ($i=0; $i < count($action); $i++) {
+			$act = new Acao();
+			$act->getByBuy($action[$i]["idinvestiment"]);
 			echo '<pre>';
 			print_r($act);
 			echo '</pre>';
 			$act->update();
 		}
+		//exit;
+		
 		//exit;
 		$msg = '';
 		// if (isset($_POST["tax"])) {
