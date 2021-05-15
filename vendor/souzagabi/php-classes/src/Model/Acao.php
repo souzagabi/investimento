@@ -64,7 +64,7 @@
             // echo '</pre>';
             
             // exit;
-            return $sql->select("CALL sp_acoes_select_inv_buy_sell(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
+            return $sql->select("CALL sp_w_all_tests(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
                 ":sgcompany" => $list["sgcompany"],   
                 ":dtbuy"     => $list["dtbuy"],
                 ":dtsell"    => $list["dtsell"],

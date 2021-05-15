@@ -205,7 +205,11 @@
 		{
 			$company["notas"]	= "notas";
 			$action 	= Acao::selectRegister($company);
+            // echo '</pre>';
+            // print_r($action);
+            // echo '<pre>';
             
+            //exit;
 			$page->setTpl("notas", array(
 				"acoes"=> $action[0],
 				"pgs"=> $action[1]
