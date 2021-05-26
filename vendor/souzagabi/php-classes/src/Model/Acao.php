@@ -28,7 +28,7 @@
                     $l[$key] = '';
                 }
             }
-            
+
             if(isset($list["listacoes"]) && $list["listacoes"] === "listacoes")
             {
                 return $sql->select("CALL sp_acoes_list(:start, :limit)", array(
@@ -40,12 +40,11 @@
         public static function listAll($list)
         {
             $sql = new Sql();
-            $list["start"] = 1;
+            
             $pg = isset($_GET["pg"]) ? $_GET["pg"] : 1;
             $list["limit"] = (isset($list["limit"]) && $list["limit"] != '') ? $list["limit"] : 10;
-            if (($pg - 1) * $list["limit"] > 0) {
-                $list["start"] = ($pg - 1) * $list["limit"];
-            }
+            $list["start"] = ($pg - 1) * $list["limit"];
+            
             
             foreach ($list as $key => $value) 
             {
@@ -55,22 +54,26 @@
                     $l[$key] = '';
                 }
             }
-            if ($l["start"] == 1) {
+            if ($l["start"] == 1 || $l["start"] == '' ) {
                 $l["start"] = 0;
             }
             
+            // echo 'Ação L62';
             // echo '<pre>';
+            // print_r($list);
             // print_r($l);
             // echo '</pre>';
             
-            // exit;
-            return $sql->select("CALL sp_w_all_tests(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
-                ":sgcompany" => $list["sgcompany"],   
-                ":dtbuy"     => $list["dtbuy"],
-                ":dtsell"    => $list["dtsell"],
-                ":start"     => $list["start"],
-                ":limit"     => $list["limit"]
+            //exit;
+            $results = $sql->select("CALL sp_acoes_select_inv_buy_sell(:psgcompany, :pdtbuy, :pdtsell, :pstart, :plimit)", array(
+                ":psgcompany" => $l["sgcompany"],   
+                ":pdtbuy"     => $l["dtbuy"],
+                ":pdtsell"    => $l["dtsell"],
+                ":pstart"     => $l["start"],
+                ":plimit"     => $l["limit"]
             ));
+          
+            return $results;
          
         }
 
@@ -157,10 +160,11 @@
         public function getByBuy($idinvestiment) 
         {
             $sql = new Sql();
-                        
+             
             $results = $sql->select("CALL sp_acoes_select_buy(:idinvestiment)", array(
-                ":idinvestiment"=>(int)$idinvestiment
+                ":idinvestiment"=>$idinvestiment
             ));
+                     
             
             if (isset($results[0]["tax"]) && $results[0]["tax"] > 0) {
                 $results[0]["tax"] = $results[0]["tax"]." %";
@@ -199,10 +203,7 @@
             $qtdeTotal = ["qtdetotal"=>$this->getqtdetotal() + $this->getqtdebuy() - $this->getqtdesell()];
            
             $this->setData($qtdeTotal);
-            // echo '<pre>';
-			// print_r($this);
-			// echo '</pre>';
-            //exit;
+            
             $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment, :iduser, :idperson, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :bprcaverage, :btptransaction, :btipe, :dtsell, :qtdesell, :prcsell, :tlsell, :sprcaverage, :stptransaction, :btipe, :tax, :lucre, :idestoque, :sgecompany, :qtdeestoque)", array(
                                 ":idinvestiment"    => $this->getidinvestiment(),
                                 ":iduser"           => $this->getiduser(),   
@@ -215,14 +216,14 @@
                                 ":prcbuy"           => $this->getprcbuy(),
                                 ":tlbuy"            => $this->gettlbuy(),
                                 ":bprcaverage"      => $this->getbprcaverage(),
-                                ":btptransaction"   => "C",
+                                ":btptransaction"   => $this->getbtptransaction(),
                                 ":btipe"            => $this->getbtipe(),
                                 ":dtsell"           => $this->getdtsell(),
                                 ":qtdesell"         => $this->getqtdesell(),
                                 ":prcsell"          => $this->getprcsell(),
                                 ":tlsell"           => $this->gettlsell(),
                                 ":sprcaverage"      => $this->getsprcaverage(),
-                                ":stptransaction"   => "V",
+                                ":stptransaction"   => $this->getstptransaction(),
                                 ":stipe"            => $this->getstipe(),
                                 ":tax"              => $this->gettax(),
                                 ":lucre"            => $this->getlucre(),
@@ -313,9 +314,11 @@
         public function countRegister($qtdeRegister, $company)
         {
             $pgs = [];
+            // $qtdeRegister = $qtdeRegister / $company["limit"];
             for ($j=0; $j < $qtdeRegister - 1; $j++) { 
                 $pgs[$j]    = $j;
             }
+         
             $pgs["list"]["limit"] = '';
             $pgs["list"]["dtbuy"] = '';
             $pgs["list"]["dtsell"] = '';
@@ -337,15 +340,12 @@
                 $acoes 	= Acao::convertDateToView($acoes);
                 $acoes 	= Acao::convertToInt($acoes);
             }
+           
             $pgs = [];
             if (isset($acoes[0]["pgs"]) && count($acoes) > 0 && $acoes != '') {
                 $pgs 	= Acao::countRegister($acoes[0]["pgs"], $act);
             }
-            // echo '<pre>';
-            // print_r($acoes);
-            // echo '</pre>';
-            
-            // exit;
+                      
             return [$acoes, $pgs];
         }
     }

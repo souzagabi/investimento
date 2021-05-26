@@ -189,6 +189,7 @@
 			$company["search"] 		= "Search";
 			
 			$action 	= Acao::selectRegister($company);
+			// echo 'Index L192';
 			// echo '</pre>';
             // print_r($action);
             // echo '<pre>';
@@ -205,11 +206,12 @@
 		{
 			$company["notas"]	= "notas";
 			$action 	= Acao::selectRegister($company);
+            // echo 'Index L208';
             // echo '</pre>';
             // print_r($action);
             // echo '<pre>';
             
-            //exit;
+            // exit;
 			$page->setTpl("notas", array(
 				"acoes"=> $action[0],
 				"pgs"=> $action[1]
@@ -223,6 +225,11 @@
 		$acoes = new Acao();
 		$acoes->getByBuy($idinvestiment);
 		
+		// echo 'antes Update';
+		// echo '<pre>';
+		// print_r($acoes);
+		// echo '</pre>';
+		// exit;
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(
@@ -233,7 +240,7 @@
 	$app->post("/notas/:idinvestiment", function ($idinvestiment){
 		User::verifyLogin();
 		//$acoes = new Acao();
-		//$act = new Acao();
+		$act = new Acao();
 		$action 	= Acao::listAllIds();
 
 		for ($i=0; $i < count($action); $i++) {
@@ -242,28 +249,24 @@
 			echo '<pre>';
 			print_r($act);
 			echo '</pre>';
+			exit;
 			$act->update();
 		}
-		//exit;
 		
-		//exit;
+		exit;
 		$msg = '';
-		// if (isset($_POST["tax"])) {
-		// 	$tax = explode(" ",$_POST["tax"]);
-		// 	$_POST["tax"] = $tax[0];
-		// }
-		// if (isset($_POST)) {
-		// 	$_POST = Acao::convertDateToDataBase($_POST);
-		// 	$_POST["iduser"] = $_SESSION["User"]["iduser"];
-		// }
+		if (isset($_POST["tax"])) {
+			$tax = explode(" ",$_POST["tax"]);
+			$_POST["tax"] = $tax[0];
+		}
+		if (isset($_POST)) {
+			$_POST = Acao::convertDateToDataBase($_POST);
+			$_POST["iduser"] = $_SESSION["User"]["iduser"];
+		}
 		
-		// $acoes->getByBuy($idinvestiment);
-		// $acoes->setData($_POST);
-		// $msg = $acoes->update();
-		// echo '<pre>';
-		// print_r($acoes);
-		// echo '</pre>';
-		// exit;
+		$acoes->getByBuy($idinvestiment);
+		$acoes->setData($_POST);
+		$msg = $acoes->update();
 		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search&limit=10&msg=".$msg);
 		exit;
 	});

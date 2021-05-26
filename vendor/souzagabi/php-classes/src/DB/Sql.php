@@ -6,7 +6,7 @@
 
 		const HOSTNAME = "127.0.0.1";
 		const USERNAME = "root";
-		const PASSWORD = "root";
+		const PASSWORD = "@!nv3st1m3nt0";
 		const DBNAME = "db_acao";
 
 		private $conn;

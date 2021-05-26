@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Log in</title>
+  <title>Investimentos</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="../../res/admin/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../config/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../../res/admin/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="../../config/css/AdminLTE.min.css">
   <!-- iCheck -->
-  <link rel="stylesheet" href="../../res/admin/plugins/iCheck/square/blue.css">
+  <link rel="stylesheet" href="../../config/plugins/iCheck/square/blue.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,7 +27,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="../../res/admin/index2.html"><b>Admin</b>LTE</a>
+    <a href="../../config/index2.html"><b>Sou</b>Teramoto</a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
@@ -68,7 +68,7 @@
     <!-- /.social-auth-links -->
 
     <a href="/admin/forgot">Esqueci a senha</a><br>
-    <a href="../../res/admin/register.html" class="text-center">Registrar-se como novo membro</a>
+    <a href="../../config/register.html" class="text-center">Registrar-se como novo membro</a>
 
   </div>
   <!-- /.login-box-body -->
@@ -76,11 +76,11 @@
 <!-- /.login-box -->
 
 <!-- jQuery 2.2.3 -->
-<script src="../../res/admin/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="../../config/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
-<script src="../../res/admin/bootstrap/js/bootstrap.min.js"></script>
+<script src="../../config/js/bootstrap.min.js"></script>
 <!-- iCheck -->
-<script src="../../res/admin/plugins/iCheck/icheck.min.js"></script>
+<script src="../../config/plugins/iCheck/icheck.min.js"></script>
 <script>
   $(function () {
     $('input').iCheck({
