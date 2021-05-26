@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'fc57444e9a301388d86903663122ef3c76135074',
+    'reference' => '653ef3bb378d25bb0b1129864f345b19d63d4d1f',
     'name' => 'souzagabi/investimento',
   ),
   'versions' => 
@@ -45,7 +45,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'fc57444e9a301388d86903663122ef3c76135074',
+      'reference' => '653ef3bb378d25bb0b1129864f345b19d63d4d1f',
     ),
   ),
 );
