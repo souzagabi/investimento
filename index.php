@@ -72,6 +72,13 @@
 		$company["listacoes"]	= NULL;
 		$company["search"]		= NULL;
 
+		$msg = ["state"=>'VAZIO', "msg"=> 'VAZIO'];
+		
+		if ((isset($_GET["msg"]) && $_GET["msg"] != '')) {
+			$mess = explode(':', $_GET["msg"]);
+			$msg = ["state"=>$mess[0], "msg"=> $mess[1]];
+		} 
+
 		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
 			$_GET = Acao::convertDateToDataBase($_GET);
 		}
@@ -86,7 +93,8 @@
 		$page = new PageAcoes();
 		$page->setTpl("acoes", array(
 			"acoes"	=> $action[0],
-			"pgs"	=> $action[1]
+			"pgs"	=> $action[1],
+			"msg"	=> $msg
 		));
 		
 	});
@@ -177,6 +185,13 @@
 		$company["dtsell"] 		= NULL;
 		$company["search"] 		= NULL;
 		
+		$msg = ["state"=>'VAZIO', "msg"=> 'VAZIO'];
+		
+		if ((isset($_GET["msg"]) && $_GET["msg"] != '')) {
+			$mess = explode(':', $_GET["msg"]);
+			$msg = ["state"=>$mess[0], "msg"=> $mess[1]];
+		} 
+
 		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
 			$_GET = Acao::convertDateToDataBase($_GET);
 		}
@@ -189,16 +204,12 @@
 			$company["search"] 		= "Search";
 			
 			$action 	= Acao::selectRegister($company);
-			// echo 'Index L192';
-			// echo '</pre>';
-            // print_r($action);
-            // echo '<pre>';
-            
-            // exit;
+	
 			if (isset($action) && $action != '') {
 				$page->setTpl("/notas", array(
 					"acoes"=>$action[0],
-					"pgs"=>$action[1]
+					"pgs"=>$action[1],
+					"msg"=>$msg
 				));
 			}
 
@@ -206,15 +217,11 @@
 		{
 			$company["notas"]	= "notas";
 			$action 	= Acao::selectRegister($company);
-            // echo 'Index L208';
-            // echo '</pre>';
-            // print_r($action);
-            // echo '<pre>';
-            
-            // exit;
+
 			$page->setTpl("notas", array(
 				"acoes"=> $action[0],
-				"pgs"=> $action[1]
+				"pgs"=> $action[1],
+				"msg"=>$msg
 			));
 		}
 		
@@ -239,22 +246,19 @@
 	
 	$app->post("/notas/:idinvestiment", function ($idinvestiment){
 		User::verifyLogin();
-		//$acoes = new Acao();
-		$act = new Acao();
-		$action 	= Acao::listAllIds();
-
-		for ($i=0; $i < count($action); $i++) {
-			$act = new Acao();
-			$act->getByBuy($action[$i]["idinvestiment"]);
-			echo '<pre>';
-			print_r($act);
-			echo '</pre>';
-			exit;
-			$act->update();
-		}
+		$acoes = new Acao();
+		// $action 	= Acao::listAllIds();
 		
-		exit;
-		$msg = '';
+		// for ($i=0; $i < count($action); $i++) {
+		// 	$act = new Acao();
+			
+		// 	$act->getByBuy($action[$i]["idinvestiment"]);
+		// 	$act->setData($act);
+		// 	$msg = $act->update();
+		// }
+		
+		// exit;
+		
 		if (isset($_POST["tax"])) {
 			$tax = explode(" ",$_POST["tax"]);
 			$_POST["tax"] = $tax[0];
@@ -267,7 +271,8 @@
 		$acoes->getByBuy($idinvestiment);
 		$acoes->setData($_POST);
 		$msg = $acoes->update();
-		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search&limit=10&msg=".$msg);
+		
+		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search&limit=10&msg=$msg");
 		exit;
 	});
 	

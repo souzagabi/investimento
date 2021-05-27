@@ -1,13 +1,13 @@
--- MariaDB dump 10.19  Distrib 10.4.18-MariaDB, for Win64 (AMD64)
+-- MySQL dump 10.13  Distrib 8.0.25, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: db_acao
 -- ------------------------------------------------------
--- Server version	10.4.18-MariaDB
+-- Server version	8.0.25
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,28 +21,28 @@
 
 DROP TABLE IF EXISTS `tb_sells`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_sells` (
-  `idsell` int(11) NOT NULL AUTO_INCREMENT,
-  `idinvestiment` int(11) DEFAULT NULL,
-  `idperson` int(11) NOT NULL,
+  `idsell` int NOT NULL AUTO_INCREMENT,
+  `idinvestiment` int DEFAULT NULL,
+  `idperson` int NOT NULL,
   `sgcompany` varchar(20) NOT NULL,
-  `qtdesell` int(11) DEFAULT 0,
+  `qtdesell` int DEFAULT '0',
   `dtsell` date DEFAULT NULL,
-  `prcsell` decimal(10,2) DEFAULT 0.00,
-  `tlsell` decimal(10,2) DEFAULT 0.00,
-  `sprcaverage` decimal(10,2) DEFAULT 0.00,
-  `tax` decimal(10,2) DEFAULT 0.00,
-  `lucre` decimal(10,2) DEFAULT 0.00,
+  `prcsell` decimal(10,2) DEFAULT '0.00',
+  `tlsell` decimal(10,2) DEFAULT '0.00',
+  `sprcaverage` decimal(10,2) DEFAULT '0.00',
+  `tax` decimal(10,2) DEFAULT '0.00',
+  `lucre` decimal(10,2) DEFAULT '0.00',
   `stptransaction` char(1) DEFAULT NULL,
   `stipe` char(1) DEFAULT NULL,
-  `dtregister` timestamp NOT NULL DEFAULT current_timestamp(),
+  `dtregister` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idsell`),
   KEY `FK_sells_investiments_idx` (`idinvestiment`),
   KEY `fk_sells_persons` (`idperson`),
-  CONSTRAINT `FK_sells_investiments_idx` FOREIGN KEY (`idinvestiment`) REFERENCES `tb_investiments` (`idinvestiment`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `fk_sells_persons` FOREIGN KEY (`idperson`) REFERENCES `tb_persons` (`idperson`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=260 DEFAULT CHARSET=utf8;
+  CONSTRAINT `FK_sells_investiments_idx` FOREIGN KEY (`idinvestiment`) REFERENCES `tb_investiments` (`idinvestiment`) ON DELETE CASCADE,
+  CONSTRAINT `fk_sells_persons` FOREIGN KEY (`idperson`) REFERENCES `tb_persons` (`idperson`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=260 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,4 +64,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-15  5:54:40
+-- Dump completed on 2021-05-27  5:51:59

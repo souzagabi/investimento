@@ -1,4 +1,4 @@
-function sumTotal(qtde, elementValue, elementTotal)
+/*function sumTotal(qtde, elementValue, elementTotal)
 {
     if (elementValue.value !== '') {
         elementValue.value = replaceComa(elementValue);
@@ -30,7 +30,7 @@ function sumTotal(qtde, elementValue, elementTotal)
     }
 
     return total;
-}
+}*/
 
 function replaceComa(element)
 {
@@ -47,12 +47,36 @@ function replaceSlash(element)
 function convertLowToUpper(element)
 {
     var company = element.value;
+
     if(company != '' || company != NULL)
     {
         document.getElementById(element.name).value = company.toUpperCase();
         
     }
 }
+
+function verifyConfPassWord(element, elementCompare, elementMsg)
+{
+    var msg = '';
+    if (element.value != elementCompare.value) {
+        msg = "Senha não confere! Digite-a novamente.";
+    } else if (element.value == elementCompare.value) {
+        if (element.value.length < 6) {
+            msg = "A senha tem que ser pelo menos 6 caracteres!!";
+        } else {
+            console.log(document.getElementById("btnSubmit"));
+            document.getElementById("btnSubmit").style.display = "inline";
+        }
+    } 
+    if (msg != '') {
+        elementMsg.style.display = "block";
+        document.getElementById("msgError").innerHTML = msg;
+        elementCompare.focus();
+        removeMensagemError(elementMsg);
+    }
+
+}
+
 function removeMensagemError(element){
     if (element) {
         setTimeout(function(){ 
@@ -66,7 +90,7 @@ function removeMensagem(){
         setTimeout(function(){ 
             var msg = document.getElementById("msg-success");
             msg.parentNode.removeChild(msg);   
-        }, 1000);
+        }, 3000);
     }
 }
 document.onreadystatechange = () => {
@@ -74,4 +98,3 @@ document.onreadystatechange = () => {
         removeMensagem(); 
     }
 };
-    

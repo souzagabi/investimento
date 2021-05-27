@@ -160,7 +160,7 @@
         public function getByBuy($idinvestiment) 
         {
             $sql = new Sql();
-             
+            
             $results = $sql->select("CALL sp_acoes_select_buy(:idinvestiment)", array(
                 ":idinvestiment"=>$idinvestiment
             ));
@@ -234,6 +234,7 @@
             ));
            
             $this->setData($results);
+            
             return $results[0]["MESSAGE"];
         }
 
