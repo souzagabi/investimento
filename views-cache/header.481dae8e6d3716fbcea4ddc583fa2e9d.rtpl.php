@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php if(!class_exists('Rain\Tpl')){exit;}?><!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
@@ -93,7 +93,7 @@ desired effect
                     <a href="#">
                       <div class="pull-left">
                         <!-- User Image -->
-                        <img class="img-circle" src="../../image/{$_SESSION['User'].person_id}.jpg">
+                        <img class="img-circle" src="../../image/<?php echo htmlspecialchars( $_SESSION['User']["person_id"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.jpg">
                       </div>
                       <!-- Message title and timestamp -->
                       <h4>
@@ -177,19 +177,19 @@ desired effect
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img class="user-image" src="../../image/{if="$_SESSION['User'].photo == 0"}admin.jpg{else}{$_SESSION['User'].user_id}.jpg{/if}">
+              <img class="user-image" src="../../image/<?php if( $_SESSION['User']["photo"] == 0 ){ ?>admin.jpg<?php }else{ ?><?php echo htmlspecialchars( $_SESSION['User']["user_id"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.jpg<?php } ?>">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               
-              <span class="hidden-xs">{$_SESSION['User'].name_person}</span>
+              <span class="hidden-xs"><?php echo htmlspecialchars( $_SESSION['User']["name_person"], ENT_COMPAT, 'UTF-8', FALSE ); ?></span>
               
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               
               <li class="user-header">
-                <img class="user-image" src="../../image/{if="$_SESSION['User'].photo == 0"}admin.jpg{else}{$_SESSION['User'].user_id}.jpg{/if}">
+                <img class="user-image" src="../../image/<?php if( $_SESSION['User']["photo"] == 0 ){ ?>admin.jpg<?php }else{ ?><?php echo htmlspecialchars( $_SESSION['User']["user_id"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.jpg<?php } ?>">
               <p>
-                  {$_SESSION['User'].name_person} - Web Developer
+                  <?php echo htmlspecialchars( $_SESSION['User']["name_person"], ENT_COMPAT, 'UTF-8', FALSE ); ?> - Web Developer
                   <small>Member since Nov. 2012</small>
                 </p>
               </li>
@@ -235,10 +235,10 @@ desired effect
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel">
       <div class="pull-left image">
-        <img class="user-image" src="../../image/{if="$_SESSION['User'].photo == 0"}admin.jpg{else}{$_SESSION['User'].user_id}.jpg{/if}">
+        <img class="user-image" src="../../image/<?php if( $_SESSION['User']["photo"] == 0 ){ ?>admin.jpg<?php }else{ ?><?php echo htmlspecialchars( $_SESSION['User']["user_id"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.jpg<?php } ?>">
       </div>
       <div class="pull-left info">
-        <p>{$_SESSION['User'].name_person}</p>
+        <p><?php echo htmlspecialchars( $_SESSION['User']["name_person"], ENT_COMPAT, 'UTF-8', FALSE ); ?></p>
         <!-- Status -->
         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
       </div>

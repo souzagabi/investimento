@@ -58,7 +58,7 @@ function removeMensagemError(element){
         setTimeout(function(){ 
             element.style.display = "none";  
             document.getElementById("msgError").innerHTML = "";
-        }, 3000);
+        }, 2000);
     }
 }
 function removeMensagem(){
@@ -66,7 +66,7 @@ function removeMensagem(){
         setTimeout(function(){ 
             var msg = document.getElementById("msg-success");
             msg.parentNode.removeChild(msg);   
-        }, 1000);
+        }, 2000);
     }
 }
 document.onreadystatechange = () => {

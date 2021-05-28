@@ -247,18 +247,7 @@
 	$app->post("/notas/:idinvestiment", function ($idinvestiment){
 		User::verifyLogin();
 		$acoes = new Acao();
-		// $action 	= Acao::listAllIds();
-		
-		// for ($i=0; $i < count($action); $i++) {
-		// 	$act = new Acao();
-			
-		// 	$act->getByBuy($action[$i]["idinvestiment"]);
-		// 	$act->setData($act);
-		// 	$msg = $act->update();
-		// }
-		
-		// exit;
-		
+				
 		if (isset($_POST["tax"])) {
 			$tax = explode(" ",$_POST["tax"]);
 			$_POST["tax"] = $tax[0];
@@ -330,11 +319,19 @@
 	$app->get('/admin', function() {
 
 		User::verifyLogin();
-		$users = User::listAll();
-		$page = new PageUser();
-		$page->setTpl("users", array(
-			"users"=> $users
-		));
+		
+		if ($_SESSION["User"]["inadmin"] == 1) {
+
+			$users = User::listAll();
+			$page = new PageUser();
+			$page->setTpl("users", array(
+				"users"=> $users
+			));
+		} else {
+			header("Location: /acoes?pg=1&limit=10");
+			exit;
+		}
+		
 	});
 
 	$app->get('/admin/login', function() {
@@ -351,9 +348,13 @@
 	$app->post('/admin/login', function() {
 		
 		User::login($_POST["login"], $_POST["password"]);
-		header("Location: /admin");
-		exit;
-		
+		if ($_SESSION["User"]["inadmin"] == 1) {
+			header("Location: /admin");
+			exit;
+		} else {
+			header("Location: /acoes?pg=1&limit=10");
+			exit;
+		}
 	});
 
 	$app->get('/admin/logout', function() {
@@ -414,41 +415,62 @@
 	$app->get('/users', function() {
 		
 		User::verifyLogin();
-		$users = User::listAll();
-		$page = new PageUser();
-		$page->setTpl("users", array(
-			"users"=> $users
-		));
+		if ($_SESSION["User"]["inadmin"] == 1) {
+			$users = User::listAll();
+			$page = new PageUser();
+			$page->setTpl("users", array(
+				"users"=> $users
+			));
+		} else {
+			header("Location: /acoes?pg=1&limit=10");
+			exit;
+		}
 	});
 
 	$app->get('/users/create', function() {
 		
 		User::verifyLogin();
-		$page = new PageUser();
-		$page->setTpl("users-create");
+		if ($_SESSION["User"]["inadmin"] == 1) {
+			$page = new PageUser();
+			$page->setTpl("users-create");
+		} else {
+			header("Location: /acoes?pg=1&limit=10");
+			exit;
+		}
 	});
 	
 	$app->get("/users/:iduser/delete", function ($iduser){
 		User::verifyLogin();
-		$user = new User();
-		$user->get((int)$iduser);
 
-		$user->delete();
-		header("Location: /users");
-		exit;
+			$user = new User();
+		if ($_SESSION["User"]["inadmin"] == 1) {
+			$user->get((int)$iduser);
+
+			$user->delete();
+			header("Location: /users");
+			exit;
+		} else {
+			header("Location: /acoes?pg=1&limit=10");
+			exit;
+		}
 	});
 
 	$app->get("/users/:iduser", function($iduser) {
 		User::verifyLogin();
-		$user = new User();
- 
-		$user->get((int)$iduser);
-		
-		$page = new PageUser();
-		
-		$page ->setTpl("users-update", array(
-			"user"=>$user->getValues()
-		));
+		if ($_SESSION["User"]["inadmin"] == 1) {
+			$user = new User();
+	
+			$user->get((int)$iduser);
+			
+			$page = new PageUser();
+			
+			$page ->setTpl("users-update", array(
+				"user"=>$user->getValues()
+			));
+		} else {
+			header("Location: /acoes?pg=1&limit=10");
+			exit;
+		}
 	});
 
 	$app->post("/users/create", function (){

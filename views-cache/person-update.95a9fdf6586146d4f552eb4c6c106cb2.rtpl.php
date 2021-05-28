@@ -36,6 +36,12 @@
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
+                  <label for="sgcompany">Sigla</label>
+                  <input type="text" class="form-control" name="sgcompany" id="sgcompany" value="<?php echo htmlspecialchars( $persons["sgcompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" required>
+                </div>
+              </div>
+              <div class="col col-md-2">
+                <div class="form-group">
                   <label for="descpfcnpj">CPF/CNPJ</label>
                   <input type="text" class="form-control" name="descpfcnpj" id="descpfcnpj" value="<?php echo htmlspecialchars( $persons["descpfcnpj"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                 </div>

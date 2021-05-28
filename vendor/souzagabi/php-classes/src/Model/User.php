@@ -33,10 +33,16 @@
 
         public static function verifyLogin($inadmin = true)
         {
-            if (!isset($_SESSION[User::SESSION]) || !$_SESSION[User::SESSION] || !(int)$_SESSION[User::SESSION]["iduser"] > 0 || (bool)$_SESSION[User::SESSION]["inadmin"] !== $inadmin) {
+            if (!isset($_SESSION[User::SESSION]) || !$_SESSION[User::SESSION] || !(int)$_SESSION[User::SESSION]["iduser"] > 0 ) {
                 header("Location: /admin/login");
                 exit;
-            } 
+            }
+       
+            // if ( (bool)$_SESSION[User::SESSION]["inadmin"] !== $inadmin)
+            // {
+            //     header("Location: /notas?pg=1&limit=10");
+            //     exit;
+            // } 
         }
 
         public static function logout()
