@@ -17,7 +17,9 @@
             ));
             
             if (count($results) === 0) {
-                throw new \Exception("Usuário inexistente ou senha inválida", 1);
+                $msg = "ERROR: Usuário ou senha inválida";
+                header("Location: /admin/login?msg=$msg");
+			    exit;
             }
             $data = $results[0];
             
@@ -27,22 +29,19 @@
                 $_SESSION[User::SESSION] = $user->getValues();
                 return $user;
             } else{
-                throw new \Exception("Usuário inexistente ou senha inválida", 1);
+                $msg = "ERROR: Usuário ou senha inválida";
+                header("Location: /admin/login?msg=$msg");
+			    exit;
             }
         }
 
         public static function verifyLogin($inadmin = true)
         {
             if (!isset($_SESSION[User::SESSION]) || !$_SESSION[User::SESSION] || !(int)$_SESSION[User::SESSION]["iduser"] > 0 ) {
-                header("Location: /admin/login");
+                $msg = "ERROR: É necessário fazer login.";
+                header("Location: /admin/login?msg=$msg");
                 exit;
             }
-       
-            // if ( (bool)$_SESSION[User::SESSION]["inadmin"] !== $inadmin)
-            // {
-            //     header("Location: /notas?pg=1&limit=10");
-            //     exit;
-            // } 
         }
 
         public static function logout()

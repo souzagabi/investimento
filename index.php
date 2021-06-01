@@ -11,6 +11,7 @@
 	use \Acao\Model\User;
 	use \Acao\Model\Acao;
 	use \Acao\Model\Person;
+	use \Acao\Model\Metodo;
 
 	
 
@@ -24,7 +25,7 @@
 /*======================================================================================*/
 	$app->get('/', function() {
 		User::verifyLogin();
-		$acoes = Acao::listAll("listacoes", "");
+		$acoes = Metodo::listAll("listacoes", "");
 		
 		$page = new PageAcoes([
 			"acoes"=> $acoes
@@ -45,14 +46,14 @@
 		$company["listestoque"]	= NULL;
 
 		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
-			$_GET = Acao::convertDateToDataBase($_GET);
+			$_GET = Metodo::convertDateToDataBase($_GET);
 		}
 		foreach ($_GET as $key => $value) {
 			$company[$key] = $value;
 		}
 		
 		$company["listestoque"]	= "listestoque";
-		$action	= Acao::selectRegister($company);
+		$action	= Metodo::selectRegister($company);
 		
 		$page = new PageAcoes([
 			"acoes"=> $action[0]
@@ -80,7 +81,7 @@
 		} 
 
 		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
-			$_GET = Acao::convertDateToDataBase($_GET);
+			$_GET = Metodo::convertDateToDataBase($_GET);
 		}
 		foreach ($_GET as $key => $value) {
 			$company[$key] = $value;
@@ -88,7 +89,7 @@
 		
 		$company["listacoes"] 	= "listacoes";
 		
-		$action 	= Acao::selectRegister($company);
+		$action 	= Metodo::selectRegister($company);
 	
 		$page = new PageAcoes();
 		$page->setTpl("acoes", array(
@@ -102,6 +103,13 @@
 	$app->get('/acoes/create', function() {
 		User::verifyLogin();
 		
+		$msg = ["state"=>'VAZIO', "msg"=> 'VAZIO'];
+		
+		if ((isset($_GET["msg"]) && $_GET["msg"] != '')) {
+			$mess = explode(':', $_GET["msg"]);
+			$msg = ["state"=>$mess[0], "msg"=> $mess[1]];
+		} 
+
 		$voltar = ["voltar"=>"acoes"];
 		if (isset($_GET["acoes"])) {
 			$voltar = ["voltar"=>"acoes"];
@@ -113,7 +121,8 @@
 
 		if (isset($_GET["compra"])) {
 			$page->setTpl("acoes-create", array(
-				"voltar"=>$voltar
+				"voltar"=>$voltar,
+				"msg"=>$msg
 			));
 		}
 		
@@ -129,7 +138,7 @@
 			$_POST["tax"] = $tax[0];
 		}
 
-		$_POST = Acao::convertDateToDataBase($_POST);
+		$_POST = Metodo::convertDateToDataBase($_POST);
 
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		
@@ -138,25 +147,32 @@
 
 		$acao->setData($_POST);
 
-		$acao->save();
+		$msg = $acao->save();
 		//var_dump($acao);exit;
 		$tipo = "compra";
 		
-		header("Location: /acoes/create?$tipo=$tipo");
+		header("Location: /acoes/create?$tipo=$tipo&msg=$msg");
 		exit;
 	});
 	
 	$app->get("/acoes/:idinvestiment/delete", function ($idinvestiment){
 		User::verifyLogin();
 		$acao = new Acao();
+		$msg = ["state"=>'VAZIO', "msg"=> 'VAZIO'];
+		
+		if ((isset($_GET["msg"]) && $_GET["msg"] != '')) {
+			$mess = explode(':', $_GET["msg"]);
+			$msg = ["state"=>$mess[0], "msg"=> $mess[1]];
+		} 
+
 		$acao->getByBuy($idinvestiment);
 		$array = (array) $acao;
 
 		foreach ($array as $key => $value) {
 			$company = $value["sgcompany"];
 		}
-		$acao->delete();
-		header("Location: /acoes?sgcompany=".$company."&dtbuy=&dtsell=&search=Search");
+		$msg = $acao->delete();
+		header("Location: /acoes?sgcompany=".$company."&dtbuy=&dtsell=&search=Search¨msg=$msg");
 		exit;
 	});
 
@@ -165,7 +181,7 @@
 		$acoes = new Acao();
 		$acoes->getByBuy($idinvestiment);
 		
-		$acoes = Acao::convertDateToView($acoes);
+		$acoes = Metodo::convertDateToView($acoes);
 
 		$page = new PageAcoes();
 		
@@ -193,7 +209,7 @@
 		} 
 
 		if ((isset($_GET["dtbuy"]) && $_GET["dtbuy"] != '') || (isset($_GET["dtsell"]) && $_GET["dtsell"] != '')) {
-			$_GET = Acao::convertDateToDataBase($_GET);
+			$_GET = Metodo::convertDateToDataBase($_GET);
 		}
 		foreach ($_GET as $key => $value) {
 			$company[$key] = $value;
@@ -203,7 +219,7 @@
 		if (isset($_GET["search"])) {
 			$company["search"] 		= "Search";
 			
-			$action 	= Acao::selectRegister($company);
+			$action 	= Metodo::selectRegister($company);
 	
 			if (isset($action) && $action != '') {
 				$page->setTpl("/notas", array(
@@ -216,7 +232,7 @@
 		} else // Fim do Search
 		{
 			$company["notas"]	= "notas";
-			$action 	= Acao::selectRegister($company);
+			$action 	= Metodo::selectRegister($company);
 
 			$page->setTpl("notas", array(
 				"acoes"=> $action[0],
@@ -247,13 +263,20 @@
 	$app->post("/notas/:idinvestiment", function ($idinvestiment){
 		User::verifyLogin();
 		$acoes = new Acao();
-				
+			
+		$msg = ["state"=>'VAZIO', "msg"=> 'VAZIO'];
+		
+		if ((isset($_GET["msg"]) && $_GET["msg"] != '')) {
+			$mess = explode(':', $_GET["msg"]);
+			$msg = ["state"=>$mess[0], "msg"=> $mess[1]];
+		}
+		
 		if (isset($_POST["tax"])) {
 			$tax = explode(" ",$_POST["tax"]);
 			$_POST["tax"] = $tax[0];
 		}
 		if (isset($_POST)) {
-			$_POST = Acao::convertDateToDataBase($_POST);
+			$_POST = Metodo::convertDateToDataBase($_POST);
 			$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		}
 		
@@ -274,7 +297,7 @@
 		User::verifyLogin();
 		$persons = Person::listAll();
 		$page = new PagePerson();
-		$page->setTpl("index", array(
+		$page->setTpl("persons", array(
 			"persons"=> $persons
 		));
 	});
@@ -336,18 +359,28 @@
 
 	$app->get('/admin/login', function() {
 		
+		$msg = ["state"=>'VAZIO', "msg"=> 'VAZIO'];
+		
+		if ((isset($_GET["msg"]) && $_GET["msg"] != '')) {
+			$mess = explode(':', $_GET["msg"]);
+			$msg = ["state"=>$mess[0], "msg"=> $mess[1]];
+		}
+
 		$page = new PageAdmin([
 			"header"=> false,
 			"footer"=> false
 
 		]);
-		$page->setTpl("login");
+		$page->setTpl("login", array(
+			"msg"=>$msg
+		));
 		
 	});
 
 	$app->post('/admin/login', function() {
 		
 		User::login($_POST["login"], $_POST["password"]);
+		
 		if ($_SESSION["User"]["inadmin"] == 1) {
 			header("Location: /admin");
 			exit;
@@ -430,6 +463,7 @@
 	$app->get('/users/create', function() {
 		
 		User::verifyLogin();
+		
 		if ($_SESSION["User"]["inadmin"] == 1) {
 			$page = new PageUser();
 			$page->setTpl("users-create");

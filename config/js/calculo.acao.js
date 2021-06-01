@@ -68,6 +68,12 @@ function removeMensagem(){
             msg.parentNode.removeChild(msg);   
         }, 2000);
     }
+    if (document.getElementById("msg-danger")) {
+        setTimeout(function(){ 
+            var msg = document.getElementById("msg-danger");
+            msg.parentNode.removeChild(msg);   
+        }, 2000);
+    }
 }
 document.onreadystatechange = () => {
     if (document.readyState === 'complete') {

@@ -34,3 +34,15 @@ img{
 .pagination{
     margin: 8px;
 }
+.alert-success{
+    background-color: #d5f8da !important;
+    color: #076111 !important;
+    font-size: 20px;
+    font-weight: bold;
+}
+.alert-danger{
+    background-color: #f8d9d5 !important;
+    color: #7e2c17 !important;
+    font-size: 14px;
+    font-weight: bold;
+}

@@ -20,22 +20,10 @@
            
             $list["start"] = ($pg - 1) * $list["limit"];
            
-            foreach ($list as $key => $value) 
-            {
-                if ($value != '') {
-                    $l[$key] = $value;
-                }else {
-                    $l[$key] = '';
-                }
-            }
-
-            if(isset($list["listacoes"]) && $list["listacoes"] === "listacoes")
-            {
-                return $sql->select("CALL sp_acoes_list(:start, :limit)", array(
-                    ":start"=> $l["start"],
-                    ":limit"=> $l["limit"],
-                ));
-            }
+            return $sql->select("CALL sp_acoes_list(:start, :limit)", array(
+                ":start"=> $list["start"],
+                ":limit"=> $list["limit"],
+            ));
         }
         public static function listAll($list)
         {
@@ -85,53 +73,15 @@
             
             $list["limit"] = (isset($list["limit"]) && $list["limit"] != '') ? $list["limit"] : 10;
             $list["start"] = ($pg - 1) * $list["limit"];
-            foreach ($list as $key => $value) 
-            {
-                if ($value != '') {
-                    $l[$key] = $value;
-                }else {
-                    $l[$key] = '';
-                }
-            }
+               
+            return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
+                ":sgcompany"    => $list["sgcompany"],    
+                ":dtbuy"        => $list["dtbuy"],
+                ":dtsell"       => $list["dtsell"],
+                ":start"        => $list["start"],
+                ":limit"        => $list["limit"]
+            ));
             
-            if (isset($list) && $list != '') {
-                
-                if (count($list) >= 3) {
-                   
-                    return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
-                        ":sgcompany"    => $l["sgcompany"],    
-                        ":dtbuy"        => $l["dtbuy"],
-                        ":dtsell"       => $l["dtsell"],
-                        ":start"        => $l["start"],
-                        ":limit"        => $l["limit"]
-                    ));
-                } else if ($data[0] === "sgcompany") {
-                    return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
-                        ":sgcompany"    => $l["sgcompany"],    
-                        ":dtbuy"        => $l["dtbuy"],
-                        ":dtsell"       => $l["dtsell"],
-                        ":start"        => $l["start"],
-                        ":limit"        => $l["limit"]
-                    ));
-                
-                } else {
-                    return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
-                        ":sgcompany"    => $l["sgcompany"],    
-                        ":dtbuy"        => $l["dtbuy"],
-                        ":dtsell"       => $l["dtsell"],
-                        ":start"        => $l["start"],
-                        ":limit"        => $l["limit"]
-                    ));
-                }
-            } else{ // (isset($listestoque) && $listestoque != '')
-                return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
-                    ":sgcompany"    => $l["sgcompany"],    
-                    ":dtbuy"        => $l["dtbuy"],
-                    ":dtsell"       => $l["dtsell"],
-                    ":start"        => $l["start"],
-                    ":limit"        => $l["limit"]
-                ));
-            }
         }
 
         //não está sendo usada
@@ -179,7 +129,22 @@
         public function save()
         {
             $sql = new Sql();
-          
+                   
+            echo '<pre>';
+            print_r($this);
+            echo '</pre>';
+            // exit;
+            // '1',
+            // 'GOL LINHAS AEREAS INTELIGENTES S.A.',
+            // 'GOLL4',
+            // '43.776.517/0001-80',
+            // '2021-01-21',
+            // '20',
+            // '22.75',
+            // '455.00',
+            // 'C',
+            // '1',
+            // '22.75',
             $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :desperson, :sgcompany, :descnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :tptransaction, :btipe, :bprcaverage)", array(
                 ":iduser"           => $this->getiduser(),    
                 ":desperson"        => $this->getdesperson(),    
@@ -195,6 +160,8 @@
             ));
             
             $this->setData($results);
+            print_r($results);exit;
+            return $results[0]["MESSAGE"];
         }
         
         public function update()
@@ -242,112 +209,16 @@
         {
             $sql = new Sql();
             
-            $sql->query("CALL sp_acoes_delete(:idinvestiment, :idestoque, :qtdetotal)", array(
+            $results = $sql->query("CALL sp_acoes_delete(:idinvestiment, :idestoque, :qtdetotal)", array(
                 ":idinvestiment"    =>$this->getidinvestiment(),
                 ":idestoque"        =>$this->getidestoque(),
                 ":qtdetotal"        =>$this->getqtdetotal()
             ));
+
+            $this->setData($results);
+            return $results[0]["MESSAGE"];
         }
         
-        public function convertDateToView($object = array())
-        {
-            if (isset($object["unit"])) {
-                
-                for ($i=0; $i < count($object); $i++) { 
-                    if (isset($object["dtbuy"]) && $object["dtbuy"] != '') {
-                        $object["dtbuy"] =  Acao::convertDateView($object["dtbuy"]);
-                    }
-                    if (isset($object["dtsell"]) && $object["dtsell"] != '') {
-                        $object["dtsell"] =     Acao::convertDateView($object["dtsell"]);
-                    }
-                }
-                
-            } else
-            {
-                for ($i=0; $i < count($object); $i++) { 
-                    if (isset($object[$i]["dtbuy"]) && $object[$i]["dtbuy"] != '') {
-                        $object[$i]["dtbuy"] =  Acao::convertDateView($object[$i]["dtbuy"]);
-                    }
-                    if (isset($object[$i]["dtsell"]) && $object[$i]["dtsell"] != '') {
-                        $object[$i]["dtsell"] =     Acao::convertDateView($object[$i]["dtsell"]);
-                    }
-                }
-            }
-            
-            return $object;
-        }
         
-        public function convertDateToDataBase($object = array())
-        {
-            for ($i=0; $i < count($object); $i++) { 
-                if (isset($object["dtbuy"]) && $object["dtbuy"] !='') {
-                    $object["dtbuy"] =  Acao::convertDateDataBase($object["dtbuy"]);
-                }
-                if (isset($object["dtsell"]) && $object["dtsell"] !='') {
-                    $object["dtsell"] =     Acao::convertDateDataBase($object["dtsell"]);
-                }
-            }
-            return $object;
-           
-        }
-
-        public function convertDateView($date)
-        {
-            return $data = date("d-m-Y", strToTime($date));
-        }
-
-        public function convertDateDataBase($date)
-        {
-            return $data = date("Y-m-d", strToTime($date));
-        }
-        
-        public function convertToInt($object = array())
-        {
-            if (isset($object[0]["pgs"])) {
-                for ($i=0; $i < count($object); $i++) { 
-                    $object[$i]["pgs"] = ceil($object[$i]["pgs"]);
-                }
-                return $object;
-            }
-            return false;
-        }
-
-        public function countRegister($qtdeRegister, $company)
-        {
-            $pgs = [];
-            // $qtdeRegister = $qtdeRegister / $company["limit"];
-            for ($j=0; $j < $qtdeRegister - 1; $j++) { 
-                $pgs[$j]    = $j;
-            }
-         
-            $pgs["list"]["limit"] = '';
-            $pgs["list"]["dtbuy"] = '';
-            $pgs["list"]["dtsell"] = '';
-            foreach ($company as $key => $value) {
-                $pgs["list"][$key] = $value;
-            }
-            
-            return $pgs;
-        }
-        public function selectRegister($act = array())
-        {
-            if (isset($act["listacoes"]) && $act["listacoes"] == "listacoes") {
-                $acoes = Acao::listAllAction($act);
-            } else if (isset($act["listestoque"]) && $act["listestoque"] == "listestoque") {
-                $acoes = Acao::listAllEstoque($act);
-                $acoes 	= Acao::convertDateToView($acoes);
-            } else {
-                $acoes 	= Acao::listAll($act);
-                $acoes 	= Acao::convertDateToView($acoes);
-                $acoes 	= Acao::convertToInt($acoes);
-            }
-           
-            $pgs = [];
-            if (isset($acoes[0]["pgs"]) && count($acoes) > 0 && $acoes != '') {
-                $pgs 	= Acao::countRegister($acoes[0]["pgs"], $act);
-            }
-                      
-            return [$acoes, $pgs];
-        }
     }
 ?>

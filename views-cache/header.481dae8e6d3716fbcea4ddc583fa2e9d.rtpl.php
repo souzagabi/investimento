@@ -7,7 +7,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Manutenção</title>
+  <title>Investimento</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
@@ -26,7 +26,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   -->
   <link rel="stylesheet" href="../../config/css/skins/skin-blue.min.css">
   <link rel="stylesheet" href="../../config/css/index.css">
-  <link rel="shortcut icon" href="../../img/favicon.jpg" type="image/x-icon">
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -60,12 +60,12 @@ desired effect
   <!-- Main Header -->
   <header class="main-header">
 
-    <!-- Logo -->
+<!-- Logo -->
     <a href="../../config/index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>M</b>NT</span>
+      <span class="logo-mini"><b>I</b>AC</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Manutenção</b>MNT</span>
+      <span class="logo-lg"><b>Investimento</b>AC</span>
     </a>
 
     <!-- Header Navbar -->
@@ -93,7 +93,7 @@ desired effect
                     <a href="#">
                       <div class="pull-left">
                         <!-- User Image -->
-                        <img class="img-circle" src="../../image/<?php echo htmlspecialchars( $_SESSION['User']["person_id"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.jpg">
+                        <img class="img-circle">
                       </div>
                       <!-- Message title and timestamp -->
                       <h4>
@@ -177,19 +177,17 @@ desired effect
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img class="user-image" src="../../image/<?php if( $_SESSION['User']["photo"] == 0 ){ ?>admin.jpg<?php }else{ ?><?php echo htmlspecialchars( $_SESSION['User']["user_id"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.jpg<?php } ?>">
+              <img class="user-image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              
-              <span class="hidden-xs"><?php echo htmlspecialchars( $_SESSION['User']["name_person"], ENT_COMPAT, 'UTF-8', FALSE ); ?></span>
-              
+              <span class="hidden-xs">Gabriel Alves</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               
               <li class="user-header">
-                <img class="user-image" src="../../image/<?php if( $_SESSION['User']["photo"] == 0 ){ ?>admin.jpg<?php }else{ ?><?php echo htmlspecialchars( $_SESSION['User']["user_id"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.jpg<?php } ?>">
-              <p>
-                  <?php echo htmlspecialchars( $_SESSION['User']["name_person"], ENT_COMPAT, 'UTF-8', FALSE ); ?> - Web Developer
+                <img class="img-circle">
+                <p>
+                  Gabriel Alves - Web Developer
                   <small>Member since Nov. 2012</small>
                 </p>
               </li>
@@ -211,10 +209,10 @@ desired effect
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-info btn-flat">Perfil</a>
+                  <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="/admin/logout" class="btn btn-danger btn-flat">Sair</a>
+                  <a href="/admin/logout" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -235,10 +233,10 @@ desired effect
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel">
       <div class="pull-left image">
-        <img class="user-image" src="../../image/<?php if( $_SESSION['User']["photo"] == 0 ){ ?>admin.jpg<?php }else{ ?><?php echo htmlspecialchars( $_SESSION['User']["user_id"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.jpg<?php } ?>">
+        <img src="../../img/avatar.jpg" class="img-circle">
       </div>
       <div class="pull-left info">
-        <p><?php echo htmlspecialchars( $_SESSION['User']["name_person"], ENT_COMPAT, 'UTF-8', FALSE ); ?></p>
+        <p>Gabriel Alves</p>
         <!-- Status -->
         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
       </div>
@@ -260,14 +258,13 @@ desired effect
     <ul class="sidebar-menu">
       <li class="header">HEADER</li>
       <!-- Optionally, you can add icons to the links -->
-      <!-- <li><a href="/admin?pg=1"><i class="fa fa-user"></i> <span>Administrador</span></a></li>
-      <li><a href="/users?pg=1"><i class="fa fa-users"></i> <span>Usuários</span></a></li> -->
-      <li><a href="/visitant?pg=1"><i class="fa fa-user"></i> <span>Visitas</span></a></li>
-      <li><a href="/residual?pg=1"><i class="fa fa-user"></i> <span>Resíduos</span></a></li>
-      <!-- <li class="active"><a href="/acoes?pg=1&limit=10"><i class="fa fa-envelope"></i> <span>Ações</span></a></li>
+      <!-- <li><a href="/admin"><i class="fa fa-user"></i> <span>Administrador</span></a></li> -->
+      <li><a href="/users?pg=1&limit=10"><i class="fa fa-users"></i> <span>Usuários</span></a></li>
+      <li><a href="/persons?pg=1&limit=10"><i class="fa fa-user"></i> <span>Pessoas</span></a></li>
+      <li class="active"><a href="/acoes?pg=1&limit=10"><i class="fa fa-envelope"></i> <span>Ações</span></a></li>
       <li><a href="/notas?pg=1&limit=10"><i class="fa fa-envelope"></i> <span>Notas Compra</span></a></li>
-      <li><a href="/acoes-estoque?search"><i class="fa fa-envelope"></i> <span>Estoque</span></a></li> -->
-      <!-- <li class="treeview">
+      <!-- <li><a href="/acoes-estoque?pg=1&limit=10"><i class="fa fa-envelope"></i> <span>Estoque</span></a></li> -->
+      <li class="treeview">
         <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
@@ -277,7 +274,7 @@ desired effect
           <li><a href="#">Link in level 2</a></li>
           <li><a href="#">Link in level 2</a></li>
         </ul>
-      </li> -->
+      </li>
     </ul>
     <!-- /.sidebar-menu -->
   </section>

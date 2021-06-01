@@ -16,7 +16,9 @@
 
 <!-- Main content -->
 <section class="content">
-
+  <div id="<?php if( $msg["state"] == 'SUCCESS'  ){ ?>msg-success<?php } ?>" class="box box-success" <?php if( $msg["state"] != 'SUCCESS'  ){ ?>readonly hidden<?php } ?>>
+    <div class="msg"><input type="text" class="form-control <?php if( $msg["state"] == 'SUCCESS'  ){ ?>alert-success<?php }else{ ?>alert-danger<?php } ?>" name="msg" id="msg" value="<?php if( $msg["state"] == 'SUCCESS'  ){ ?><?php echo htmlspecialchars( $msg["msg"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?>" ></div>
+  </div>
   <div class="row">
   	<div class="col-md-12">
   		<div class="box box-success">
@@ -48,8 +50,8 @@
             </div>
             <div class="col col-md-2">
               <div class="form-group">
-                <label for="tipe">Tipo</label>
-                <select class="form-control" name="tipe" id="tipe">
+                <label for="btipe">Tipo</label>
+                <select class="form-control" name="btipe" id="btipe">
                   <option value="1" selected>Swing Trade</option>
                   <option value="2">Day Trade</option>
                 </select>
@@ -83,8 +85,8 @@
             </div>
             <div class="col col-md-2">
               <div class="form-group">
-                <label for="prcaverage">Valor Médio</label>
-                <input type="text" class="form-control" id="prcaverage" name="prcaverage" readonly>
+                <label for="bprcaverage">Valor Médio</label>
+                <input type="text" class="form-control" id="bprcaverage" name="bprcaverage" readonly>
               </div>
             </div>
           </div>
