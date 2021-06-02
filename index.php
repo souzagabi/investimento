@@ -25,15 +25,8 @@
 /*======================================================================================*/
 	$app->get('/', function() {
 		User::verifyLogin();
-		$acoes = Metodo::listAll("listacoes", "");
-		
-		$page = new PageAcoes([
-			"acoes"=> $acoes
-		]);
-			
-		$page->setTpl("acoes", array(
-			"acoes"=> $acoes
-		));
+		header("Location: /acoes?pg=1&limit=10");
+		exit;
 		
 	});
 

@@ -179,7 +179,7 @@ desired effect
               <!-- The user image in the navbar-->
               <img class="user-image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">Gabriel Alves</span>
+              <span class="hidden-xs"></span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->

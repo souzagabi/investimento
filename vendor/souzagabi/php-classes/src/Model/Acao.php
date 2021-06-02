@@ -2,6 +2,7 @@
     namespace Acao\Model;
     use \Acao\DB\Sql;
     use \Acao\Model;
+    use \Acao\Model\Metodo;
     
     class Acao extends Model {
 
@@ -120,10 +121,11 @@
                 $results[0]["tax"] = $results[0]["tax"]." %";
             }
             $results[0]["unit"] = "unit";
-                 
-            //$results[0] = Acao::convertDateToView($results[0]);
+            
+            $results[0] = Metodo::convertDateToView($results[0]);
             
             $this->setData($results[0]);
+            
         }
 
         public function save()
@@ -170,11 +172,16 @@
             $qtdeTotal = ["qtdetotal"=>$this->getqtdetotal() + $this->getqtdebuy() - $this->getqtdesell()];
            
             $this->setData($qtdeTotal);
-            
-            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment, :iduser, :idperson, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :bprcaverage, :btptransaction, :btipe, :dtsell, :qtdesell, :prcsell, :tlsell, :sprcaverage, :stptransaction, :btipe, :tax, :lucre, :idestoque, :sgecompany, :qtdeestoque)", array(
+            echo 'antes Update';
+            echo '<pre>';
+            print_r($this);
+            echo '</pre>';
+            exit;
+           
+            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson,:iduser,:desperson,:sgcompany,:descpfcnpj,:dtbuy,:qtdebuy,:prcbuy,:tlbuy,:bprcaverage,:btptransaction,:btipe,:dtsell,:qtdesell,:prcsell,:tlsell,:sprcaverage,:stptransaction,:stipe,:tax,:lucre,:idestoque,:sgecompany,:qtdeestoque)", array(
                                 ":idinvestiment"    => $this->getidinvestiment(),
-                                ":iduser"           => $this->getiduser(),   
-                                ":idperson"         => $this->getidperson(),
+                                ":idperson"         => $this->getidperson(),   
+                                ":iduser"           => $this->getiduser(),
                                 ":desperson"        => $this->getdesperson(),    
                                 ":sgcompany"        => $this->getsgcompany(),    
                                 ":descpfcnpj"       => $this->getdescpfcnpj(),    
@@ -200,8 +207,12 @@
                         
             ));
            
-            $this->setData($results);
-            
+            $this->setData($results[0]);
+            echo 'depois Update';
+            echo '<pre>';
+            print_r($results[0]);
+            echo '</pre>';
+            exit;
             return $results[0]["MESSAGE"];
         }
 

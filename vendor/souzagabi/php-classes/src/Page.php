@@ -1,5 +1,5 @@
 <?php
-    namespace PRJM010;
+    namespace Acao;
     use Rain\Tpl;
 
     class Page{
@@ -21,10 +21,6 @@
             }
             
             $this->setConfig($tpl_dir);
-<<<<<<< HEAD
-
-=======
->>>>>>> 62683b9d55fc35e5c5d53b515122afd4b3dc2809
         }
         
         private function setData($data = array())
@@ -43,34 +39,19 @@
         public function __destruct()
         {
             $this->setConfig("/views/");
-<<<<<<< HEAD
-
-=======
-             
->>>>>>> 62683b9d55fc35e5c5d53b515122afd4b3dc2809
             if($this->options["footer"] === true) 
             {
                 $this->tpl->draw("footer");
             }
         }
-<<<<<<< HEAD
 
         private function setConfig($tpl_dir)
         {
-=======
-        private function setConfig($tpl_dir)
-        {
-            //Configura o diretório raiz para carregar header,o footer e os contents
->>>>>>> 62683b9d55fc35e5c5d53b515122afd4b3dc2809
             $config = array(
                 "tpl_dir"    => $_SERVER['DOCUMENT_ROOT'].$tpl_dir, 
                 "cache_dir"  => $_SERVER['DOCUMENT_ROOT']."/views-cache/", 
                 "debug"      => false           
              );
-<<<<<<< HEAD
-=======
-             
->>>>>>> 62683b9d55fc35e5c5d53b515122afd4b3dc2809
              Tpl::configure( $config );
  
              $this->tpl = new Tpl;

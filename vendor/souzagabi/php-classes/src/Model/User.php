@@ -12,7 +12,7 @@
         {
             $sql = new Sql();
 
-            $results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :LOGIN", array(
+            $results = $sql->select("SELECT * FROM tb_persons p INNER JOIN tb_users u ON u.idperson = p.idperson WHERE u.deslogin = :LOGIN", array(
                 ":LOGIN"=>$login
             ));
             
