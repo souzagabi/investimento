@@ -213,7 +213,7 @@
 			$company["search"] 		= "Search";
 			
 			$action 	= Metodo::selectRegister($company);
-	
+			
 			if (isset($action) && $action != '') {
 				$page->setTpl("/notas", array(
 					"acoes"=>$action[0],
@@ -257,6 +257,8 @@
 		User::verifyLogin();
 		$acoes = new Acao();
 			
+		$_POST["qtdetotal"] = $_POST["qtdebuy"] - $_POST["qtdesell"];
+
 		$msg = ["state"=>'VAZIO', "msg"=> 'VAZIO'];
 		
 		if ((isset($_GET["msg"]) && $_GET["msg"] != '')) {
@@ -276,6 +278,11 @@
 		$acoes->getByBuy($idinvestiment);
 		$acoes->setData($_POST);
 		$msg = $acoes->update();
+		// echo 'index L281';
+		// echo '<pre>';
+		// print_r($acoes);
+		// echo '</pre>';
+		// exit;
 		
 		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search&limit=10&msg=$msg");
 		exit;

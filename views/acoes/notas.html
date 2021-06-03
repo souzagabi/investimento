@@ -95,7 +95,7 @@
           <tbody>
             {loop="$acoes"}
             <tr>
-              <th>{$value.sgcompany}</th>
+              <th>{$value.company}</th>
               <td class="buy">{$value.dtbuy}</td>
               <td class="buy">{$value.qtdebuy}</td>
               <td class="buy">{$value.prcbuy}</td>
@@ -106,8 +106,8 @@
               <td class="sell">{$value.sprcaverage}</td>
               <td>{if="$value.btipe == 1"}Swing Trade{else}Day Trade{/if}</td>
               <td>
-                <a href="/notas/{$value.idinvestiment}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
-                <a href="/notas/{$value.idinvestiment}/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                <a href="/notas/{$value.idinvest}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                <a href="/notas/{$value.idinvest}/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
             {/loop}
