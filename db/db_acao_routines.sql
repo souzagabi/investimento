@@ -509,15 +509,15 @@ BEGIN
 		SELECT DISTINCT(i.idinvestiment), p.idperson, p.desperson, p.descpfcnpj , i.iduser, i.sgcompany, 
 			b.dtbuy, b.qtdebuy, b.prcbuy, b.tlbuy, b.bprcaverage, b.btptransaction, b.btipe,
             s.dtsell, s.qtdesell, s.prcsell, s.tlsell, s.sprcaverage, s.stptransaction, s.stipe, 
-            s.lucre, s.tax, e.idestoque, e.sgecompany AS sgecompany,
+            s.lucre, s.tax, e.idestoque, e.sgecompany AS sgecompany, e.prcaverage,
 			e.qtdeestoque AS qtdetotal, s.qtdesell, b.qtdebuy
 		FROM tb_persons p 
 		INNER JOIN tb_investiments i USING(idperson) 
         INNER JOIN tb_buys b USING(idperson)
-        INNER JOIN tb_sells s USING(idperson)
-		INNER JOIN tb_estoques e USING(idperson) 
-		WHERE i.idinvestiment = pidinvestiment AND b.idinvestiment = pidinvestiment 
-        AND s.idinvestiment = pidinvestiment
+        LEFT JOIN tb_sells s USING(idperson)
+		LEFT JOIN tb_estoques e USING(idperson) 
+		WHERE i.idinvestiment = pidinvestiment 
+        AND b.idinvestiment = pidinvestiment 
         GROUP BY i.sgcompany;
 END ;;
 DELIMITER ;
@@ -963,7 +963,7 @@ BEGIN
     /*												Início do Select				 						 */
     /*********************************************************************************************************/
     
-    SET @sql = CONCAT('SELECT *, ');
+    SET @sql = CONCAT('SELECT  i.sgcompany as company, i.idinvestiment AS idinvest,b.*, s.*, ');
     SET @sql = CONCAT(@sql,' (SELECT count(idinvestiment) FROM tb_investiments  ii' );
     
     IF pdtbuy IS NOT NULL AND pdtbuy != '' THEN
@@ -1046,19 +1046,19 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_update_save`(
 	pidinvestiment INT(11), 
-	piduser INT(11),        
-	pidperson INT(11),      
+	pidperson INT(11),        
+	piduser INT(11),      
 	pdesperson VARCHAR(64),
 	psgcompany VARCHAR(20), 
-	pdescnpj VARCHAR(20),   
-	pdtbuy DATE,            
+	pdescpfcnpj VARCHAR(20),   
+	pdtbuy VARCHAR(10),            
 	pqtdebuy INT(11),       
 	pprcbuy DECIMAL(10,2),  
 	ptlbuy DECIMAL(10,2),   
 	pbprcaverage DECIMAL(10,2),
 	pbtptransaction CHAR(1),
 	pbtipe CHAR(1), 
-	pdtsell DATE,           
+	pdtsell VARCHAR(10),           
 	pqtdesell INT(11),      
 	pprcsell DECIMAL(10,2), 
 	ptlsell DECIMAL(10,2),
@@ -1069,108 +1069,107 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_update_save`(
 	plucre DECIMAL(10,2),   
 	pidestoque INT(11),     
 	psgecompany VARCHAR(20),
+    pprcaverage DECIMAL(10,1),
 	pqtdeestoque INT(11)
 )
 BEGIN
-	DECLARE IDP INT;
-    DECLARE IDI INT;
+	DECLARE IDP, IDB, IDS INT;
     DECLARE MESSAGE VARCHAR(200);
 	DECLARE EX SMALLINT DEFAULT 0;
 	DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET EX = 1;
-    DECLARE EXIT HANDLER FOR 1062 SELECT  "ERRO de duplicidade do ID." AS MESSAGE;
-	DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SELECT 'Erro no código SQL.' AS MESS;
+    DECLARE EXIT HANDLER FOR 1062 SELECT  "ERRO de duplicidade do ID." MESSAGE;
+	DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SELECT 'Erro no código SQL.' MESSAGE;
     START TRANSACTION;
-        
-    SELECT idinvestiment INTO IDI FROM tb_buys WHERE idinvestiment = pidinvestiment;
     
-    IF IDI IS NULL THEN
-    BEGIN
-		INSERT INTO tb_buys (idinvestiment, idperson,sgcompany,dtbuy,qtdebuy,prcbuy,tlbuy,bprcaverage,btptransaction,btipe) 
-        VALUES (pidinvestiment, pidperson,psgcompany,pdtbuy,pqtdebuy,pprcbuy,ptlbuy,pbprcaverage,pbtptransaction,pbtipe);
-    END;
-    else
-    BEGIN
-		UPDATE tb_buys
-		SET
-			idperson        = pidperson, 
-			sgcompany       = psgcompany, 
-			dtbuy           = pdtbuy, 
-			qtdebuy         = pqtdebuy, 
-			prcbuy          = pprcbuy, 
-			tlbuy           = ptlbuy, 
-			bprcaverage     = pbprcaverage, 
-			btptransaction  = pbtptransaction, 
-			btipe           = pbtipe 
-		WHERE idinvestiment = IDI;
-	END;
-    END IF;
-    IF EX = 1 THEN
-		SET MESSAGE =  "ERROR: Erro ao fazer update no registro na tabela Buys";
-    END IF;
-    
-    SELECT idinvestiment INTO IDI FROM tb_sells WHERE idinvestiment = pidinvestiment;
-    
-    IF IDI IS NULL THEN
-    BEGIN
-		INSERT INTO tb_sells (idinvestiment, idperson, sgcompany, dtsell, qtdesell, prcsell, tlsell, sprcaverage, stptransaction, stipe, tax, lucre) 
-		VALUES (pidinvestiment, pidperson, psgcompany, pdtsell, pqtdesell, pprcsell, ptlsell, psprcaverage, pstptransaction, pstipe, ptax, plucre);
-    END;
-    ELSE
-    BEGIN
-		UPDATE tb_sells
-        SET
-			idperson        = pidperson, 
-			sgcompany       = psgcompany, 
-			dtsell          = pdtsell, 
-			qtdesell        = pqtdesell, 
-			prcsell         = pprcsell, 
-			tlsell          = ptlsell, 
-			sprcaverage     = psprcaverage, 
-			stptransaction  = pstptransaction, 
-			stipe           = pstipe , 
-			tax             = ptax, 
-			lucre           = plucre
-		WHERE idinvestiment = IDI;
-    END;
-    END IF;
-    IF EX = 1 THEN
-		SET MESSAGE =  "ERROR: Erro ao fazer update no registro na tabela Sells";
-    END IF;
-	
-    SELECT idinvestiment INTO IDI FROM tb_investiments WHERE idinvestiment = pidinvestiment;
-     
-    UPDATE tb_investiments
-    SET
-		iduser 		= piduser, 
-        idperson 	= pidperson, 
-        sgcompany 	= psgcompany,
-        dtbuy 		= pdtbuy,
-        dtsell 		= pdtsell
-        
-    WHERE idinvestiment = pidinvestiment;
+    UPDATE tb_investiments 
+	SET 
+		iduser		= piduser,
+		idperson	= pidperson,
+		sgcompany	= psgcompany,
+		dtbuy		= pdtbuy,
+		dtsell		= pdtsell
+		
+	WHERE idinvestiment = pidinvestiment;
     
     IF EX = 1 THEN
 		SET MESSAGE =  "ERROR: Erro ao fazer update no registro na tabela Investiments";
+	ELSE
+		SET MESSAGE =  "SUCCESS: Entrou na tabela Investiments";
     END IF;
     
-	UPDATE tb_estoques
-	SET
-		qtdeestoque = pqtdeestoque
-	WHERE idestoque = pidestoque;
+    UPDATE tb_buys 
+	SET 
+		idperson        = pidperson, 
+		sgcompany       = psgcompany, 
+		dtbuy           = pdtbuy, 
+		qtdebuy         = pqtdebuy,
+		prcbuy          = pprcbuy,
+		tlbuy           = ptlbuy,
+		bprcaverage     = pbprcaverage,
+		btptransaction  = pbtptransaction,
+		btipe           = pbtipe 
+	WHERE idinvestiment = pidinvestiment;
     
     IF EX = 1 THEN
-		SET MESSAGE =  "Erro ao fazer update no registro na tabela Estoques";
-	END IF; #Fim do if EX = 1 THEN
+		SET MESSAGE =  "ERROR: Erro ao fazer update no registro na tabela Buys";
+	ELSE
+		SET MESSAGE =  "SUCCESS: Update Entrou na tabela Buys";
+	END IF;
+    
+    SELECT idsell INTO IDS FROM tb_sells WHERE idinvestiment = pidinvestiment;
+
+	IF (IDS IS NULL) THEN
+							  
+		INSERT INTO tb_sells (idinvestiment,idperson,sgcompany,qtdesell,dtsell,prcsell,tlsell,sprcaverage,tax,lucre,stptransaction,stipe)
+			VALUES (pidinvestiment,pidperson,psgcompany,pqtdesell,pdtsell,pprcsell,ptlsell,psprcaverage,ptax,plucre,pstptransaction,pstipe);
+		IF EX = 1 THEN
+			SET MESSAGE =  "ERROR: Erro ao cadastrar registro na tabela Sells";
+		ELSE
+			SET MESSAGE =  "SUCCESS: Insert Entrou na tabela Sells";
+		END IF;
+	ELSE
+		UPDATE tb_sells
+		SET
+			idperson        = pidperson,
+			sgcompany       = psgcompany,
+			qtdesell        = pqtdesell,
+			dtsell          = pdtsell,
+			prcsell         = pprcsell,
+			tlsell          = ptlsell,
+			sprcaverage     = psprcaverage,
+			tax             = ptax,
+			lucre           = plucre,
+			stptransaction  = pstptransaction,
+			stipe           = pstipe
+		WHERE idsell = IDS;
+		IF EX = 1 THEN
+			SET MESSAGE =  "ERROR: Erro ao fazer update no registro na tabela Sells";
+		ELSE
+			SET MESSAGE =  "SUCCESS: Update Entrou na tabela Sells";
+		END IF;
+	END IF;
+	
+    UPDATE tb_estoques
+	SET
+		qtdeestoque = pqtdeestoque,
+        prcaverage	= pprcaverage
+	WHERE idestoque = pidestoque;
+	IF EX = 1 THEN
+		SET MESSAGE =  "ERROR: Erro ao fazer update no registro na tabela Estoques";
+	END IF;
+   
+    IF EX = 1 THEN
+		SET MESSAGE =  "ERROR: Erro ao fazer update no registro na tabela Estoques";
+	END IF;
     
     IF EX = 1 THEN
 		SELECT MESSAGE;
 		ROLLBACK;
 	ELSE
-		SET MESSAGE = "SUCCESS: Registro salvo com sucesso!";
-        SELECT MESSAGE;
+		SET MESSAGE =  "SUCCESS: Dados atualizados com sucesso!!";
+		SELECT MESSAGE;
         COMMIT;
-	END IF; #Fim do if EX = 1 THEN
-    
+	END IF;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1509,4 +1508,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-01  6:28:28
+-- Dump completed on 2021-06-03  6:02:29
