@@ -140,18 +140,8 @@
             echo '<pre>';
             print_r($this);
             echo '</pre>';
-            // exit;
-            // '1',
-            // 'GOL LINHAS AEREAS INTELIGENTES S.A.',
-            // 'GOLL4',
-            // '43.776.517/0001-80',
-            // '2021-01-21',
-            // '20',
-            // '22.75',
-            // '455.00',
-            // 'C',
-            // '1',
-            // '22.75',
+            //exit;
+            
             $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :desperson, :sgcompany, :descnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :tptransaction, :btipe, :bprcaverage)", array(
                 ":iduser"           => $this->getiduser(),    
                 ":desperson"        => $this->getdesperson(),    
@@ -167,7 +157,7 @@
             ));
             
             $this->setData($results);
-            print_r($results);exit;
+            //print_r($results);exit;
             return $results[0]["MESSAGE"];
         }
         
@@ -176,7 +166,7 @@
             $sql = new Sql();
             $qtdeTotal  = ["qtdetotal"=>$this->getqtdetotal() + $this->getqtdebuy() - $this->getqtdesell()];
             $this->setData($qtdeTotal);
-            var_dump($qtdeTotal);
+            
             if ($qtdeTotal["qtdetotal"] == 0) {
                 $average    = ["prcaverage"=>'0'];
                 $this->setData($average);

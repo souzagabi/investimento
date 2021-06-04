@@ -236,7 +236,7 @@ BEGIN
     START TRANSACTION;
 	
 	SELECT idperson INTO IDP FROM tb_persons WHERE sgcompany = psgcompany;
-	SELECT idperson INTO IDE FROM tb_estoques WHERE sgecompany = psgcompany;
+	SELECT idestoque INTO IDE FROM tb_estoques WHERE sgecompany = psgcompany;
 
 	IF IDP IS NULL THEN
 		INSERT INTO tb_persons (desperson, sgcompany, descpfcnpj) VALUES (pdescompany, psgcompany, pdescnpj);
@@ -260,31 +260,25 @@ BEGIN
 		SET MESSAGE = "ERROR: Erro ao gravar registro na tabela Buys";
     END IF; 
     
-    IF IDE IS NULL OR IDE IS NOT NULL THEN
-		IF IDE IS NULL THEN
-			SET @sql = CONCAT('INSERT INTO tb_estoques (idperson, sgecompany, qtdeestoque, prcaverage) VALUES (',IDP,', ',psgcompany,',', pqtdebuy,', ',pprcaverage,');');
-            IF EX = 1 THEN
-				SET MESSAGE = "ERROR: Erro ao gravar registro na tabela Estoques";
-			 END IF;
-		ELSE
-			SELECT qtdeestoque  + pqtdebuy INTO QTDE FROM tb_estoques e WHERE idperson = IDE;
-            SELECT ((qtdeestoque * prcaverage) + ptlbuy ) / QTDE INTO AVERAGE FROM tb_estoques e WHERE idperson = IDE;
-            
-			SET @sql = CONCAT('UPDATE tb_estoques ');
-			SET @sql = CONCAT(@sql,'SET ');
-			SET @sql = CONCAT(@sql,' qtdeestoque = ',QTDE,',');
-			SET @sql = CONCAT(@sql,' prcaverage = ',AVERAGE);
-            SET @sql = CONCAT(@sql,' WHERE idperson = ',IDE,';');
-            
-            IF EX = 1 THEN
-				SET MESSAGE = "ERROR: Erro ao atualizar registro na tabela Estoques";
-			 END IF;
-		END IF;
-         
+	IF IDE IS NULL THEN
+		INSERT INTO tb_estoques (idperson, sgecompany, qtdeestoque, prcaverage) VALUES (IDP,psgcompany, pqtdebuy,pprcaverage);
+		IF EX = 1 THEN
+			SET MESSAGE = "ERROR: Erro ao gravar registro na tabela Estoques";
+		 END IF;
+	ELSE
+		SELECT qtdeestoque  + pqtdebuy INTO QTDE FROM tb_estoques e WHERE idestoque = IDE;
+		SELECT ((qtdeestoque * prcaverage) + ptlbuy ) / QTDE INTO AVERAGE FROM tb_estoques e WHERE idestoque = IDE;
+		
+		UPDATE tb_estoques
+		SET 
+			qtdeestoque = QTDE,
+			prcaverage = AVERAGE
+		WHERE idestoque = IDE;
+		
+		IF EX = 1 THEN
+			SET MESSAGE = "ERROR: Erro ao atualizar registro na tabela Estoques";
+		 END IF;
 	END IF;
-	#SELECT @sql;
-    PREPARE STMT FROM @sql;
-    EXECUTE STMT;
     
     IF EX = 1 THEN
 		SELECT MESSAGE;
@@ -506,19 +500,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_acoes_select_buy`(
 	pidinvestiment INT(10)
 )
 BEGIN
-		SELECT DISTINCT(i.idinvestiment), p.idperson, p.desperson, p.descpfcnpj , i.iduser, i.sgcompany, 
+		SELECT i.idinvestiment, p.idperson, p.desperson, p.descpfcnpj , i.iduser, i.sgcompany, 
 			b.dtbuy, b.qtdebuy, b.prcbuy, b.tlbuy, b.bprcaverage, b.btptransaction, b.btipe,
             s.dtsell, s.qtdesell, s.prcsell, s.tlsell, s.sprcaverage, s.stptransaction, s.stipe, 
             s.lucre, s.tax, e.idestoque, e.sgecompany AS sgecompany, e.prcaverage,
 			e.qtdeestoque AS qtdetotal, s.qtdesell, b.qtdebuy
 		FROM tb_persons p 
-		INNER JOIN tb_investiments i USING(idperson) 
-        INNER JOIN tb_buys b USING(idperson)
-        LEFT JOIN tb_sells s USING(idperson)
-		LEFT JOIN tb_estoques e USING(idperson) 
-		WHERE i.idinvestiment = pidinvestiment 
-        AND b.idinvestiment = pidinvestiment 
-        GROUP BY i.sgcompany;
+		INNER JOIN tb_investiments i ON i.idperson = p.idperson
+        INNER JOIN tb_buys b ON b.idinvestiment = i.idinvestiment
+        LEFT JOIN tb_sells s ON s.idinvestiment = i.idinvestiment
+		LEFT JOIN tb_estoques e ON e.idperson = p.idperson
+		WHERE i.idinvestiment = pidinvestiment;
+        
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1508,4 +1501,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-03  6:02:29
+-- Dump completed on 2021-06-04  6:15:19
