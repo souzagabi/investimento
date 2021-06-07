@@ -135,7 +135,7 @@
 
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		
-   		$_POST["tptransaction"] = "C";
+   		$_POST["btptransaction"] = "C";
 
 
 		$acao->setData($_POST);
@@ -240,12 +240,9 @@
 		User::verifyLogin();
 		$acoes = new Acao();
 		$acoes->getByBuy($idinvestiment);
-		
-		// echo 'antes Update';
 		// echo '<pre>';
 		// print_r($acoes);
-		// echo '</pre>';
-		// exit;
+		// echo '</pre>';exit;
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(
@@ -278,6 +275,22 @@
 		$acoes->getByBuy($idinvestiment);
 		$acoes->setData($_POST);
 		$msg = $acoes->update();
+		/***************************Atualizar Tabelas *************************************/
+		// $act = new Acao();
+		// $action 	= Acao::listAllIds();
+		
+		// for ($i=0; $i < count($action); $i++) {
+		// 	$act = new Acao();
+		// 	$act->getByBuy($action[$i]["idinvestiment"]);
+			
+		// 	echo '<pre>';
+		// 	print_r($act);
+		// 	echo '</pre>';
+		// 	$msg = $act->update();
+		// }
+		//exit;
+		/***************************Atualizar Tabelas *************************************/
+
 		// echo 'index L281';
 		// echo '<pre>';
 		// print_r($acoes);

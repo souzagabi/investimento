@@ -72,9 +72,8 @@
         {
             $sql = new Sql();
             
-            $results = $sql->select("CALL sp_users_save(:desperson, :sgcompany, :descpfcnpj, :deslogin, :despassword, :inadmin)", array(
+            $results = $sql->select("CALL sp_users_save(:desperson, :descpfcnpj, :deslogin, :despassword, :inadmin)", array(
                 ":desperson"    =>  $this->getdesperson(),
-                ":sgcompany"    =>  $this->getsgcompany(),
                 ":descpfcnpj"   =>  $this->getdescpfcnpj(),
                 ":deslogin"     =>  $this->getdeslogin(),
                 ":despassword"  =>  $this->getdespassword(),
@@ -87,12 +86,11 @@
         {
             $sql = new Sql();
                        
-            $results = $sql->select("CALL sp_users_update_save(:iduser, :idperson, :desperson, :sgcompany, :descpfcnpj, :deslogin, :despassword, :inadmin)", array(
+            $results = $sql->select("CALL sp_users_update_save(:iduser, :idperson, :desperson, :descpfcnpj, :deslogin, :despassword, :inadmin)", array(
                 ":iduser"       =>  $this->getiduser(),
                 ":idperson"     =>  $this->getidperson(),
                 ":desperson"    =>  $this->getdesperson(),
                 ":descpfcnpj"   =>  $this->getdescpfcnpj(),
-                ":sgcompany"    =>  $this->getsgcompany(),
                 ":deslogin"     =>  $this->getdeslogin(),
                 ":despassword"  =>  $this->getdespassword(),
                 ":inadmin"      =>  $this->getinadmin()

@@ -124,11 +124,7 @@
             $results[0]["unit"] = "unit";
             
             $results[0] = Metodo::convertDateToView($results[0]);
-            // echo 'Acao L126';
-            // echo '<pre>';
-            // print_r($results);
-            // echo '</pre>';
-            // exit;
+         
             $this->setData($results[0]);
             
         }
@@ -136,28 +132,45 @@
         public function save()
         {
             $sql = new Sql();
-                   
+                  
+            echo 'Save: L140';
             echo '<pre>';
             print_r($this);
             echo '</pre>';
-            //exit;
-            
-            $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :desperson, :sgcompany, :descnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :tptransaction, :btipe, :bprcaverage)", array(
+            exit;
+            // echo 'Save: L140';
+            // echo '<pre>';
+            // print_r($this);
+            // echo '</pre>';
+            // exit;
+            // '1',
+            // 'MAGAZINE LUIZA S.A.',
+            // 'MGLU3',
+            // '47.960.950/0001-21',
+            // '24-04-2020',
+            // '2',
+            // '47.14',
+            // '94.28',
+            // 'C',
+            // '2',
+            // '47.14',
+           
+            $results = $sql->select("CALL sp_acoes_save(:iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :btptransaction, :btipe, :bprcaverage)", array(
                 ":iduser"           => $this->getiduser(),    
                 ":desperson"        => $this->getdesperson(),    
                 ":sgcompany"        => $this->getsgcompany(),    
-                ":descnpj"          => $this->getdescnpj(),    
+                ":descpfcnpj"       => $this->getdescpfcnpj(),    
                 ":dtbuy"            => $this->getdtbuy(),
                 ":qtdebuy"          => $this->getqtdebuy(),
                 ":prcbuy"           => $this->getprcbuy(),
                 ":tlbuy"            => $this->gettlbuy(),
-                ":tptransaction"    => $this->gettptransaction(),
+                ":btptransaction"   => $this->getbtptransaction(),
                 ":btipe"            => $this->getbtipe(),
                 ":bprcaverage"      => $this->getbprcaverage()
             ));
             
             $this->setData($results);
-            //print_r($results);exit;
+            print_r($results);//exit;
             return $results[0]["MESSAGE"];
         }
         
@@ -174,18 +187,20 @@
                 $average    = ["prcaverage"=>($this->getprcbuy() + $this->getprcsell()) / $qtdeTotal];
                 $this->setData($average);
             }
-           
-            // echo 'antes Update';
-            // echo '<pre>';
-            // print_r($this);
-            // echo '</pre>';
-            // exit;
-
-
-            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson,:iduser,:desperson,:sgcompany,:descpfcnpj,:dtbuy,:qtdebuy,:prcbuy,:tlbuy,:bprcaverage,:btptransaction,:btipe,:dtsell,:qtdesell,:prcsell,:tlsell,:sprcaverage,:stptransaction,:stipe,:tax,:lucre,:idestoque,:sgecompany,:prcaverage,:qtdeestoque)", array(
+            echo '<pre>';
+            print_r($average);
+            echo '</pre>';
+            echo '<pre>';
+            print_r($qtdeTotal);
+            echo '</pre>';
+            echo '<pre>';
+            print_r($this);
+            echo '</pre>';exit;
+            $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson,:iduser,:idsgcompany,:desperson,:sgcompany,:descpfcnpj,:dtbuy,:qtdebuy,:prcbuy,:tlbuy,:bprcaverage,:btptransaction,:btipe,:dtsell,:qtdesell,:prcsell,:tlsell,:sprcaverage,:stptransaction,:stipe,:tax,:lucre,:idestoque,:sgecompany,:prcaverage,:qtdeestoque)", array(
                                 ":idinvestiment"    => $this->getidinvestiment(),
                                 ":idperson"         => $this->getidperson(),   
                                 ":iduser"           => $this->getiduser(),
+                                ":idsgcompany"      => $this->getidsgcompany(),
                                 ":desperson"        => $this->getdesperson(),    
                                 ":sgcompany"        => $this->getsgcompany(),    
                                 ":descpfcnpj"       => $this->getdescpfcnpj(),    
@@ -203,7 +218,7 @@
                                 ":sprcaverage"      => $this->getsprcaverage(),
                                 ":stptransaction"   => $this->getstptransaction(),
                                 ":stipe"            => $this->getstipe(),
-                                ":tax"              => $this->gettax(),
+                                ":tax"              => "0",//$this->gettax(),
                                 ":lucre"            => $this->getlucre(),
                                 ":idestoque"        => $this->getidestoque(),
                                 ":sgecompany"       => $this->getsgecompany(),
@@ -213,11 +228,7 @@
             ));
            
             $this->setData($results[0]);
-            // echo 'depois Update';
-            // echo '<pre>';
-            // print_r($results[0]);
-            // echo '</pre>';
-            // exit;
+         
             return $results[0]["MESSAGE"];
         }
 

@@ -16,33 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `tb_users`
+-- Table structure for table `tb_sgcompany`
 --
 
-DROP TABLE IF EXISTS `tb_users`;
+DROP TABLE IF EXISTS `tb_sgcompany`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tb_users` (
-  `iduser` int NOT NULL AUTO_INCREMENT,
-  `idperson` int NOT NULL,
-  `deslogin` varchar(64) NOT NULL,
-  `despassword` varchar(256) NOT NULL,
-  `inadmin` tinyint(1) NOT NULL DEFAULT '0',
-  `dtregister` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`iduser`),
-  KEY `FK_users_persons_idx` (`idperson`),
-  CONSTRAINT `fk_users_persons` FOREIGN KEY (`idperson`) REFERENCES `tb_persons` (`idperson`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+CREATE TABLE `tb_sgcompany` (
+  `idsgcompany` int NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(10) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`idsgcompany`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_users`
+-- Dumping data for table `tb_sgcompany`
 --
 
-LOCK TABLES `tb_users` WRITE;
-/*!40000 ALTER TABLE `tb_users` DISABLE KEYS */;
-INSERT INTO `tb_users` VALUES (1,1,'admin','$2y$12$YlooCyNvyTji8bPRcrfNfOKnVMmZA9ViM2A3IpFjmrpIbp5ovNmga',1,'2021-03-13 06:00:00');
-/*!40000 ALTER TABLE `tb_users` ENABLE KEYS */;
+LOCK TABLES `tb_sgcompany` WRITE;
+/*!40000 ALTER TABLE `tb_sgcompany` DISABLE KEYS */;
+INSERT INTO `tb_sgcompany` VALUES (1,'MGLU3'),(2,'PETR3'),(3,'ABEV3'),(4,'SPRI3'),(5,'KLBN11'),(6,'ELET3'),(7,'AZUL4'),(8,'PETR4'),(9,'EMBR3'),(10,'SUZB3'),(11,'SBSP3'),(12,'JBSS3'),(13,'COGN3'),(14,'TPIS3'),(15,'GOLL4'),(16,'AMAR3'),(17,'ETER3'),(18,'LUPA3'),(19,'VVAR3'),(20,'TIET11'),(21,'BBSE3'),(22,'TAEE11'),(23,'TAEE4'),(24,'GUAR3'),(25,'TOTS3'),(26,'TAEE3'),(27,'GOLL2'),(28,'GOLLE240');
+/*!40000 ALTER TABLE `tb_sgcompany` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
