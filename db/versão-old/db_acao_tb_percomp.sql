@@ -16,27 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `tb_sgcompany`
+-- Table structure for table `tb_percomp`
 --
 
-DROP TABLE IF EXISTS `tb_sgcompany`;
+DROP TABLE IF EXISTS `tb_percomp`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tb_sgcompany` (
-  `idsgcompany` int NOT NULL AUTO_INCREMENT,
-  `descricao` varchar(10) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`idsgcompany`)
+CREATE TABLE `tb_percomp` (
+  `idpercomp` int NOT NULL AUTO_INCREMENT,
+  `idperson` int NOT NULL,
+  `idsgcompany` int NOT NULL,
+  PRIMARY KEY (`idpercomp`),
+  KEY `FK_percomps_person_idx_idx` (`idperson`),
+  KEY `FK_percomp_sgcompany_idx_idx` (`idsgcompany`),
+  CONSTRAINT `FK_percomp_person_idx` FOREIGN KEY (`idperson`) REFERENCES `tb_persons` (`idperson`) ON DELETE CASCADE,
+  CONSTRAINT `FK_percomp_sgcompany_idx` FOREIGN KEY (`idsgcompany`) REFERENCES `tb_sgcompany` (`idsgcompany`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_sgcompany`
+-- Dumping data for table `tb_percomp`
 --
 
-LOCK TABLES `tb_sgcompany` WRITE;
-/*!40000 ALTER TABLE `tb_sgcompany` DISABLE KEYS */;
-INSERT INTO `tb_sgcompany` VALUES (1,'MGLU3'),(2,'PETR3'),(3,'ABEV3'),(4,'SPRI3'),(5,'KLBN11'),(6,'ELET3'),(7,'AZUL4'),(8,'PETR4'),(9,'EMBR3'),(10,'SUZB3'),(11,'SBSP3'),(12,'JBSS3'),(13,'COGN3'),(14,'TPIS3'),(15,'GOLL4'),(16,'AMAR3'),(17,'ETER3'),(18,'LUPA3'),(19,'VVAR3'),(20,'TIET11'),(21,'BBSE3'),(22,'TAEE11'),(23,'TAEE4'),(24,'GUAR3'),(25,'TOTS3'),(26,'TAEE3'),(27,'GOLL2'),(28,'GOLLE240');
-/*!40000 ALTER TABLE `tb_sgcompany` ENABLE KEYS */;
+LOCK TABLES `tb_percomp` WRITE;
+/*!40000 ALTER TABLE `tb_percomp` DISABLE KEYS */;
+INSERT INTO `tb_percomp` VALUES (1,4,1),(2,5,2),(3,3,3),(4,6,4),(5,7,5),(6,8,6),(7,9,7),(8,5,8),(9,10,9),(10,11,10),(11,13,11),(12,14,12),(13,15,13),(14,16,14),(15,17,15),(16,18,16),(17,19,17),(18,20,18),(19,21,19),(20,22,20),(21,23,21),(22,24,22),(23,24,23),(24,26,24),(25,27,25),(26,24,26),(27,17,27),(28,17,28);
+/*!40000 ALTER TABLE `tb_percomp` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-08  5:18:52
+-- Dump completed on 2021-06-07  6:09:34

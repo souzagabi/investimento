@@ -240,9 +240,7 @@
 		User::verifyLogin();
 		$acoes = new Acao();
 		$acoes->getByBuy($idinvestiment);
-		// echo '<pre>';
-		// print_r($acoes);
-		// echo '</pre>';exit;
+		
 		$page = new PageAcoes();
 		
 		$page ->setTpl("acoes-update", array(
@@ -254,8 +252,8 @@
 		User::verifyLogin();
 		$acoes = new Acao();
 			
-		$_POST["qtdetotal"] = $_POST["qtdebuy"] - $_POST["qtdesell"];
-
+		$_POST["qtdetotal"] = (float)$_POST["qtdetotal"] - (float)$_POST["qtdesell"];
+		
 		$msg = ["state"=>'VAZIO', "msg"=> 'VAZIO'];
 		
 		if ((isset($_GET["msg"]) && $_GET["msg"] != '')) {
@@ -274,6 +272,10 @@
 		
 		$acoes->getByBuy($idinvestiment);
 		$acoes->setData($_POST);
+		echo '<pre>';
+		print_r($acoes);
+		echo '</pre>';
+		//exit;		
 		$msg = $acoes->update();
 		/***************************Atualizar Tabelas *************************************/
 		// $act = new Acao();

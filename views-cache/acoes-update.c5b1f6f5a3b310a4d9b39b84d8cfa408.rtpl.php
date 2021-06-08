@@ -148,6 +148,8 @@
                 <div class="form-group">
                   <label for="stptransaction">Transação</label>
                   <input type="text" class="form-control" id="stptransaction" name="stptransaction" value="V" readonly>
+                  <input type="text" class="form-control" id="qtdetotal" name="qtdetotal" value="<?php echo htmlspecialchars( $acoes["qtdetotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
+                  <input type="text" class="form-control" id="prcaverage" name="prcaverage" value="<?php echo htmlspecialchars( $acoes["prcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
                 </div>
               </div>
             </div>

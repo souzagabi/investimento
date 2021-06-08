@@ -46,14 +46,7 @@
             if ($l["start"] == 1 || $l["start"] == '' ) {
                 $l["start"] = 0;
             }
-            
-            // echo 'Ação L62';
-            // echo '<pre>';
-            // print_r($list);
-            // print_r($l);
-            // echo '</pre>';
-            
-            //exit;
+           
             $results = $sql->select("CALL sp_acoes_select_inv_buy_sell(:psgcompany, :pdtbuy, :pdtsell, :pstart, :plimit)", array(
                 ":psgcompany" => $l["sgcompany"],   
                 ":pdtbuy"     => $l["dtbuy"],
@@ -121,6 +114,7 @@
             if (isset($results[0]["tax"]) && $results[0]["tax"] > 0) {
                 $results[0]["tax"] = $results[0]["tax"]." %";
             }
+
             $results[0]["unit"] = "unit";
             
             $results[0] = Metodo::convertDateToView($results[0]);
@@ -177,25 +171,20 @@
         public function update()
         {
             $sql = new Sql();
-            $qtdeTotal  = ["qtdetotal"=>$this->getqtdetotal() + $this->getqtdebuy() - $this->getqtdesell()];
-            $this->setData($qtdeTotal);
+            // $qtdeTotal  = $this->getqtdetotal() + $this->getprcsell();
+            // echo '<pre>';
+            // print_r($qtdeTotal);
+            // echo '</pre>';
+            // $this->setData($qtdeTotal);
             
-            if ($qtdeTotal["qtdetotal"] == 0) {
+            if ($this->getqtdetotal() == 0) {
                 $average    = ["prcaverage"=>'0'];
                 $this->setData($average);
-            } else {
-                $average    = ["prcaverage"=>($this->getprcbuy() + $this->getprcsell()) / $qtdeTotal];
-                $this->setData($average);
             }
-            echo '<pre>';
-            print_r($average);
-            echo '</pre>';
-            echo '<pre>';
-            print_r($qtdeTotal);
-            echo '</pre>';
-            echo '<pre>';
-            print_r($this);
-            echo '</pre>';exit;
+            // echo '<pre>';
+            // print_r($average);
+            // echo '</pre>';
+           
             $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson,:iduser,:idsgcompany,:desperson,:sgcompany,:descpfcnpj,:dtbuy,:qtdebuy,:prcbuy,:tlbuy,:bprcaverage,:btptransaction,:btipe,:dtsell,:qtdesell,:prcsell,:tlsell,:sprcaverage,:stptransaction,:stipe,:tax,:lucre,:idestoque,:sgecompany,:prcaverage,:qtdeestoque)", array(
                                 ":idinvestiment"    => $this->getidinvestiment(),
                                 ":idperson"         => $this->getidperson(),   
@@ -218,7 +207,7 @@
                                 ":sprcaverage"      => $this->getsprcaverage(),
                                 ":stptransaction"   => $this->getstptransaction(),
                                 ":stipe"            => $this->getstipe(),
-                                ":tax"              => "0",//$this->gettax(),
+                                ":tax"              => $this->gettax(),
                                 ":lucre"            => $this->getlucre(),
                                 ":idestoque"        => $this->getidestoque(),
                                 ":sgecompany"       => $this->getsgecompany(),
@@ -228,7 +217,7 @@
             ));
            
             $this->setData($results[0]);
-         
+           
             return $results[0]["MESSAGE"];
         }
 

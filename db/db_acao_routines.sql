@@ -687,15 +687,19 @@ BEGIN
     /*												Início do Select				 						 */
     /*********************************************************************************************************/
     
-    SET @sql = CONCAT('SELECT  i.sgcompany as company, i.idinvestiment AS idinvest,b.*, s.*, ');
+    SET @sql = CONCAT('SELECT i.idinvestiment AS idinvest, g.idsgcompany, g.descricao AS company,b.*, s.*, ');
     SET @sql = CONCAT(@sql,' (SELECT count(idinvestiment) FROM tb_investiments  ii' );
     
     IF pdtbuy IS NOT NULL AND pdtbuy != '' THEN
-		SET @sql = CONCAT(@sql,' INNER JOIN tb_buys bb USING(idinvestiment) ');
+		SET @sql = CONCAT(@sql,' INNER JOIN tb_buys b ON b.idinvestiment = i.idinvestimen ');
     END IF;
     IF pdtsell IS NOT NULL AND pdtsell != '' THEN
-		SET @sql = CONCAT(@sql,' LEFT JOIN tb_sells ss USING(idinvestiment) ');
+		SET @sql = CONCAT(@sql,' LEFT JOIN tb_sells s ON s.idinvestiment = i.idinvestiment ');
     END IF;
+    
+    #IF psgcompany IS NOT NULL AND psgcompany != '' THEN
+		SET @sql = CONCAT(@sql,' LEFT JOIN tb_sgcompany sg ON sg.idsgcompany = ii.idsgcompany ');
+    #END IF;
     
     SET @sql = CONCAT(@sql,' WHERE ii.idinvestiment IS NOT NULL ');
    
@@ -707,7 +711,7 @@ BEGIN
     END IF;
     
     IF psgcompany IS NOT NULL AND psgcompany != '' THEN
-		SET @sql = CONCAT(@sql,' AND ii.sgcompany LIKE "%',psgcompany,'%" ');
+		SET @sql = CONCAT(@sql,'  AND sg.descricao LIKE "%',psgcompany,'%" ');
     END IF;
     
     SET @sql = CONCAT(@sql,' ) / ',plimit,' AS pgs ');
@@ -715,8 +719,9 @@ BEGIN
     /*												Início do FROM					 						 */
     /*********************************************************************************************************/
     SET @sql = CONCAT(@sql,' FROM tb_investiments i ');
-	SET @sql = CONCAT(@sql,' INNER JOIN tb_buys b USING(idinvestiment) ');
-	SET @sql = CONCAT(@sql,' LEFT JOIN tb_sells s USING(idinvestiment) ');
+	SET @sql = CONCAT(@sql,' INNER JOIN tb_buys b ON b.idinvestiment = i.idinvestiment ');
+	SET @sql = CONCAT(@sql,' LEFT JOIN tb_sells s ON s.idinvestiment = i.idinvestiment ');
+    SET @sql = CONCAT(@sql,' LEFT JOIN tb_sgcompany g ON g.idsgcompany = i.idsgcompany ');
     
     SET @sql = CONCAT(@sql,' WHERE i.idinvestiment IS NOT NULL');
     
@@ -729,7 +734,7 @@ BEGIN
     END IF;
     
     IF psgcompany IS NOT NULL AND psgcompany != '' THEN
-		SET @sql = CONCAT(@sql,' AND i.sgcompany LIKE "%',psgcompany,'%"');
+		SET @sql = CONCAT(@sql,' AND g.descricao LIKE "%',psgcompany,'%"');
     END IF;
     
 	SET @sql = CONCAT(@sql,' ORDER BY i.idinvestiment ');
@@ -738,7 +743,7 @@ BEGIN
 	/*********************************************************************************************************/
     /*											Início da Execução					 						 */
     /*********************************************************************************************************/
-    #SELECT @sql;
+	#SELECT @sql;
     PREPARE STMT FROM @sql;
     EXECUTE STMT;
     IF EX = 1 THEN
@@ -750,7 +755,7 @@ BEGIN
 	ELSE
 		SELECT "Registros filtrado com sucesso!" AS MESSAGE;
         COMMIT;
-	END IF; 
+	END IF;
 
 END ;;
 DELIMITER ;
@@ -845,8 +850,8 @@ BEGIN
 
 	IF (IDS IS NULL) THEN
 							  
-		INSERT INTO tb_sells (idinvestiment,idperson,idsgcompany,qtdesell,dtsell,prcsell,tlsell,sprcaverage,tax,lucre,stptransaction,stipe)
-			VALUES (pidinvestiment,pidperson,pidsgcompany,pqtdesell,pdtsell,pprcsell,ptlsell,psprcaverage,ptax,plucre,pstptransaction,pstipe);
+		INSERT INTO tb_sells (idinvestiment,idperson,idsgcompany,dtsell,qtdesell,prcsell,tlsell,sprcaverage,stptransaction,stipe,tax,lucre)
+			VALUES (pidinvestiment,pidperson,pidsgcompany,pdtsell,pqtdesell,pprcsell,ptlsell,psprcaverage,pstptransaction,pstipe,ptax,plucre);
 		IF EX = 1 THEN
 			SET MESSAGE =  "ERROR: Erro ao cadastrar registro na tabela Sells";
 		ELSE
@@ -1457,4 +1462,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-07  6:09:35
+-- Dump completed on 2021-06-08  5:18:53
