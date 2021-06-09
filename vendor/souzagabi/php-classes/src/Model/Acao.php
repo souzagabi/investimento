@@ -109,7 +109,7 @@
             $results = $sql->select("CALL sp_acoes_select_buy(:idinvestiment)", array(
                 ":idinvestiment"=>$idinvestiment
             ));
-                     
+            $results[0]["qtdetotal"] = $results[0]["qtdetotal"] + $results[0]["qtdesell"] - $results[0]["qtdebuy"];         
             
             if (isset($results[0]["tax"]) && $results[0]["tax"] > 0) {
                 $results[0]["tax"] = $results[0]["tax"]." %";
@@ -181,10 +181,7 @@
                 $average    = ["prcaverage"=>'0'];
                 $this->setData($average);
             }
-            // echo '<pre>';
-            // print_r($average);
-            // echo '</pre>';
-           
+                     
             $results = $sql->select("CALL sp_acoes_update_save(:idinvestiment,:idperson,:iduser,:idsgcompany,:desperson,:sgcompany,:descpfcnpj,:dtbuy,:qtdebuy,:prcbuy,:tlbuy,:bprcaverage,:btptransaction,:btipe,:dtsell,:qtdesell,:prcsell,:tlsell,:sprcaverage,:stptransaction,:stipe,:tax,:lucre,:idestoque,:sgecompany,:prcaverage,:qtdeestoque)", array(
                                 ":idinvestiment"    => $this->getidinvestiment(),
                                 ":idperson"         => $this->getidperson(),   
