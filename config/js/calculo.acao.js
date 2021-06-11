@@ -26,7 +26,6 @@ function sumTotal(qtde, elementValue, elementTotal)
             }
             document.getElementById("lucre").value = lucre.toFixed(2);
         }
-      
     }
 
     return total;
@@ -38,6 +37,7 @@ function replaceComa(element)
     document.getElementById(element.name).value = v;
     return v ;
 }
+
 function replaceSlash(element)
 {
     var dt = element.value.replace(/[\/\-]/g, '-');
@@ -53,6 +53,7 @@ function convertLowToUpper(element)
         
     }
 }
+
 function removeMensagemError(element){
     if (element) {
         setTimeout(function(){ 
@@ -61,6 +62,7 @@ function removeMensagemError(element){
         }, 2000);
     }
 }
+
 function removeMensagem(){
     if (document.getElementById("msg-success")) {
         setTimeout(function(){ 
@@ -75,6 +77,7 @@ function removeMensagem(){
         }, 2000);
     }
 }
+
 document.onreadystatechange = () => {
     if (document.readyState === 'complete') {
         removeMensagem(); 

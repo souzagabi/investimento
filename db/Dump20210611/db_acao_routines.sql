@@ -688,13 +688,13 @@ BEGIN
     /*********************************************************************************************************/
     
     SET @sql = CONCAT('SELECT i.idinvestiment AS idinvest, g.idsgcompany, g.descricao AS company,b.*, s.*, ');
-    SET @sql = CONCAT(@sql,' (SELECT count(idinvestiment) FROM tb_investiments  ii' );
+    SET @sql = CONCAT(@sql,' (SELECT count(ii.idinvestiment) FROM tb_investiments  ii' );
     
     IF pdtbuy IS NOT NULL AND pdtbuy != '' THEN
-		SET @sql = CONCAT(@sql,' INNER JOIN tb_buys b ON b.idinvestiment = i.idinvestimen ');
+		SET @sql = CONCAT(@sql,' INNER JOIN tb_buys bb ON bb.idinvestiment = ii.idinvestiment ');
     END IF;
     IF pdtsell IS NOT NULL AND pdtsell != '' THEN
-		SET @sql = CONCAT(@sql,' LEFT JOIN tb_sells s ON s.idinvestiment = i.idinvestiment ');
+		SET @sql = CONCAT(@sql,' LEFT JOIN tb_sells ss ON ss.idinvestiment = ii.idinvestiment ');
     END IF;
     
     #IF psgcompany IS NOT NULL AND psgcompany != '' THEN
@@ -1462,4 +1462,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-08  5:18:53
+-- Dump completed on 2021-06-11  5:49:55
