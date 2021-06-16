@@ -16,8 +16,10 @@
 
 <!-- Main content -->
 <section class="content">
-  <div id="<?php if( $msg["state"] == 'SUCCESS'  ){ ?>msg-success<?php } ?>" class="box box-success" <?php if( $msg["state"] != 'SUCCESS'  ){ ?>readonly hidden<?php } ?>>
-    <div class="msg"><input type="text" class="form-control <?php if( $msg["state"] == 'SUCCESS'  ){ ?>alert-success<?php }else{ ?>alert-danger<?php } ?>" name="msg" id="msg" value="<?php if( $msg["state"] == 'SUCCESS'  ){ ?><?php echo htmlspecialchars( $msg["msg"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php } ?>" ></div>
+  <div id="msg<?php if( $msg["state"] == 'SUCCESS' ){ ?>-success<?php }else{ ?>-danger<?php } ?>" 
+        class="box box-<?php if( $msg["state"] == 'SUCCESS' ){ ?>-success<?php }else{ ?>danger<?php } ?>" 
+        <?php if( $msg["state"] != 'SUCCESS' && $msg["state"] != 'ERROR' ){ ?>readonly hidden<?php } ?>>
+    <div class="msg"><input type="text" class="form-control msg-<?php if( $msg["state"] == 'SUCCESS'  ){ ?>success alert-success<?php }else{ ?>danger alert-danger<?php } ?>" name="msg" value="<?php echo htmlspecialchars( $msg["msg"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" ></div>
   </div>
   <div class="row">
   	<div class="col-md-12">
@@ -44,8 +46,8 @@
             </div>
             <div class="col col-md-2">
               <div class="form-group">
-                <label for="descnpj">CPF/CNPJ</label>
-                <input type="text" class="form-control" name="descnpj" id="descnpj">
+                <label for="descpfcnpj">CPF/CNPJ</label>
+                <input type="text" class="form-control" name="descpfcnpj" id="descpfcnpj">
               </div>
             </div>
             <div class="col col-md-2">
@@ -87,6 +89,69 @@
               <div class="form-group">
                 <label for="bprcaverage">Valor Médio</label>
                 <input type="text" class="form-control" id="bprcaverage" name="bprcaverage" readonly>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="box-body">
+            <div class="col col-md-2">
+              <div class="form-group">
+                <label for="dtsell">Data Venda</label>
+                <input type="text" class="form-control" name="dtsell" id="dtsell" onChange="replaceSlash(dtsell)">
+              </div>
+            </div>
+            <div class="col col-md-2">
+              <div class="form-group">
+                <label for="qtdesell">Qtde</label>
+                <input type="text" class="form-control" name="qtdesell" id="qtdesell" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
+              </div>
+            </div>
+            <div class="col col-md-2">
+              <div class="form-group">
+                <label for="prcsell">Valor Venda</label>
+                <input type="text" class="form-control" name="prcsell" id="prcsell" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
+              </div>
+            </div>
+            <div class="col col-md-2">
+              <div class="form-group">
+                <label for="tlsell">Total Venda</label>
+                <input type="text" class="form-control" id="tlsell" name="tlsell" readonly>
+              </div>
+            </div>
+            <div class="col col-md-2">
+              <div class="form-group">
+                <label for="lucre">Lucro</label>
+                <input type="text" class="form-control" id="lucre" name="lucre"  readonly>
+              </div>
+            </div>
+            <div class="col col-md-2">
+              <div class="form-group">
+                <label for="tax">Taxa</label>
+                <input type="text" class="form-control" id="tax" name="tax" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="box-body">
+            <div class="col col-md-2">
+              <div class="form-group">
+                <label for="sprcaverage">Valor Médio</label>
+                <input type="text" class="form-control" id="sprcaverage" name="sprcaverage" readonly>
+              </div>
+            </div>
+            <div class="col col-md-2">
+              <div class="form-group">
+                <label for="stipe">Tipo</label>
+                <select class="form-control" name="stipe" id="stipe">
+                  <option value="1" selected>Swing Trade</option>
+                  <option value="2" >Day Trade</option>
+                </select>
+              </div>
+            </div>
+            <div class="col col-md-2" hidden>
+              <div class="form-group">
+                <label for="stptransaction">Transação</label>
+                <input type="text" class="form-control" id="stptransaction" name="stptransaction" value="V" readonly>
               </div>
             </div>
           </div>

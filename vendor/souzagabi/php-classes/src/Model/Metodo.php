@@ -2,6 +2,7 @@
     namespace Acao\Model;
     use \Acao\Model; 
     use \Acao\Model\Acao;
+    use \Acao\Model\Person;
 
     class Metodo extends Model {
 
@@ -85,19 +86,23 @@
             
             return $pgs;
         }
+
         public function selectRegister($act = array())
         {
+            
             if (isset($act["listacoes"]) && $act["listacoes"] == "listacoes") {
                 $classModel = Acao::listAllAction($act);
             } else if (isset($act["listestoque"]) && $act["listestoque"] == "listestoque") {
                 $classModel = Acao::listAllEstoque($act);
                 $classModel = Metodo::convertDateToView($classModel);
+            } else if (isset($act["person"]) && $act["person"] == "person") {
+                $classModel = Person::listAll();
             } else {
                 $classModel = Acao::listAll($act);
                 $classModel = Metodo::convertDateToView($classModel);
                 $classModel = Metodo::convertToInt($classModel);
             }
-           
+            
             $pgs = [];
             if (isset($classModel[0]["pgs"]) && count($classModel) > 0 && $classModel != '') {
                 $pgs 	= Metodo::countRegister($classModel[0]["pgs"], $act);

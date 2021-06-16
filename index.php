@@ -13,12 +13,9 @@
 	use \Acao\Model\Person;
 	use \Acao\Model\Metodo;
 
-	
-
 	$app = new Slim();
 
 	$app->config('debug', true);
-
 	
 /*======================================================================================*/
 /*										Rotas das Ações									*/
@@ -103,7 +100,7 @@
 			$msg = ["state"=>$mess[0], "msg"=> $mess[1]];
 		} 
 
-		$voltar = ["voltar"=>"acoes"];
+		$voltar = ["voltar"=>"notas"];
 		if (isset($_GET["acoes"])) {
 			$voltar = ["voltar"=>"acoes"];
 		}
@@ -307,10 +304,24 @@
 	$app->get('/persons', function() {
 
 		User::verifyLogin();
-		$persons = Person::listAll();
+		
+		$company["person"]	= 'person';
+		$company["search"]	= 'person';
+
+		$msg = ["state"=>'VAZIO', "msg"=> 'VAZIO'];
+		
+		if ((isset($_GET["msg"]) && $_GET["msg"] != '')) {
+			$mess = explode(':', $_GET["msg"]);
+			$msg = ["state"=>$mess[0], "msg"=> $mess[1]];
+		} 
+
+		$persons = Metodo::selectRegister($company);
+
 		$page = new PagePerson();
 		$page->setTpl("persons", array(
-			"persons"=> $persons
+			"persons"=> $persons[0],
+			"pgs"=> $persons[1],
+			"msg"=>$msg
 		));
 	});
 

@@ -46,8 +46,8 @@
       </div>
     </div>
     <div id="msg<?php if( $msg["state"] == 'SUCCESS' ){ ?>-success<?php }else{ ?>-danger<?php } ?>" 
-          class="box box-<?php if( $msg["state"] == 'SUCCESS' ){ ?>-success<?php }else{ ?>danger<?php } ?>" 
-          <?php if( $msg["state"] != 'SUCCESS' && $msg["state"] != 'ERROR' ){ ?>readonly hidden<?php } ?>>
+        class="box box-<?php if( $msg["state"] == 'SUCCESS' ){ ?>-success<?php }else{ ?>danger<?php } ?>" 
+        <?php if( $msg["state"] != 'SUCCESS' && $msg["state"] != 'ERROR' ){ ?>readonly hidden<?php } ?>>
       <div class="msg"><input type="text" class="form-control msg-<?php if( $msg["state"] == 'SUCCESS'  ){ ?>success alert-success<?php }else{ ?>danger alert-danger<?php } ?>" name="msg" value="<?php echo htmlspecialchars( $msg["msg"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" ></div>
     </div>
     <div class="box box-primary">
@@ -84,6 +84,7 @@
               <th class="buy">Qtde</th>
               <th class="buy">Valor Compra</th>
               <th class="buy">Valor Médio</th>
+              <th>Tipo</th>
               <th class="sell">DtVenda</th>
               <th class="sell">Qtde</th>
               <th class="sell">Valor Médio</th>
@@ -100,11 +101,12 @@
               <td class="buy"><?php echo htmlspecialchars( $value1["qtdebuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="buy"><?php echo htmlspecialchars( $value1["prcbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="buy"><?php echo htmlspecialchars( $value1["bprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <td><?php if( $value1["btipe"] == 1 ){ ?>Swing Trade<?php }else{ ?>Day Trade<?php } ?></td>
               <td class="sell"><?php echo htmlspecialchars( $value1["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="sell"><?php echo htmlspecialchars( $value1["qtdesell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="sell"><?php echo htmlspecialchars( $value1["prcsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="sell"><?php echo htmlspecialchars( $value1["sprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td><?php if( $value1["btipe"] == 1 ){ ?>Swing Trade<?php }else{ ?>Day Trade<?php } ?></td>
+              <td><?php if( $value1["stipe"] == 1 ){ ?>Swing Trade<?php }else{ ?>Day Trade<?php } ?></td>
               <td>
                 <a href="/notas/<?php echo htmlspecialchars( $value1["idinvest"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
                 <a href="/notas/<?php echo htmlspecialchars( $value1["idinvest"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>

@@ -126,30 +126,13 @@
         public function save()
         {
             $sql = new Sql();
-                  
-            echo 'Save: L140';
+                   
             echo '<pre>';
             print_r($this);
-            echo '</pre>';
-            exit;
-            // echo 'Save: L140';
-            // echo '<pre>';
-            // print_r($this);
-            // echo '</pre>';
-            // exit;
-            // '1',
-            // 'MAGAZINE LUIZA S.A.',
-            // 'MGLU3',
-            // '47.960.950/0001-21',
-            // '24-04-2020',
-            // '2',
-            // '47.14',
-            // '94.28',
-            // 'C',
-            // '2',
-            // '47.14',
-           
-            $results = $sql->select("CALL sp_acoes_save(:iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :btptransaction, :btipe, :bprcaverage)", array(
+            echo '</pre>';exit;
+            
+            $results = $sql->select("CALL sp_acoes_save(:iduser,:desperson,:sgcompany,:descpfcnpj,:dtbuy,:qtdebuy,:prcbuy,:tlbuy,:btptransaction,:btipe,:bprcaverage,:dtsell,:qtdesell,:prcsell,:tlsell,:sprcaverage,:stptransaction,:stipe,:tax,:lucre)", array(
+           // $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :btptransaction, :btipe, :bprcaverage)", array(
                 ":iduser"           => $this->getiduser(),    
                 ":desperson"        => $this->getdesperson(),    
                 ":sgcompany"        => $this->getsgcompany(),    
@@ -160,7 +143,17 @@
                 ":tlbuy"            => $this->gettlbuy(),
                 ":btptransaction"   => $this->getbtptransaction(),
                 ":btipe"            => $this->getbtipe(),
-                ":bprcaverage"      => $this->getbprcaverage()
+                ":bprcaverage"      => $this->getbprcaverage(),
+                ":dtsell"           => $this->getdtsell(),
+                ":qtdesell"         => $this->getqtdesell(),
+                ":prcsell"          => $this->getprcsell(),
+                ":tlsell"           => $this->gettlsell(),
+                ":sprcaverage"      => $this->getsprcaverage(),
+                ":stptransaction"   => $this->getstptransaction(),
+                ":stipe"            => $this->getstipe(),
+                ":tax"              => $this->gettax(),
+                ":lucre"            => $this->getlucre()
+
             ));
             
             $this->setData($results);
