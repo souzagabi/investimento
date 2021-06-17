@@ -127,10 +127,29 @@
         {
             $sql = new Sql();
                    
-            echo '<pre>';
-            print_r($this);
-            echo '</pre>';exit;
-            
+            // echo '<pre>';
+            // print_r($this);
+            // echo '</pre>';exit;
+            // '1',
+            // 'MAGAZINE LUIZA S.A.',
+            // 'MGLU3',
+            // '47.960.950/0001-21',
+            // '2020-04-24',
+            // '2',
+            // '46.98',
+            // '93.96',
+            // 'C',
+            // '2',
+            // '46.98',
+            // '2020-04-24',
+            // '2',
+            // '47.28',
+            // '94.56',
+            // '47.28',
+            // 'V',
+            // '2',
+            // '0.64',
+            // '0.60',
             $results = $sql->select("CALL sp_acoes_save(:iduser,:desperson,:sgcompany,:descpfcnpj,:dtbuy,:qtdebuy,:prcbuy,:tlbuy,:btptransaction,:btipe,:bprcaverage,:dtsell,:qtdesell,:prcsell,:tlsell,:sprcaverage,:stptransaction,:stipe,:tax,:lucre)", array(
            // $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :btptransaction, :btipe, :bprcaverage)", array(
                 ":iduser"           => $this->getiduser(),    
