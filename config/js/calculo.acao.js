@@ -8,8 +8,10 @@ function sumTotal(qtde, elementValue, elementTotal)
         var average = total / qtde;
         document.getElementById(elementTotal.name).value = total.toFixed(2);
         
-        if (elementTotal.name == "tlbuy") {
-            document.getElementById("bprcaverage").value = average.toFixed(2);
+        //if (elementTotal.name == "tlbuy") {
+        if (elementTotal.value != "") {
+            //document.getElementById("bprcaverage").value = average.toFixed(2);
+            elementTotal.value = average.toFixed(2);
         } else
         {
             document.getElementById("sprcaverage").value = average.toFixed(2);
