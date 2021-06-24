@@ -25,13 +25,10 @@
                 <label for="desperson">Nome</label>
                 <input type="text" class="form-control" id="desperson" name="desperson" value="<?php echo htmlspecialchars( $user["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Digite o nome">
               </div>
-              <div class="form-group">
-                <label for="sgcompany">Sigla</label>
-                <input type="text" class="form-control" id="sgcompany" name="sgcompany" value="<?php echo htmlspecialchars( $user["descpfcnpj"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Digite o login">
-              </div>
+             
               <div class="form-group">
                 <label for="descpfcnpj">CPF/CNPJ</label>
-                <input type="text" class="form-control" id="descpfcnpj" name="descpfcnpj" value="<?php echo htmlspecialchars( $user["sgcompany"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Digite o login">
+                <input type="text" class="form-control" id="descpfcnpj" name="descpfcnpj" value="<?php echo htmlspecialchars( $user["descpfcnpj"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Digite o login">
               </div>
               <div class="form-group">
                 <label for="deslogin">Login</label>
@@ -46,6 +43,7 @@
             <!-- /.box-body -->
             <div class="box-footer">
               <button type="submit" class="btn btn-success">Cadastrar</button>
+              <a href="/admin?limit=10" class="btn btn-warning">Voltar</a>
             </div>
         </form>
       </div>

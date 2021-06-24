@@ -35,7 +35,7 @@
         {
             $sql = new Sql();
             
-            $results = $sql->select("SELECT * FROM tb_persons WHERE idperson = :idperson", array(
+            $results = $sql->select("SELECT p.*, sg.descricao as sgcompany FROM tb_persons p LEFT JOIN tb_sgcompany sg ON sg.idperson = p.idperson WHERE p.idperson = :idperson", array(
             ":idperson"=>$idperson
             ));
             

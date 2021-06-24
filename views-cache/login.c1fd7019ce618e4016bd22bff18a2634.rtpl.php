@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Log in</title>
+  <title>Investimentos</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="../../config/css/AdminLTE.min.css">
   <!-- iCheck -->
   <link rel="stylesheet" href="../../config/plugins/iCheck/square/blue.css">
+  <link rel="stylesheet" href="../../config/css/index.css">
+  <link rel="shortcut icon" href="../../img/favicon.jpg" type="image/x-icon">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,10 +29,15 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="../../config/index2.html"><b>Admin</b>LTE</a>
+    <a href="../../config/index2.html"><b>Sou</b>Teramoto</a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
+    <div id="msg<?php if( $msg["state"] == 'SUCCESS' ){ ?>-success<?php }else{ ?>-danger<?php } ?>" 
+          class="box box-<?php if( $msg["state"] == 'SUCCESS' ){ ?>-success<?php }else{ ?>danger<?php } ?>" 
+          <?php if( $msg["state"] != 'SUCCESS' && $msg["state"] != 'ERROR' ){ ?>readonly hidden<?php } ?>>
+      <div class="msg"><input type="text" class="form-control msg-<?php if( $msg["state"] == 'SUCCESS'  ){ ?>success alert-success<?php }else{ ?>danger alert-danger<?php } ?>" name="msg" value="<?php echo htmlspecialchars( $msg["msg"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" ></div>
+    </div>
     <p class="login-box-msg">Logar para comelar sua sessão</p>
 
     <form action="/admin/login" method="post">
@@ -81,6 +88,7 @@
 <script src="../../config/js/bootstrap.min.js"></script>
 <!-- iCheck -->
 <script src="../../config/plugins/iCheck/icheck.min.js"></script>
+<script src="../../config/js/calculo.acao.js"></script>
 <script>
   $(function () {
     $('input').iCheck({

@@ -1,35 +1,47 @@
-function sumTotal(qtde, elementValue, elementTotal)
+function sumTotal(qtde, elementUnit, elementTotal, elementAverage)
 {
-    if (elementValue.value !== '') {
-        elementValue.value = replaceComa(elementValue);
-    }
-    if (qtde > 0 && elementValue.value > 0) {
-        var total =  qtde * elementValue.value;
-        var average = total / qtde;
-        document.getElementById(elementTotal.name).value = total.toFixed(2);
-        
-        //if (elementTotal.name == "tlbuy") {
-        if (elementTotal.value != "") {
-            //document.getElementById("bprcaverage").value = average.toFixed(2);
-            elementTotal.value = average.toFixed(2);
-        } else
-        {
-            document.getElementById("sprcaverage").value = average.toFixed(2);
-            var vlbuy = document.getElementById("prcbuy").value * qtde;
-            var vlsell = elementTotal.value;
-            
     
-            if (vlbuy && vlsell) {
-                var lucre = vlsell - vlbuy;
-                if (lucre < 0 || lucre > 0) {
-                    var tax = ((lucre*100)/vlbuy);
-                    document.getElementById("tax").value = tax.toFixed(2)+" %";
+    elementUnit.value = replaceComa(elementUnit);
+
+    if (qtde >= 0 && elementUnit.value >= 0) {
+        var total =  qtde * elementUnit.value;
+        var average = 0;
+        if (qtde > 0) {
+            average = total / qtde;
+        }
+        elementTotal.value = total.toFixed(2);
+        elementAverage.value = average.toFixed(2);
+
+       if (document.getElementById("prcsell").value != '' && document.getElementById("prcsell").value >= 0) 
+       {
+            
+            var vlbuy  = document.getElementById("tlbuy").value;
+            var vlsell = document.getElementById("tlsell").value;
+    
+            var lucre = vlsell - vlbuy;
+            var tax = 0;
+            
+            if ((lucre < 0 || lucre > 0) && vlbuy != 0) {
+                tax = ((lucre*100)/vlbuy);
+            } else {
+                if (vlbuy == 0 && vlsell > 0) {
+                    tax = 100;
+                } else {
+                    tax = 0;
                 }
             }
             document.getElementById("lucre").value = lucre.toFixed(2);
+            document.getElementById("tax").value = tax.toFixed(2)+" %";
+        } else {
+            document.getElementById("prcsell").value = '';
+            document.getElementById("qtdesell").value = '';
+            document.getElementById("sprcaverage").value = '';
+            document.getElementById("tlsell").value = '';
+            document.getElementById("lucre").value = '';
+            document.getElementById("tax").value = '';
         }
     }
-
+ 
     return total;
 }
 

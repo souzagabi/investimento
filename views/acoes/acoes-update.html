@@ -62,13 +62,13 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="qtdebuy">Qtde</label>
-                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="{$acoes.qtdebuy}">
+                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy, bprcaverage)" value="{$acoes.qtdebuy}">
                 </div>
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="prcbuy">Valor Compra</label>
-                  <input type="text" class="form-control" name="prcbuy" id="prcbuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="{$acoes.prcbuy}">
+                  <input type="text" class="form-control" name="prcbuy" id="prcbuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy, bprcaverage)" value="{$acoes.prcbuy}">
                 </div>
               </div>
               <div class="col col-md-2">
@@ -100,13 +100,13 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="qtdesell">Qtde</label>
-                  <input type="text" class="form-control" name="qtdesell" id="qtdesell" value="{$acoes.qtdesell}" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
+                  <input type="text" class="form-control" name="qtdesell" id="qtdesell" value="{$acoes.qtdesell}" onChange="sumTotal(qtdesell.value, prcsell, tlsell, sprcaverage)">
                 </div>
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="prcsell">Valor Venda</label>
-                  <input type="text" class="form-control" name="prcsell" id="prcsell" value="{$acoes.prcsell}" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
+                  <input type="text" class="form-control" name="prcsell" id="prcsell" value="{$acoes.prcsell}" onChange="sumTotal(qtdesell.value, prcsell, tlsell, sprcaverage)">
                 </div>
               </div>
               <div class="col col-md-2">
@@ -117,6 +117,14 @@
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
+                  <label for="sprcaverage">Valor Médio</label>
+                  <input type="text" class="form-control" id="sprcaverage" name="sprcaverage" value="{$acoes.sprcaverage}" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="box-body">
+              <div class="col col-md-2">
+                <div class="form-group">
                   <label for="lucre">Lucro</label>
                   <input type="text" class="form-control" id="lucre" name="lucre" value="{$acoes.lucre}" readonly>
                 </div>
@@ -125,14 +133,6 @@
                 <div class="form-group">
                   <label for="tax">Taxa</label>
                   <input type="text" class="form-control" id="tax" name="tax" value="{$acoes.tax}" readonly>
-                </div>
-              </div>
-            </div>
-            <div class="box-body">
-              <div class="col col-md-2">
-                <div class="form-group">
-                  <label for="sprcaverage">Valor Médio</label>
-                  <input type="text" class="form-control" id="sprcaverage" name="sprcaverage" value="{$acoes.sprcaverage}" readonly>
                 </div>
               </div>
               <div class="col col-md-2">

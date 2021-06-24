@@ -11,6 +11,7 @@
             $sql = new Sql();
             return $sql->select("CALL sp_acoes_list_all_id()");
         }
+
         public static function listAllAction($list)
         {
             $sql = new Sql();
@@ -126,7 +127,9 @@
         public function save()
         {
             $sql = new Sql();
-            
+            echo '<pre>';
+		print_r($this);
+		echo '</pre>';exit;
             $results = $sql->select("CALL sp_acoes_save(:iduser,:desperson,:sgcompany,:descpfcnpj,:dtbuy,:qtdebuy,:prcbuy,:tlbuy,:btptransaction,:btipe,:bprcaverage,:dtsell,:qtdesell,:prcsell,:tlsell,:sprcaverage,:stptransaction,:stipe,:tax,:lucre)", array(
            // $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :btptransaction, :btipe, :bprcaverage)", array(
                 ":iduser"           => $this->getiduser(),    
@@ -153,19 +156,14 @@
             ));
             
             $this->setData($results);
-            print_r($results);//exit;
+            print_r($results);exit;
             return $results[0]["MESSAGE"];
         }
         
         public function update()
         {
             $sql = new Sql();
-            // $qtdeTotal  = $this->getqtdetotal() + $this->getprcsell();
-            // echo '<pre>';
-            // print_r($qtdeTotal);
-            // echo '</pre>';
-            // $this->setData($qtdeTotal);
-            
+                       
             if ($this->getqtdetotal() == 0) {
                 $average    = ["prcaverage"=>'0'];
                 $this->setData($average);

@@ -62,13 +62,13 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="qtdebuy">Qtde</label>
-                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="<?php echo htmlspecialchars( $acoes["qtdebuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
+                  <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy, bprcaverage)" value="<?php echo htmlspecialchars( $acoes["qtdebuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                 </div>
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="prcbuy">Valor Compra</label>
-                  <input type="text" class="form-control" name="prcbuy" id="prcbuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" value="<?php echo htmlspecialchars( $acoes["prcbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
+                  <input type="text" class="form-control" name="prcbuy" id="prcbuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy, bprcaverage)" value="<?php echo htmlspecialchars( $acoes["prcbuy"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                 </div>
               </div>
               <div class="col col-md-2">
@@ -89,7 +89,7 @@
                 <label for="btptransaction">Transação</label>
                 <input type="text" class="form-control" id="btptransaction" name="btptransaction" value="C" readonly>
               </div>
-            </div
+            </div>
             <div class="box-body">
               <div class="col col-md-2">
                 <div class="form-group">
@@ -100,13 +100,13 @@
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="qtdesell">Qtde</label>
-                  <input type="text" class="form-control" name="qtdesell" id="qtdesell" value="<?php echo htmlspecialchars( $acoes["qtdesell"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
+                  <input type="text" class="form-control" name="qtdesell" id="qtdesell" value="<?php echo htmlspecialchars( $acoes["qtdesell"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" onChange="sumTotal(qtdesell.value, prcsell, tlsell, sprcaverage)">
                 </div>
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
                   <label for="prcsell">Valor Venda</label>
-                  <input type="text" class="form-control" name="prcsell" id="prcsell" value="<?php echo htmlspecialchars( $acoes["prcsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
+                  <input type="text" class="form-control" name="prcsell" id="prcsell" value="<?php echo htmlspecialchars( $acoes["prcsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" onChange="sumTotal(qtdesell.value, prcsell, tlsell, sprcaverage)">
                 </div>
               </div>
               <div class="col col-md-2">
@@ -117,6 +117,14 @@
               </div>
               <div class="col col-md-2">
                 <div class="form-group">
+                  <label for="sprcaverage">Valor Médio</label>
+                  <input type="text" class="form-control" id="sprcaverage" name="sprcaverage" value="<?php echo htmlspecialchars( $acoes["sprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="box-body">
+              <div class="col col-md-2">
+                <div class="form-group">
                   <label for="lucre">Lucro</label>
                   <input type="text" class="form-control" id="lucre" name="lucre" value="<?php echo htmlspecialchars( $acoes["lucre"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
                 </div>
@@ -125,14 +133,6 @@
                 <div class="form-group">
                   <label for="tax">Taxa</label>
                   <input type="text" class="form-control" id="tax" name="tax" value="<?php echo htmlspecialchars( $acoes["tax"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
-                </div>
-              </div>
-            </div>
-            <div class="box-body">
-              <div class="col col-md-2">
-                <div class="form-group">
-                  <label for="sprcaverage">Valor Médio</label>
-                  <input type="text" class="form-control" id="sprcaverage" name="sprcaverage" value="<?php echo htmlspecialchars( $acoes["sprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
                 </div>
               </div>
               <div class="col col-md-2">
@@ -148,6 +148,8 @@
                 <div class="form-group">
                   <label for="stptransaction">Transação</label>
                   <input type="text" class="form-control" id="stptransaction" name="stptransaction" value="V" readonly>
+                  <input type="text" class="form-control" id="qtdetotal" name="qtdetotal" value="<?php echo htmlspecialchars( $acoes["qtdetotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
+                  <input type="text" class="form-control" id="prcaverage" name="prcaverage" value="<?php echo htmlspecialchars( $acoes["prcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" readonly>
                 </div>
               </div>
             </div>

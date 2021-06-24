@@ -133,12 +133,14 @@
 		$_POST["iduser"] = $_SESSION["User"]["iduser"];
 		
    		$_POST["btptransaction"] = "C";
-
-
+		   
 		$acao->setData($_POST);
+		echo '<pre>';
+		print_r($acao);
+		echo '</pre>';exit;
 
 		$msg = $acao->save();
-		//var_dump($acao);exit;
+		
 		$tipo = "compra";
 		
 		header("Location: /acoes/create?$tipo=$tipo&msg=$msg");
@@ -339,6 +341,7 @@
 		$persons = new Person();
  
 		$persons->get((int)$idperson);
+
 		$page = new PagePerson();
 		
 		$page ->setTpl("person-update", array(
@@ -518,7 +521,9 @@
 			$user = new User();
 	
 			$user->get((int)$iduser);
-			
+			// echo '<pre>';
+			// print_r($user);
+			// echo '</pre>';exit;
 			$page = new PageUser();
 			
 			$page ->setTpl("users-update", array(

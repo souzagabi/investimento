@@ -70,13 +70,13 @@
             <div class="col col-md-2">
               <div class="form-group">
                 <label for="qtdebuy">Qtde</label>
-                <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy)" required>
+                <input type="text" class="form-control" name="qtdebuy" id="qtdebuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy,bprcaverage)" required>
               </div>
             </div>
             <div class="col col-md-2">
               <div class="form-group">
                 <label for="prcbuy">Valor Compra</label>
-                <input type="text" class="form-control" name="prcbuy" id="prcbuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy);" required>
+                <input type="text" class="form-control" name="prcbuy" id="prcbuy" onChange="sumTotal(qtdebuy.value, prcbuy, tlbuy,bprcaverage);" required>
               </div>
             </div>
             <div class="col col-md-2">
@@ -104,13 +104,13 @@
             <div class="col col-md-2">
               <div class="form-group">
                 <label for="qtdesell">Qtde</label>
-                <input type="text" class="form-control" name="qtdesell" id="qtdesell" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
+                <input type="text" class="form-control" name="qtdesell" id="qtdesell" onChange="sumTotal(qtdesell.value, prcsell, tlsell,bprcaverage)">
               </div>
             </div>
             <div class="col col-md-2">
               <div class="form-group">
                 <label for="prcsell">Valor Venda</label>
-                <input type="text" class="form-control" name="prcsell" id="prcsell" onChange="sumTotal(qtdesell.value, prcsell, tlsell)">
+                <input type="text" class="form-control" name="prcsell" id="prcsell" onChange="sumTotal(qtdesell.value, prcsell, tlsell,sprcaverage)">
               </div>
             </div>
             <div class="col col-md-2">
