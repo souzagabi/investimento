@@ -2,8 +2,11 @@ function sumTotal(qtde, elementUnit, elementTotal, elementAverage)
 {
     
     elementUnit.value = replaceComa(elementUnit);
+    if (elementUnit.value == 0 && elementUnit.value != '') {
+        elementUnit.value = '0.00';
+    }
 
-    if (qtde >= 0 && elementUnit.value >= 0) {
+    if (qtde >= 0 && elementUnit.value >= 0 && elementUnit.value != '') {
         var total =  qtde * elementUnit.value;
         var average = 0;
         if (qtde > 0) {

@@ -135,9 +135,9 @@
    		$_POST["btptransaction"] = "C";
 		   
 		$acao->setData($_POST);
-		echo '<pre>';
-		print_r($acao);
-		echo '</pre>';exit;
+		// echo '<pre>';
+		// print_r($acao);
+		// echo '</pre>';exit;
 
 		$msg = $acao->save();
 		

@@ -128,8 +128,8 @@
         {
             $sql = new Sql();
             echo '<pre>';
-		print_r($this);
-		echo '</pre>';exit;
+            print_r($this);
+            echo '</pre>';exit;
             $results = $sql->select("CALL sp_acoes_save(:iduser,:desperson,:sgcompany,:descpfcnpj,:dtbuy,:qtdebuy,:prcbuy,:tlbuy,:btptransaction,:btipe,:bprcaverage,:dtsell,:qtdesell,:prcsell,:tlsell,:sprcaverage,:stptransaction,:stipe,:tax,:lucre)", array(
            // $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :btptransaction, :btipe, :bprcaverage)", array(
                 ":iduser"           => $this->getiduser(),    
@@ -156,7 +156,7 @@
             ));
             
             $this->setData($results);
-            print_r($results);exit;
+            // print_r($results);exit;
             return $results[0]["MESSAGE"];
         }
         
