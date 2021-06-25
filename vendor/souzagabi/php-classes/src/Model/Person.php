@@ -9,7 +9,7 @@
         {
             $sql = new Sql();
             $pg = isset($_GET["pg"]) ? $_GET["pg"] : 1;
-            $list["limit"] = (isset($list["limit"]) && $list["limit"] != '') ? $list["limit"] : 10;
+            $list["limit"] = (isset($list["limit"]) && $list["limit"] != '') ? $list["limit"] : 20;
             $list["start"] = ($pg - 1) * $list["limit"];
             
             foreach ($list as $key => $value) 

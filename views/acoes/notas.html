@@ -87,8 +87,8 @@
               <th>Tipo</th>
               <th class="sell">DtVenda</th>
               <th class="sell">Qtde</th>
-              <th class="sell">Valor Médio</th>
-              <th class="sell">Valor Venda</th>
+              <th class="sell">Lucro</th>
+              <th class="sell">Taxa %</th>
               <th>Tipo</th>
               <th>Ação</th>
             </tr>
@@ -104,8 +104,8 @@
               <td>{if="$value.btipe == 1"}Swing Trade{else}Day Trade{/if}</td>
               <td class="sell">{$value.dtsell}</td>
               <td class="sell">{$value.qtdesell}</td>
-              <td class="sell">{$value.prcsell}</td>
-              <td class="sell">{$value.sprcaverage}</td>
+              <td class="sell">{$value.lucre}</td>
+              <td class="sell">{$value.tax}{if="$value.lucre > 0"} %{/if}</td>
               <td>{if="$value.stipe == 1"}Swing Trade{else}Day Trade{/if}</td>
               <td>
                 <a href="/notas/{$value.idinvest}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>

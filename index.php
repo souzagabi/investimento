@@ -22,7 +22,7 @@
 /*======================================================================================*/
 	$app->get('/', function() {
 		User::verifyLogin();
-		header("Location: /acoes?pg=1&limit=10");
+		header("Location: /acoes?pg=1&limit=20");
 		exit;
 		
 	});
@@ -295,7 +295,7 @@
 		// echo '</pre>';
 		// exit;
 		
-		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search&limit=10&msg=$msg");
+		header("Location: /notas?sgcompany=".$_POST["sgcompany"]."&dtbuy=&dtsell=&search=Search&limit=20&msg=$msg");
 		exit;
 	});
 	
@@ -377,7 +377,7 @@
 				"users"=> $users
 			));
 		} else {
-			header("Location: /acoes?pg=1&limit=10");
+			header("Location: /acoes?pg=1&limit=20");
 			exit;
 		}
 		
@@ -411,7 +411,7 @@
 			header("Location: /admin");
 			exit;
 		} else {
-			header("Location: /acoes?pg=1&limit=10");
+			header("Location: /acoes?pg=1&limit=20");
 			exit;
 		}
 	});
@@ -481,7 +481,7 @@
 				"users"=> $users
 			));
 		} else {
-			header("Location: /acoes?pg=1&limit=10");
+			header("Location: /acoes?pg=1&limit=20");
 			exit;
 		}
 	});
@@ -494,7 +494,7 @@
 			$page = new PageUser();
 			$page->setTpl("users-create");
 		} else {
-			header("Location: /acoes?pg=1&limit=10");
+			header("Location: /acoes?pg=1&limit=20");
 			exit;
 		}
 	});
@@ -510,7 +510,7 @@
 			header("Location: /users");
 			exit;
 		} else {
-			header("Location: /acoes?pg=1&limit=10");
+			header("Location: /acoes?pg=1&limit=20");
 			exit;
 		}
 	});
@@ -530,7 +530,7 @@
 				"user"=>$user->getValues()
 			));
 		} else {
-			header("Location: /acoes?pg=1&limit=10");
+			header("Location: /acoes?pg=1&limit=20");
 			exit;
 		}
 	});

@@ -18,7 +18,7 @@
             $list["start"] = 1;
             $pg = isset($_GET["pg"]) ? $_GET["pg"] : 1;
             
-            $list["limit"] = (isset($list["limit"]) && $list["limit"] != '') ? $list["limit"] : 10;
+            $list["limit"] = (isset($list["limit"]) && $list["limit"] != '') ? $list["limit"] : 20;
            
             $list["start"] = ($pg - 1) * $list["limit"];
            
@@ -32,7 +32,7 @@
             $sql = new Sql();
             
             $pg = isset($_GET["pg"]) ? $_GET["pg"] : 1;
-            $list["limit"] = (isset($list["limit"]) && $list["limit"] != '') ? $list["limit"] : 10;
+            $list["limit"] = (isset($list["limit"]) && $list["limit"] != '') ? $list["limit"] : 20;
             $list["start"] = ($pg - 1) * $list["limit"];
             
             
@@ -66,7 +66,7 @@
             $list["start"] = 0;
             $pg = isset($_GET["pg"]) ? $_GET["pg"] : 1;
             
-            $list["limit"] = (isset($list["limit"]) && $list["limit"] != '') ? $list["limit"] : 10;
+            $list["limit"] = (isset($list["limit"]) && $list["limit"] != '') ? $list["limit"] : 20;
             $list["start"] = ($pg - 1) * $list["limit"];
                
             return $sql->select("CALL sp_acoes_select_estoque(:sgcompany, :dtbuy, :dtsell, :start, :limit)", array(
@@ -127,11 +127,12 @@
         public function save()
         {
             $sql = new Sql();
-            echo '<pre>';
-            print_r($this);
-            echo '</pre>';exit;
-            $results = $sql->select("CALL sp_acoes_save(:iduser,:desperson,:sgcompany,:descpfcnpj,:dtbuy,:qtdebuy,:prcbuy,:tlbuy,:btptransaction,:btipe,:bprcaverage,:dtsell,:qtdesell,:prcsell,:tlsell,:sprcaverage,:stptransaction,:stipe,:tax,:lucre)", array(
-           // $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :btptransaction, :btipe, :bprcaverage)", array(
+            // echo '<pre>';
+            // print_r($this);
+            // echo '</pre>';exit;
+            
+            //$results = $sql->select("CALL w_test(:iduser,:desperson,:sgcompany,:descpfcnpj,:dtbuy,:qtdebuy,:prcbuy,:tlbuy,:btptransaction,:btipe,:bprcaverage,:dtsell,:qtdesell,:prcsell,:tlsell,:sprcaverage,:stptransaction,:stipe,:tax,:lucre)", array(
+            $results = $sql->select("CALL sp_acoes_save_buy(:iduser, :desperson, :sgcompany, :descpfcnpj, :dtbuy, :qtdebuy, :prcbuy, :tlbuy, :btptransaction, :btipe, :bprcaverage)", array(
                 ":iduser"           => $this->getiduser(),    
                 ":desperson"        => $this->getdesperson(),    
                 ":sgcompany"        => $this->getsgcompany(),    
@@ -142,7 +143,7 @@
                 ":tlbuy"            => $this->gettlbuy(),
                 ":btptransaction"   => $this->getbtptransaction(),
                 ":btipe"            => $this->getbtipe(),
-                ":bprcaverage"      => $this->getbprcaverage(),
+                ":bprcaverage"      => $this->getbprcaverage()/*,
                 ":dtsell"           => $this->getdtsell(),
                 ":qtdesell"         => $this->getqtdesell(),
                 ":prcsell"          => $this->getprcsell(),
@@ -151,12 +152,12 @@
                 ":stptransaction"   => $this->getstptransaction(),
                 ":stipe"            => $this->getstipe(),
                 ":tax"              => $this->gettax(),
-                ":lucre"            => $this->getlucre()
+                ":lucre"            => $this->getlucre()*/
 
             ));
             
             $this->setData($results);
-            // print_r($results);exit;
+            
             return $results[0]["MESSAGE"];
         }
         
@@ -218,7 +219,6 @@
             $this->setData($results);
             return $results[0]["MESSAGE"];
         }
-        
         
     }
 ?>
