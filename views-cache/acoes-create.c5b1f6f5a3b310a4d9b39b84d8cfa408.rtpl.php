@@ -94,7 +94,7 @@
           </div>
 
 
-          <div class="box-body">
+          <!-- <div class="box-body">
             <div class="col col-md-2">
               <div class="form-group">
                 <label for="dtsell">Data Venda</label>
@@ -154,13 +154,13 @@
                 <input type="text" class="form-control" id="stptransaction" name="stptransaction" value="V" readonly>
               </div>
             </div>
-          </div>
+          </div> -->
           
           <!-- /.box-body -->
           <div class="box-footer">
             <input type="submit"name="compra" class="btn btn-success" value="Cadastrar Compra">
             <?php $counter1=-1;  if( isset($voltar) && ( is_array($voltar) || $voltar instanceof Traversable ) && sizeof($voltar) ) foreach( $voltar as $key1 => $value1 ){ $counter1++; ?>
-            <a href="/<?php echo htmlspecialchars( $voltar["voltar"], ENT_COMPAT, 'UTF-8', FALSE ); ?>?limit=10" class="btn btn-warning">Voltar</a>
+            <a href="/<?php echo htmlspecialchars( $voltar["voltar"], ENT_COMPAT, 'UTF-8', FALSE ); ?>?limit=20" class="btn btn-warning">Voltar</a>
             <?php } ?>
           </div>
         </form>

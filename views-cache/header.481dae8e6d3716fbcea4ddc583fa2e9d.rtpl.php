@@ -259,11 +259,11 @@ desired effect
       <li class="header">HEADER</li>
       <!-- Optionally, you can add icons to the links -->
       <!-- <li><a href="/admin"><i class="fa fa-user"></i> <span>Administrador</span></a></li> -->
-      <li><a href="/users?pg=1&limit=10"><i class="fa fa-users"></i> <span>Usuários</span></a></li>
-      <li><a href="/persons?pg=1&limit=10"><i class="fa fa-user"></i> <span>Pessoas</span></a></li>
-      <li class="active"><a href="/acoes?pg=1&limit=10"><i class="fa fa-envelope"></i> <span>Ações</span></a></li>
-      <li><a href="/notas?pg=1&limit=10"><i class="fa fa-envelope"></i> <span>Notas Compra</span></a></li>
-      <!-- <li><a href="/acoes-estoque?pg=1&limit=10"><i class="fa fa-envelope"></i> <span>Estoque</span></a></li> -->
+      <li><a href="/users?pg=1&limit=20"><i class="fa fa-users"></i> <span>Usuários</span></a></li>
+      <li><a href="/persons?pg=1&limit=20"><i class="fa fa-user"></i> <span>Pessoas</span></a></li>
+      <li class="active"><a href="/acoes?pg=1&limit=20"><i class="fa fa-envelope"></i> <span>Ações por Empresa</span></a></li>
+      <li><a href="/notas?pg=1&limit=20"><i class="fa fa-envelope"></i> <span>Notas de Compra</span></a></li>
+      <!-- <li><a href="/acoes-estoque?pg=1&limit=20"><i class="fa fa-envelope"></i> <span>Estoque</span></a></li> -->
       <li class="treeview">
         <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
           <span class="pull-right-container">

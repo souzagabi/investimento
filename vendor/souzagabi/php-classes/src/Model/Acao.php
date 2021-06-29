@@ -27,6 +27,7 @@
                 ":limit"=> $list["limit"],
             ));
         }
+        
         public static function listAll($list)
         {
             $sql = new Sql();
@@ -219,6 +220,7 @@
             $this->setData($results);
             return $results[0]["MESSAGE"];
         }
+        
         
     }
 ?>

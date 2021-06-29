@@ -22,7 +22,7 @@
           </div>
           
           <form action="/notas" method="get">
-            <div class="col col-md-2"><label for="sgcompany">Sigla</label><input type="text" name="sgcompany" id="sgcompany" class="form-control"></div>
+            <div class="col col-md-2"><label for="sgcompany">Sigla</label><input type="text" name="sgcompany" id="sgcompany" onKeyUp="convertLowToUpper(sgcompany)" class="form-control"></div>
             <div class="col col-md-2"><label for="dtbuy">Data Inicio</label><input type="text" name="dtbuy" id="dtbuy" class="form-control" onChange="replaceSlash(dtbuy)"></div>
             <div class="col col-md-2"><label for="dtsell">Data Fim</label><input type="text" name="dtsell" id="dtsell" class="form-control" onChange="replaceSlash(dtsell)"></div>
             <div class="col col-md-1"><label for="limit">Data Fim</label>
@@ -87,8 +87,8 @@
               <th>Tipo</th>
               <th class="sell">DtVenda</th>
               <th class="sell">Qtde</th>
-              <th class="sell">Valor Médio</th>
-              <th class="sell">Valor Venda</th>
+              <th class="sell">Lucro</th>
+              <th class="sell">Taxa %</th>
               <th>Tipo</th>
               <th>Ação</th>
             </tr>
@@ -104,8 +104,8 @@
               <td><?php if( $value1["btipe"] == 1 ){ ?>Swing Trade<?php }else{ ?>Day Trade<?php } ?></td>
               <td class="sell"><?php echo htmlspecialchars( $value1["dtsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
               <td class="sell"><?php echo htmlspecialchars( $value1["qtdesell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td class="sell"><?php echo htmlspecialchars( $value1["prcsell"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-              <td class="sell"><?php echo htmlspecialchars( $value1["sprcaverage"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <td class="sell"><?php echo htmlspecialchars( $value1["lucre"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+              <td class="sell"><?php echo htmlspecialchars( $value1["tax"], ENT_COMPAT, 'UTF-8', FALSE ); ?><?php if( $value1["lucre"] > 0 ){ ?> %<?php } ?></td>
               <td><?php if( $value1["stipe"] == 1 ){ ?>Swing Trade<?php }else{ ?>Day Trade<?php } ?></td>
               <td>
                 <a href="/notas/<?php echo htmlspecialchars( $value1["idinvest"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
